@@ -1,7 +1,8 @@
+import time
 import numpy
 
 def readfile():
-    my_data = numpy.loadtxt('../data.txt')
+    my_data = numpy.loadtxt('../zoo.txt')
     print(my_data)
     return my_data
 
@@ -25,5 +26,8 @@ def div(my_data):
         div_list.append(list1.copy())
     print(div_list)
 
+start = time.perf_counter()
 my_data = readfile()
 div(my_data)
+end = time.perf_counter()
+print(end - start)
