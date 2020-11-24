@@ -55,6 +55,7 @@ def divByUi(my_data,Ui): #1.数据表，2、3.删除元素下表   求划分集�
                 list.append(j)
         divlist.append(list.copy())
     return divlist
+
 def pos(dec_divlist,con_divlist):  #子集  正域集合
     pos_list=[]
     for i in dec_divlist:
@@ -64,8 +65,7 @@ def pos(dec_divlist,con_divlist):  #子集  正域集合
     return  pos_list
 
 def dependency(pos_list,my_data):#依赖度
-     dep_num =  (len(pos_list)/my_data.shape[0])
-     # print("依赖度:",dep_num)
+     dep_num =  (len(pos_list)/len(my_data))
      return dep_num
 
 def core(con_data,dec_divlist,dep_num):# 根据 属性重要度  求核
@@ -80,13 +80,14 @@ def core(con_data,dec_divlist,dep_num):# 根据 属性重要度  求核
     # print(core_data)
     return core_data
 
-def Red(core_data,dec_data,con_data):
+def Red(core_data,dec_divlist,con_data):
     i = 0
     R = core_data
     red = R
     P = div(R)
+    U = [i for i in range(con_data.shape[0])]
+    Ui = U
     temp_con_data = con_data
-    temp_dec_data = dec_data
     temp_R = R
     dict ={}
     attr_data = con_data
@@ -100,7 +101,7 @@ def Red(core_data,dec_data,con_data):
             j += 1
         k += 1
     temp_attr_data = attr_data
-    while dependency(pos(div(temp_dec_data),P),temp_R) != dependency(pos(div(temp_dec_data), div(temp_con_data)), temp_R):
+    while dependency(pos(dec_divlist,divByUi(red,Ui)),temp_R) != dependency(pos(dec_divlist, div(temp_con_data)), temp_R):
         dict.clear()
         con_key = -1  # 字典key
         con_value = 0  # 字典value
@@ -120,7 +121,6 @@ def Red(core_data,dec_data,con_data):
             temp_Red_data = temp_R
             temp_Red_data = numpy.append(temp_Red_data, attr_data[:, n, numpy.newaxis], axis=1)
             dict[n] = dependency(pos(div(temp_dec_data), div(temp_Red_data)), temp_con_data)
-            # print("  fffffff",n,dependency(pos(div(dec_data), div(temp_Red_data)), temp_con_data))
         for key in dict:
             if con_value < dict[key]:
                 con_value = dict[key]
@@ -147,9 +147,8 @@ if __name__ == "__main__":
     con_data = deal_data(my_data, my_data.shape[1]-1, my_data.shape[1]-1)
     dec_data = deal_data(my_data, 0, my_data.shape[1]-2)
     con_divlist = div(con_data)
-    con_divlist1 = divByUi(con_data,[0,1,2,3,4,5,6,7])
     dec_divlist = div(dec_data)
-    print("con_divlist", con_divlist,con_divlist1)
+    print("con_divlist", con_divlist)
     print("dec_divlist", dec_divlist)
     pos_list = pos(dec_divlist,con_divlist)
     print("pos_list",pos_list)
@@ -157,6 +156,6 @@ if __name__ == "__main__":
     print("dep_num",dep_num)
     core_data = core(con_data, dec_divlist,dep_num)
     # print(dependency(pos(dec_divlist,div(core_data)),con_data))
-    Red(core_data,dec_data,con_data)
+    Red(core_data,dec_divlist,con_data)
     end = time.perf_counter()
     print(end - start)
