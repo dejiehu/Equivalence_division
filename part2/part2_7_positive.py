@@ -1,7 +1,7 @@
 import numpy
 
 def readfile():#读文件
-    my_data = numpy.loadtxt('..\data.txt')
+    my_data = numpy.loadtxt('..\zoo.txt')
     print(my_data)
     print("my_data.shape:",my_data.shape)
     return my_data
@@ -78,15 +78,16 @@ def Red(core_data,dec_data,con_data):
         k += 1
     temp_attr_data = attr_data
     while dependency(pos(div(temp_dec_data),P),temp_R) != dependency(pos(div(temp_dec_data), div(temp_con_data)), temp_R):
+        print("dependency",dependency(pos(div(temp_dec_data),P),temp_R) , dependency(pos(div(temp_dec_data), div(temp_con_data)), temp_R))
         dict.clear()
         con_key = -1  # 字典key
         con_value = 0  # 字典value
-        pos_list = pos(div(dec_data),P)
-        # print(pos_list,"pos_listpos_listpos_list",P)
+        pos_list = pos(div(temp_dec_data),P)
+        print(pos_list,"pos_listpos_listpos_list")
         m = len(temp_con_data)-1
         while m >= 0:
             if set(pos_list).__contains__(m):  #删除对象
-                print(pos_list, m,"包含，删除")
+                # print(pos_list, m,"包含，删除")
                 temp_con_data = numpy.delete(temp_con_data, m, axis=0)
                 temp_dec_data = numpy.delete(temp_dec_data, m, axis=0)
                 attr_data = numpy.delete(attr_data, m, axis=0)
@@ -96,7 +97,9 @@ def Red(core_data,dec_data,con_data):
         for n in range(attr_data.shape[1]):
             temp_Red_data = temp_R
             temp_Red_data = numpy.append(temp_Red_data, attr_data[:, n, numpy.newaxis], axis=1)
-            dict[n] = dependency(pos(div(dec_data), div(temp_Red_data)), temp_con_data)
+            dict[n] = dependency(pos(div(temp_dec_data), div(temp_Red_data)), temp_con_data)
+            # print("  fffffff",n,dependency(pos(div(dec_data), div(temp_Red_data)), temp_con_data))
+        print(attr_data,"dict",dict)
         for key in dict:
             if con_value < dict[key]:
                 con_value = dict[key]
