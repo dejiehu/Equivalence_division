@@ -3,7 +3,7 @@ import time
 import numpy
 
 def readfile():#读文件
-    my_data = numpy.loadtxt('..\zoo.txt')
+    my_data = numpy.loadtxt('..\data.txt')
     print(my_data)
     print("my_data.shape:",my_data.shape)
     return my_data
@@ -18,7 +18,7 @@ def div(my_data): #1.数据表，2、3.删除元素下表   求划分集合
     divlist =[]#返回的划分集合
     list = []
     jump = 1
-    for i in range(len(my_data)):  # 8行
+    for i in range(len(my_data)):  #
         list.clear()
         for l in range(len(divlist)):
             if (divlist[l].__contains__(i)):
@@ -34,6 +34,27 @@ def div(my_data): #1.数据表，2、3.删除元素下表   求划分集合
         divlist.append(list.copy())
     return divlist
 
+def divByUi(my_data,Ui): #1.数据表，2、3.删除元素下表   求划分集合
+    divlist =[]#返回的划分集合
+    list = []
+    jump = 1
+    for i in Ui:  # 8行
+        list.clear()
+        for l in range(len(divlist)):
+            if (divlist[l].__contains__(i)):
+                jump = 0
+                break
+        if jump == 0:
+            jump = 1
+            continue
+        list.append(i)
+        for j in Ui:
+            if j == i:
+                continue
+            if ((my_data[i] == my_data[j]).all()):
+                list.append(j)
+        divlist.append(list.copy())
+    return divlist
 def pos(dec_divlist,con_divlist):  #子集  正域集合
     pos_list=[]
     for i in dec_divlist:
@@ -60,7 +81,7 @@ def core(con_data,dec_divlist,dep_num):# 根据 属性重要度  求核
     return core_data
 
 def Red(core_data,dec_data,con_data):
-    i = 1
+    i = 0
     R = core_data
     red = R
     P = div(R)
@@ -126,8 +147,9 @@ if __name__ == "__main__":
     con_data = deal_data(my_data, my_data.shape[1]-1, my_data.shape[1]-1)
     dec_data = deal_data(my_data, 0, my_data.shape[1]-2)
     con_divlist = div(con_data)
+    con_divlist1 = divByUi(con_data,[0,1,2,3,4,5,6,7])
     dec_divlist = div(dec_data)
-    print("con_divlist", con_divlist)
+    print("con_divlist", con_divlist,con_divlist1)
     print("dec_divlist", dec_divlist)
     pos_list = pos(dec_divlist,con_divlist)
     print("pos_list",pos_list)

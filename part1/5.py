@@ -1,7 +1,9 @@
+import time
+
 import numpy
 
 def readfile():#读文件
-    my_data = numpy.loadtxt('zoo.txt')
+    my_data = numpy.loadtxt('../zoo.txt')
     print(my_data)
     print("my_data.shape:",my_data.shape)
     return my_data
@@ -117,6 +119,7 @@ def print_red(my_data,Red_data):
 
 
 if __name__ == "__main__":
+    start = time.perf_counter()
     my_data = readfile()
     con_data = deal_data(my_data, 16, 16)
     dec_data = deal_data(my_data, 0, 15)
@@ -128,3 +131,5 @@ if __name__ == "__main__":
     core_data = core(con_data, dec_divlist,dep_num)
     Red_data = Red(con_data,dec_divlist,core_data,dep_num)
     print_red(my_data, De_redundancy(Red_data,dec_divlist,dep_num))
+    end = time.perf_counter()
+    print(end - start)
