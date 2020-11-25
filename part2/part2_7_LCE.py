@@ -4,7 +4,7 @@ from itertools import chain
 import numpy
 
 def readfile():
-    my_data = numpy.loadtxt('../zoo.txt')
+    my_data = numpy.loadtxt('../data.txt')
     print(my_data)
     return my_data
 
@@ -74,10 +74,14 @@ def L_Entropy(con_divlist,dec_divlist):  #梁的熵
     l_entropy = 0
     for i in con_divlist:
         U_num += len(i)
-    # for i in con_divlist:
-    #     for j in dec_divlist:
-    #         if len((set(j) & set(j))) != 0:
-    #             l_entropy +=
+    print(U,U_num)
+    for i in con_divlist:
+        for j in dec_divlist:
+            i_c = list(set(U).difference(set(i)))
+            j_c = list(set(U).difference(set(j)))
+            if len((set(j) & set(j))) != 0 & len(i_c & j_c) != 0:
+                l_entropy += ((len((set(j) & set(j))) * len(i_c & j_c))/U)
+    return l_entropy
 
 
 
@@ -172,6 +176,7 @@ if __name__ == '__main__':
     # dec_divlist = div(dec_data)
     # print("con_divlist",con_divlist)
     # print("dec_divlist", dec_divlist)
+    # L_Entropy(con_divlist, dec_divlist)
     # con_entropy = con_Entropy(con_divlist,dec_divlist)
     # print("条件熵：",con_entropy)
     # print("Entropy(attr_divlist)",Entropy(dec_divlist))
@@ -182,4 +187,4 @@ if __name__ == '__main__':
     # print(end - start)
     list1 = [1,4,8,5,2]
     list2 = [1,4,8,5,2,6]
-    print(list(set(list2).difference(set(list1))))
+    print((set(list2).difference(set(list1))))
