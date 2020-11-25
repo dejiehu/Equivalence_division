@@ -100,7 +100,6 @@ def Red(core_data,dec_divlist,con_data):
         con_key = -1  # 字典key
         con_value = 0  # 字典value
         pos_list = pos(dec_divlist,div(red))
-        print(pos_list)
         m = len(Ui)-1
         while m >= 0:
             if set(pos_list).__contains__(Ui[m]):  #删除对象

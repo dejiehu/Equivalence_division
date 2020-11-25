@@ -46,6 +46,28 @@ def div(my_data):  #划分等价类
         div_list.append(list1.copy())
     return div_list
 
+def divByUi(my_data,Ui): #1.数据表，2、3.删除元素下表   求划分集合
+    divlist =[]#返回的划分集合
+    list = []
+    jump = 1
+    for i in Ui:  # 8行
+        list.clear()
+        for l in range(len(divlist)):
+            if (divlist[l].__contains__(i)):
+                jump = 0
+                break
+        if jump == 0:
+            jump = 1
+            continue
+        list.append(i)
+        for j in Ui:
+            if j == i:
+                continue
+            if ((my_data[i] == my_data[j]).all()):
+                list.append(j)
+        divlist.append(list.copy())
+    return divlist
+
 def Entropy(attr_divlist):#信息熵
     U_num = 0
     for i in attr_divlist:
@@ -69,6 +91,14 @@ def con_Entropy(con_divlist,dec_divlist):  #条件熵
         con_entropy += ((len(j)/U_num) * Entropy(s))
     return con_entropy
 
+def pos(dec_divlist,con_divlist):  #子集  正域集合
+    pos_list=[]
+    for i in dec_divlist:
+         for j in con_divlist:
+            if set(j).issubset(i):
+                pos_list +=j
+    return  pos_list
+
 def core(con_data, dec_divlist,con_entropy):  #基于条件熵求核
     core_data = numpy.empty(shape=(con_data.shape[0],0))
     for i in range(con_data.shape[1]):
@@ -80,7 +110,9 @@ def core(con_data, dec_divlist,con_entropy):  #基于条件熵求核
     return core_data
 
 
-def Red(C0_data,dec_divlist,con_entropy,attr_data):#约简
+def Red(C0_data,dec_divlist,con_data,attr_data):#约简
+    U = [i for i in range(con_data.shape[0])]
+    Ui = U
     if C0_data.size == 0:
         return "无约简"
     B = C0_data
@@ -90,22 +122,23 @@ def Red(C0_data,dec_divlist,con_entropy,attr_data):#约简
     if con_Entropy(div(C0_data),dec_divlist) == con_entropy:
         print("约简为",C0_data)
     else:
-        B_entropy = -1
-        num = 0
-        while con_entropy != B_entropy:
-            # print("第", num, "次循环了")
-            num += 1
+        while  con_Entropy(divByUi(con_data,Ui),dec_divlist) != con_Entropy(divByUi(B,Ui),dec_divlist):
             dict.clear()
+            pos_list = pos(dec_divlist, div(B))
+            m = len(Ui) - 1
+            while m >= 0:
+                if set(pos_list).__contains__(Ui[m]):  # 删除对象
+                    del Ui[m]
+                m -= 1
             for i in range(attr_data.shape[1]):
                 temp_C0_data = B
                 temp_C0_data = numpy.append(temp_C0_data,attr_data[:,i,numpy.newaxis],axis=1)
-                dict[i] = con_Entropy(div(temp_C0_data),dec_divlist);
+                dict[i] = con_Entropy(divByUi(temp_C0_data,Ui),dec_divlist)
             for key in dict:
                 if dict[key] < con_value:
                     con_value = dict[key]
                     con_key = key
             B = numpy.append(B,attr_data[:,con_key,numpy.newaxis],axis=1)
-            B_entropy =con_Entropy(div(B),dec_divlist);
             attr_data = deal_data(attr_data,con_key,con_key)
     return  B
 
@@ -131,6 +164,6 @@ if __name__ == '__main__':
     print("Entropy(attr_divlist)",Entropy(dec_divlist))
     C0_data = core(con_data, dec_divlist,con_entropy)
     attr_data = del_dup(con_data,C0_data) #C-C0
-    print_red(my_data, Red(C0_data,dec_divlist,con_entropy,attr_data))
+    print_red(my_data, Red(C0_data,dec_divlist,con_data,attr_data))
     end = time.perf_counter()
     print(end - start)
