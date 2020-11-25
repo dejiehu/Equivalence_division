@@ -3,7 +3,7 @@ import time
 import numpy
 
 def readfile():#读文件
-    my_data = numpy.loadtxt('..\data.txt')
+    my_data = numpy.loadtxt('..\zoo.txt')
     print(my_data)
     print("my_data.shape:",my_data.shape)
     return my_data
@@ -82,13 +82,9 @@ def core(con_data,dec_divlist,dep_num):# 根据 属性重要度  求核
 
 def Red(core_data,dec_divlist,con_data):
     i = 0
-    R = core_data
-    red = R
-    P = div(R)
+    red = core_data
     U = [i for i in range(con_data.shape[0])]
     Ui = U
-    temp_con_data = con_data
-    temp_R = R
     dict ={}
     attr_data = con_data
     k = 0
@@ -100,35 +96,28 @@ def Red(core_data,dec_divlist,con_data):
                 continue
             j += 1
         k += 1
-    temp_attr_data = attr_data
     while dependency(pos(dec_divlist,divByUi(red,Ui)),Ui) != dependency(pos(dec_divlist, divByUi(con_data,Ui)), Ui):
         dict.clear()
         con_key = -1  # 字典key
         con_value = 0  # 字典value
-        pos_list = pos(dec_divlist,P)
-        m = len(U)-1
+        pos_list = pos(dec_divlist,div(red))
+        print(pos_list)
+        m = len(Ui)-1
         while m >= 0:
-            if set(pos_list).__contains__(U[m]):  #删除对象
-                # print(pos_list, m,"包含，删除")
-                temp_con_data = numpy.delete(temp_con_data, m, axis=0)
-                temp_dec_data = numpy.delete(temp_dec_data, m, axis=0)
-                attr_data = numpy.delete(attr_data, m, axis=0)
-                temp_R = numpy.delete(temp_R, m, axis=0)
+            if set(pos_list).__contains__(Ui[m]):  #删除对象
+                del Ui[m]
             m -= 1
         i += 1
         for n in range(attr_data.shape[1]):
-            temp_Red_data = temp_R
+            temp_Red_data = red
             temp_Red_data = numpy.append(temp_Red_data, attr_data[:, n, numpy.newaxis], axis=1)
-            dict[n] = dependency(pos(div(temp_dec_data), div(temp_Red_data)), temp_con_data)
+            dict[n] = dependency(pos(dec_divlist, divByUi(temp_Red_data,Ui)), Ui)
         for key in dict:
             if con_value < dict[key]:
                 con_value = dict[key]
                 con_key = key
-        temp_R = numpy.append(temp_R, attr_data[:, con_key, numpy.newaxis], axis=1)
-        red = numpy.append(red, temp_attr_data[:, con_key, numpy.newaxis], axis=1)
+        red = numpy.append(red, attr_data[:, con_key, numpy.newaxis], axis=1)
         attr_data = deal_data(attr_data,con_key,con_key)
-        temp_attr_data = deal_data(temp_attr_data,con_key,con_key)
-        P = div(temp_R)
     print_red(con_data,red)
 
 def print_red(my_data,Red_data):
