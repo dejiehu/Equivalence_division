@@ -101,15 +101,14 @@ def Red(core_data,dec_divlist,con_data):
             j += 1
         k += 1
     temp_attr_data = attr_data
-    while dependency(pos(dec_divlist,divByUi(red,Ui)),temp_R) != dependency(pos(dec_divlist, div(temp_con_data)), temp_R):
+    while dependency(pos(dec_divlist,divByUi(red,Ui)),Ui) != dependency(pos(dec_divlist, divByUi(con_data,Ui)), Ui):
         dict.clear()
         con_key = -1  # 字典key
         con_value = 0  # 字典value
-        pos_list = pos(div(temp_dec_data),P)
-        print("div(temp_dec_data)",div(temp_dec_data))
-        m = len(temp_con_data)-1
+        pos_list = pos(dec_divlist,P)
+        m = len(U)-1
         while m >= 0:
-            if set(pos_list).__contains__(m):  #删除对象
+            if set(pos_list).__contains__(U[m]):  #删除对象
                 # print(pos_list, m,"包含，删除")
                 temp_con_data = numpy.delete(temp_con_data, m, axis=0)
                 temp_dec_data = numpy.delete(temp_dec_data, m, axis=0)
