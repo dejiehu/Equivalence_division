@@ -81,7 +81,6 @@ def core(con_data,dec_divlist,dep_num):# 根据 属性重要度  求核
     return core_data
 
 def Red(core_data,dec_divlist,con_data):
-    i = 0
     red = core_data
     U = [i for i in range(con_data.shape[0])]
     Ui = U
@@ -107,7 +106,6 @@ def Red(core_data,dec_divlist,con_data):
             if set(pos_list).__contains__(Ui[m]):  #删除对象
                 del Ui[m]
             m -= 1
-        i += 1
         for n in range(attr_data.shape[1]):
             temp_Red_data = red
             temp_Red_data = numpy.append(temp_Red_data, attr_data[:, n, numpy.newaxis], axis=1)
