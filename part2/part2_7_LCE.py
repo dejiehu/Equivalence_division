@@ -1,10 +1,9 @@
-import math
 import time
 from itertools import chain
 import numpy
 
 def readfile():
-    my_data = numpy.loadtxt('../data.txt')
+    my_data = numpy.loadtxt('../zoo.txt')
     print(my_data)
     return my_data
 
@@ -78,35 +77,9 @@ def L_Entropy(con_divlist,dec_divlist):  #梁的熵
         for j in dec_divlist:
             i_c = (set(U).difference(set(i)))   #补集
             j_c = (set(U).difference(set(j)))   #补集
-            # print(len((set(j) & set(j))) != 0,(len(i_c & j_c) != 0))
             if (len((set(i) & set(j))) != 0) & (len(i_c & j_c) != 0):
                 l_entropy += (((len((set(i) & set(j)))/U_num) * (len(i_c & j_c))/U_num))
     return l_entropy
-
-
-
-# def Entropy(attr_divlist):#信息熵
-#     U_num = 0
-#     for i in attr_divlist:
-#         U_num += len(i)
-#     entropy = 0
-#     for i in attr_divlist:
-#         p = len(i)/U_num
-#         entropy -= p*math.log(p)
-#     return entropy
-#
-# def con_Entropy(con_divlist,dec_divlist):  #条件熵
-#     U_num = 0
-#     for i in dec_divlist:
-#         U_num += len(i)
-#     con_entropy = 0
-#     for j in con_divlist:
-#         s = list()
-#         for k in dec_divlist:
-#             if len((set(j) & set(k))) != 0:
-#                 s.append(list(set(j) & set(k)))
-#         con_entropy += ((len(j)/U_num) * Entropy(s))
-#     return con_entropy
 
 def pos(dec_divlist,con_divlist):  #子集  正域集合
     pos_list=[]
@@ -121,14 +94,13 @@ def core(con_data, dec_divlist,l_entropy):  #基于条件熵求核
     for i in range(con_data.shape[1]):
         temp_con_data = deal_data(con_data,i,i)
         temp_con_divlist = div(temp_con_data)
-        print(L_Entropy(temp_con_divlist, dec_divlist))
         if l_entropy != (L_Entropy(temp_con_divlist, dec_divlist)):
             print("核属性是第",i,"个")
             core_data = numpy.append(core_data, con_data[:, i,numpy.newaxis], axis=1)
     return core_data
 
 
-def Red(C0_data,dec_divlist,con_data,attr_data):#约简
+def Red(C0_data,dec_divlist,con_data,attr_data,L_Entropy):    #约简
     U = [i for i in range(con_data.shape[0])]
     Ui = U
     if C0_data.size == 0:
@@ -141,6 +113,7 @@ def Red(C0_data,dec_divlist,con_data,attr_data):#约简
         print("约简为",C0_data)
     else:
         while  L_Entropy(divByUi(con_data,Ui),dec_divlist) != L_Entropy(divByUi(B,Ui),dec_divlist):
+            print("while",L_Entropy(divByUi(con_data,Ui),dec_divlist) , L_Entropy(divByUi(B,Ui),dec_divlist))
             dict.clear()
             pos_list = pos(dec_divlist, div(B))
             m = len(Ui) - 1
@@ -152,6 +125,7 @@ def Red(C0_data,dec_divlist,con_data,attr_data):#约简
                 temp_C0_data = B
                 temp_C0_data = numpy.append(temp_C0_data,attr_data[:,i,numpy.newaxis],axis=1)
                 dict[i] = L_Entropy(divByUi(temp_C0_data,Ui),dec_divlist)
+            print(dict)
             for key in dict:
                 if dict[key] < con_value:
                     con_value = dict[key]
@@ -166,7 +140,7 @@ def print_red(my_data,Red_data):
         for j in range( my_data.shape[1]):
             if (my_data[:, j] == Red_data[:, i]).all():
                 red_set.append(j)
-    print(red_set)
+    print(set(red_set))
 
 if __name__ == '__main__':
     # start = time.perf_counter()
@@ -181,10 +155,6 @@ if __name__ == '__main__':
     print("liang熵：",l_entropy)
     C0_data = core(con_data, dec_divlist,l_entropy)
     attr_data = del_dup(con_data,C0_data) #C-C0
-    print(Red(C0_data,dec_divlist,con_data,attr_data))
-    print_red(my_data, Red(C0_data,dec_divlist,con_data,attr_data))
+    print_red(my_data, Red(C0_data,dec_divlist,con_data,attr_data,L_Entropy))
     # end = time.perf_counter()
     # print(end - start)
-    # list1 = [1,4,8,5,2]
-    # list2 = [1,4,8,5,2,6]
-    # print((set(list2).difference(set(list1))))

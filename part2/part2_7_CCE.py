@@ -1,9 +1,11 @@
 import math
 import time
+from itertools import chain
+
 import numpy
 
 def readfile():
-    my_data = numpy.loadtxt('../zoo.txt')
+    my_data = numpy.loadtxt('../data.txt')
     print(my_data)
     return my_data
 
@@ -67,28 +69,18 @@ def divByUi(my_data,Ui): #1.数据表，2、3.删除元素下表   求划分集�
         divlist.append(list.copy())
     return divlist
 
-def Entropy(attr_divlist):#信息熵
+def C_Entropy(con_divlist,dec_divlist):    #组合熵
     U_num = 0
-    for i in attr_divlist:
+    U = list(chain.from_iterable(con_divlist))
+    c_entropy = 0
+    for i in con_divlist:
         U_num += len(i)
-    entropy = 0
-    for i in attr_divlist:
-        p = len(i)/U_num
-        entropy -= p*math.log(p)
-    return entropy
-
-def con_Entropy(con_divlist,dec_divlist):  #条件熵
-    U_num = 0
-    for i in dec_divlist:
-        U_num += len(i)
-    con_entropy = 0
-    for j in con_divlist:
-        s = list()
-        for k in dec_divlist:
-            if len((set(j) & set(k))) != 0:
-                s.append(list(set(j) & set(k)))
-        con_entropy += ((len(j)/U_num) * Entropy(s))
-    return con_entropy
+    for i in con_divlist:
+        c_entropy += (len(i)/U_num)*((len(i)*(len(i)-1))/(U_num*(U_num-1)))
+        for j in dec_divlist:
+            if len((set(i) & set(j))) != 0:
+                c_entropy -= (len((set(i) & set(j)))/U_num)*((len((set(i) & set(j)))*(len((set(i) & set(j)))-1))/(U_num*(U_num-1)))
+    return c_entropy
 
 def pos(dec_divlist,con_divlist):  #子集  正域集合
     pos_list=[]
@@ -98,18 +90,18 @@ def pos(dec_divlist,con_divlist):  #子集  正域集合
                 pos_list +=j
     return  pos_list
 
-def core(con_data, dec_divlist,con_entropy):  #基于条件熵求核
+def core(con_data, dec_divlist,c_entropy):  #基于熵求核
     core_data = numpy.empty(shape=(con_data.shape[0],0))
     for i in range(con_data.shape[1]):
         temp_con_data = deal_data(con_data,i,i)
         temp_con_divlist = div(temp_con_data)
-        if con_entropy != (con_Entropy(temp_con_divlist, dec_divlist)):
+        if c_entropy != (C_Entropy(temp_con_divlist, dec_divlist)):
             print("核属性是第",i,"个")
             core_data = numpy.append(core_data, con_data[:, i,numpy.newaxis], axis=1)
     return core_data
 
 
-def Red(C0_data,dec_divlist,con_data,attr_data,con_entropy):#约简
+def Red(C0_data,dec_divlist,con_data,attr_data,c_entropy):#约简
     U = [i for i in range(con_data.shape[0])]
     Ui = U
     if C0_data.size == 0:
@@ -118,10 +110,10 @@ def Red(C0_data,dec_divlist,con_data,attr_data,con_entropy):#约简
     dict = {}
     con_key = -1  # 字典key
     con_value = 10000000  # 字典value
-    if con_Entropy(div(C0_data),dec_divlist) == con_entropy:
+    if C_Entropy(div(C0_data),dec_divlist) == c_entropy:
         print("约简为",C0_data)
     else:
-        while  con_Entropy(divByUi(con_data,Ui),dec_divlist) != con_Entropy(divByUi(B,Ui),dec_divlist):
+        while  C_Entropy(divByUi(con_data,Ui),dec_divlist) != C_Entropy(divByUi(B,Ui),dec_divlist):
             dict.clear()
             pos_list = pos(dec_divlist, div(B))
             m = len(Ui) - 1
@@ -132,7 +124,7 @@ def Red(C0_data,dec_divlist,con_data,attr_data,con_entropy):#约简
             for i in range(attr_data.shape[1]):
                 temp_C0_data = B
                 temp_C0_data = numpy.append(temp_C0_data,attr_data[:,i,numpy.newaxis],axis=1)
-                dict[i] = con_Entropy(divByUi(temp_C0_data,Ui),dec_divlist)
+                dict[i] = C_Entropy(divByUi(temp_C0_data,Ui),dec_divlist)
             for key in dict:
                 if dict[key] < con_value:
                     con_value = dict[key]
@@ -158,11 +150,10 @@ if __name__ == '__main__':
     dec_divlist = div(dec_data)
     print("con_divlist",con_divlist)
     print("dec_divlist", dec_divlist)
-    con_entropy = con_Entropy(con_divlist,dec_divlist)
-    print("条件熵：",con_entropy)
-    print("Entropy(attr_divlist)",Entropy(dec_divlist))
-    C0_data = core(con_data, dec_divlist,con_entropy)
+    c_entropy = C_Entropy(con_divlist,dec_divlist)
+    print("combine熵：",c_entropy)
+    C0_data = core(con_data, dec_divlist,c_entropy)
     attr_data = del_dup(con_data,C0_data) #C-C0
-    print_red(my_data, Red(C0_data,dec_divlist,con_data,attr_data,con_entropy))
+    print_red(my_data, Red(C0_data,dec_divlist,con_data,attr_data,c_entropy))
     end = time.perf_counter()
     print(end - start)
