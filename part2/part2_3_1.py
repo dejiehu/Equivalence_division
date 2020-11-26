@@ -40,12 +40,12 @@ def pos(dec_divlist,con_divlist):  #子集  正域
     print(pos_list)
     return pos_list
 
-def Matrix_construct(my_data,pos_list,con_divlist):  #构造基于正域的矩阵
+def Matrix_construct(con_data,pos_list,con_divlist):  #构造基于正域的矩阵
     s = set()
-    DM = numpy.zeros(shape=(len(my_data), len(my_data)), dtype = tuple)
+    DM = numpy.zeros(shape=(len(con_data), len(con_data)), dtype = tuple)
     for i in range(len(DM)):
         DM[i] = None
-    for i in range(my_data.shape[0]):
+    for i in range(con_data.shape[0]):
         for j in range(i):
             s.clear()
             index = 0
@@ -60,8 +60,8 @@ def Matrix_construct(my_data,pos_list,con_divlist):  #构造基于正域的矩�
             if index == len(con_divlist) - 1:
                 DM[i][j] = None
                 continue
-            for k in range(my_data.shape[1]):
-                if(my_data[i][k] != my_data[j][k]):
+            for k in range(con_data.shape[1]):
+                if(con_data[i][k] != con_data[j][k]):
                     s.add(k)
             DM[i][j] = s.copy()
     print(DM)

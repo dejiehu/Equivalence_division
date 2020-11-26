@@ -1,8 +1,10 @@
 import numpy
-from itertools import product
 
+# numpy.set_printoptions(suppress=True)
+numpy.set_printoptions(threshold=10000000000,linewidth =  8888)
+from itertools import product
 def readfile():
-    my_data = numpy.loadtxt('../data.txt')
+    my_data = numpy.loadtxt('../zoo.txt')
     print(my_data)
     return my_data
 
@@ -38,34 +40,33 @@ def pos(dec_divlist,con_divlist):  #子集  正域
          for j in con_divlist:
             if set(j).issubset(i):
                 pos_list +=j
-    print(pos_list)
+    # print(pos_list)
     return pos_list
 
-def Matrix_construct(my_data,pos_list,con_divlist):  #构造基于正域的矩阵
+def Matrix_construct(con_data,pos_list,con_divlist):  #构造基于正域的矩阵
     s = set()
-    DM = numpy.zeros(shape=(len(my_data), len(my_data)), dtype = tuple)
+    DM = numpy.zeros(shape=(len(con_data), len(con_data)), dtype = tuple)
     for i in range(len(DM)):
         DM[i] = None
-    for i in range(my_data.shape[0]):
+    for i in range(con_data.shape[0]):
         for j in range(i):
             s.clear()
             index = 0
             for m in range(len(con_divlist)):
                 if con_divlist[m].__contains__(i):
-                    print(m,i)
                     if set(con_divlist[m]).issubset(set(pos_list)):
-                        print(set(con_divlist[m]),set(pos_list),"子集")
+                        # print(set(con_divlist[m]),set(pos_list),"子集")
                         break
                 if m == len(con_divlist) - 1:
                     index = len(con_divlist) - 1
             if index == len(con_divlist) - 1:
                 DM[i][j] = None
                 continue
-            for k in range(my_data.shape[1]):
-                if(my_data[i][k] != my_data[j][k]):
+            for k in range(con_data.shape[1]):
+                if(con_data[i][k] != con_data[j][k]):
                     s.add(k)
             DM[i][j] = s.copy()
-    print(DM)
+    # print(DM)
     return DM
 
 def logic_operation(diffItem_list):#析取，吸收
@@ -82,7 +83,6 @@ def logic_operation(diffItem_list):#析取，吸收
                 DM_list.append(i)
         else:  # 列表为空直接加入
             DM_list.append(i)
-
     m = len(DM_list) - 1# 吸收多余的集合
     while m > 0: #m从后往前
         n = 0  #从前往后
@@ -101,6 +101,8 @@ def Red(DM):#逻辑运算
     for i in range(DM.shape[0]):   #矩阵差别项放到集合DM_list中
         for j in range(i):
             if DM[i][j] == None:#把集合为空的丢掉
+                continue
+            if len(DM[i][j]) == 0:
                 continue
             DM_list.append(DM[i][j])
     DM_list = logic_operation(DM_list)#集合析取逻辑操作（多余集合被吸收）
@@ -123,5 +125,5 @@ if __name__ == '__main__':
     print("con_divlist", con_divlist)
     print("dec_divlist", dec_divlist)
     pos_list = pos(dec_divlist,con_divlist)
-    DM = Matrix_construct(my_data,pos_list,con_divlist)
+    DM = Matrix_construct(con_data,pos_list,con_divlist)
     Red(DM)
