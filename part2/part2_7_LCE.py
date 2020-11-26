@@ -3,7 +3,7 @@ from itertools import chain
 import numpy
 
 def readfile():
-    my_data = numpy.loadtxt('../zoo.txt')
+    my_data = numpy.loadtxt('../data.txt')
     print(my_data)
     return my_data
 
@@ -79,7 +79,8 @@ def L_Entropy(con_divlist,dec_divlist):  #梁的熵
             j_c = (set(U).difference(set(j)))   #补集
             if (len((set(i) & set(j))) != 0) & (len(i_c & j_c) != 0):
                 l_entropy += (((len((set(i) & set(j)))/U_num) * (len(i_c & j_c))/U_num))
-    return round(l_entropy,14)
+    # return round(l_entropy,14)
+    return l_entropy
 
 def pos(dec_divlist,con_divlist):  #子集  正域集合
     pos_list=[]
@@ -94,6 +95,7 @@ def core(con_data, dec_divlist,l_entropy):  #基于条件熵求核
     for i in range(con_data.shape[1]):
         temp_con_data = deal_data(con_data,i,i)
         temp_con_divlist = div(temp_con_data)
+        print("l_entr",L_Entropy(temp_con_divlist, dec_divlist))
         if l_entropy != (L_Entropy(temp_con_divlist, dec_divlist)):
             print("核属性是第",i,"个")
             core_data = numpy.append(core_data, con_data[:, i,numpy.newaxis], axis=1)
