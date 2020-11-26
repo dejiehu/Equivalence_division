@@ -74,39 +74,39 @@ def L_Entropy(con_divlist,dec_divlist):  #梁的熵
     l_entropy = 0
     for i in con_divlist:
         U_num += len(i)
-    print(U,U_num)
     for i in con_divlist:
         for j in dec_divlist:
-            i_c = list(set(U).difference(set(i)))
-            j_c = list(set(U).difference(set(j)))
-            if len((set(j) & set(j))) != 0 & len(i_c & j_c) != 0:
-                l_entropy += ((len((set(j) & set(j))) * len(i_c & j_c))/U)
+            i_c = (set(U).difference(set(i)))   #补集
+            j_c = (set(U).difference(set(j)))   #补集
+            # print(len((set(j) & set(j))) != 0,(len(i_c & j_c) != 0))
+            if (len((set(i) & set(j))) != 0) & (len(i_c & j_c) != 0):
+                l_entropy += (((len((set(i) & set(j)))/U_num) * (len(i_c & j_c))/U_num))
     return l_entropy
 
 
 
-def Entropy(attr_divlist):#信息熵
-    U_num = 0
-    for i in attr_divlist:
-        U_num += len(i)
-    entropy = 0
-    for i in attr_divlist:
-        p = len(i)/U_num
-        entropy -= p*math.log(p)
-    return entropy
-
-def con_Entropy(con_divlist,dec_divlist):  #条件熵
-    U_num = 0
-    for i in dec_divlist:
-        U_num += len(i)
-    con_entropy = 0
-    for j in con_divlist:
-        s = list()
-        for k in dec_divlist:
-            if len((set(j) & set(k))) != 0:
-                s.append(list(set(j) & set(k)))
-        con_entropy += ((len(j)/U_num) * Entropy(s))
-    return con_entropy
+# def Entropy(attr_divlist):#信息熵
+#     U_num = 0
+#     for i in attr_divlist:
+#         U_num += len(i)
+#     entropy = 0
+#     for i in attr_divlist:
+#         p = len(i)/U_num
+#         entropy -= p*math.log(p)
+#     return entropy
+#
+# def con_Entropy(con_divlist,dec_divlist):  #条件熵
+#     U_num = 0
+#     for i in dec_divlist:
+#         U_num += len(i)
+#     con_entropy = 0
+#     for j in con_divlist:
+#         s = list()
+#         for k in dec_divlist:
+#             if len((set(j) & set(k))) != 0:
+#                 s.append(list(set(j) & set(k)))
+#         con_entropy += ((len(j)/U_num) * Entropy(s))
+#     return con_entropy
 
 def pos(dec_divlist,con_divlist):  #子集  正域集合
     pos_list=[]
@@ -116,12 +116,13 @@ def pos(dec_divlist,con_divlist):  #子集  正域集合
                 pos_list +=j
     return  pos_list
 
-def core(con_data, dec_divlist,con_entropy):  #基于条件熵求核
+def core(con_data, dec_divlist,l_entropy):  #基于条件熵求核
     core_data = numpy.empty(shape=(con_data.shape[0],0))
     for i in range(con_data.shape[1]):
         temp_con_data = deal_data(con_data,i,i)
         temp_con_divlist = div(temp_con_data)
-        if con_entropy != (con_Entropy(temp_con_divlist, dec_divlist)):
+        print(L_Entropy(temp_con_divlist, dec_divlist))
+        if l_entropy != (L_Entropy(temp_con_divlist, dec_divlist)):
             print("核属性是第",i,"个")
             core_data = numpy.append(core_data, con_data[:, i,numpy.newaxis], axis=1)
     return core_data
@@ -136,10 +137,10 @@ def Red(C0_data,dec_divlist,con_data,attr_data):#约简
     dict = {}
     con_key = -1  # 字典key
     con_value = 10000000  # 字典value
-    if con_Entropy(div(C0_data),dec_divlist) == con_entropy:
+    if L_Entropy(div(C0_data),dec_divlist) == L_Entropy:
         print("约简为",C0_data)
     else:
-        while  con_Entropy(divByUi(con_data,Ui),dec_divlist) != con_Entropy(divByUi(B,Ui),dec_divlist):
+        while  L_Entropy(divByUi(con_data,Ui),dec_divlist) != L_Entropy(divByUi(B,Ui),dec_divlist):
             dict.clear()
             pos_list = pos(dec_divlist, div(B))
             m = len(Ui) - 1
@@ -150,7 +151,7 @@ def Red(C0_data,dec_divlist,con_data,attr_data):#约简
             for i in range(attr_data.shape[1]):
                 temp_C0_data = B
                 temp_C0_data = numpy.append(temp_C0_data,attr_data[:,i,numpy.newaxis],axis=1)
-                dict[i] = con_Entropy(divByUi(temp_C0_data,Ui),dec_divlist)
+                dict[i] = L_Entropy(divByUi(temp_C0_data,Ui),dec_divlist)
             for key in dict:
                 if dict[key] < con_value:
                     con_value = dict[key]
@@ -169,22 +170,21 @@ def print_red(my_data,Red_data):
 
 if __name__ == '__main__':
     # start = time.perf_counter()
-    # my_data = readfile()
-    # con_data = deal_data(my_data, my_data.shape[1] - 1, my_data.shape[1] - 1)
-    # dec_data = deal_data(my_data, 0, my_data.shape[1] - 2)
-    # con_divlist = div(con_data)
-    # dec_divlist = div(dec_data)
-    # print("con_divlist",con_divlist)
-    # print("dec_divlist", dec_divlist)
-    # L_Entropy(con_divlist, dec_divlist)
-    # con_entropy = con_Entropy(con_divlist,dec_divlist)
-    # print("条件熵：",con_entropy)
-    # print("Entropy(attr_divlist)",Entropy(dec_divlist))
-    # C0_data = core(con_data, dec_divlist,con_entropy)
-    # attr_data = del_dup(con_data,C0_data) #C-C0
-    # print_red(my_data, Red(C0_data,dec_divlist,con_data,attr_data))
+    my_data = readfile()
+    con_data = deal_data(my_data, my_data.shape[1] - 1, my_data.shape[1] - 1)
+    dec_data = deal_data(my_data, 0, my_data.shape[1] - 2)
+    con_divlist = div(con_data)
+    dec_divlist = div(dec_data)
+    print("con_divlist",con_divlist)
+    print("dec_divlist", dec_divlist)
+    l_entropy = L_Entropy(con_divlist,dec_divlist)
+    print("liang熵：",l_entropy)
+    C0_data = core(con_data, dec_divlist,l_entropy)
+    attr_data = del_dup(con_data,C0_data) #C-C0
+    print(Red(C0_data,dec_divlist,con_data,attr_data))
+    print_red(my_data, Red(C0_data,dec_divlist,con_data,attr_data))
     # end = time.perf_counter()
     # print(end - start)
-    list1 = [1,4,8,5,2]
-    list2 = [1,4,8,5,2,6]
-    print((set(list2).difference(set(list1))))
+    # list1 = [1,4,8,5,2]
+    # list2 = [1,4,8,5,2,6]
+    # print((set(list2).difference(set(list1))))

@@ -4,7 +4,7 @@ import time
 import numpy
 
 def readfile():
-    my_data = numpy.loadtxt('../zoo.txt')
+    my_data = numpy.loadtxt('../data.txt')
     print(my_data)
     return my_data
 
