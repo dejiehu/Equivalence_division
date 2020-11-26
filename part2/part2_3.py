@@ -1,7 +1,7 @@
 import numpy
 
 def readfile():
-    my_data = numpy.loadtxt('data.txt')
+    my_data = numpy.loadtxt('../data.txt')
     print(my_data)
     return my_data
 
@@ -60,8 +60,8 @@ def Matrix_construct(my_data,pos_list):  #构造基于正域的矩阵
 
 if __name__ == '__main__':
     my_data = readfile()
-    con_data = deal_data(my_data,3,4)
-    dec_data = deal_data(my_data,0,2)
+    con_data = deal_data(my_data, my_data.shape[1] - 1, my_data.shape[1] - 1)
+    dec_data = deal_data(my_data, 0, my_data.shape[1] - 2)
     con_divlist = div(con_data)
     dec_divlist = div(dec_data)
     print("con_divlist", con_divlist)

@@ -116,13 +116,13 @@ def Red(C0_data,dec_divlist,con_data,attr_data,con_entropy):#约简
         return "无约简"
     B = C0_data
     dict = {}
-    con_key = -1  # 字典key
-    con_value = 10000000  # 字典value
     if con_Entropy(div(C0_data),dec_divlist) == con_entropy:
         print("约简为",C0_data)
     else:
         while  con_Entropy(divByUi(con_data,Ui),dec_divlist) != con_Entropy(divByUi(B,Ui),dec_divlist):
             dict.clear()
+            con_key = -1  # 字典key
+            con_value = 10000000  # 字典value
             pos_list = pos(dec_divlist, div(B))
             m = len(Ui) - 1
             while m >= 0:

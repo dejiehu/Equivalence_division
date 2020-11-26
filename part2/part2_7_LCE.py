@@ -79,7 +79,7 @@ def L_Entropy(con_divlist,dec_divlist):  #梁的熵
             j_c = (set(U).difference(set(j)))   #补集
             if (len((set(i) & set(j))) != 0) & (len(i_c & j_c) != 0):
                 l_entropy += (((len((set(i) & set(j)))/U_num) * (len(i_c & j_c))/U_num))
-    return l_entropy
+    return round(l_entropy,14)
 
 def pos(dec_divlist,con_divlist):  #子集  正域集合
     pos_list=[]
@@ -107,14 +107,14 @@ def Red(C0_data,dec_divlist,con_data,attr_data,L_Entropy):    #约简
         return "无约简"
     B = C0_data
     dict = {}
-    con_key = -1  # 字典key
-    con_value = 10000000  # 字典value
     if L_Entropy(div(C0_data),dec_divlist) == L_Entropy:
         print("约简为",C0_data)
     else:
         while  L_Entropy(divByUi(con_data,Ui),dec_divlist) != L_Entropy(divByUi(B,Ui),dec_divlist):
             print("while",L_Entropy(divByUi(con_data,Ui),dec_divlist) , L_Entropy(divByUi(B,Ui),dec_divlist))
             dict.clear()
+            con_key = -1  # 字典key
+            con_value = 10000000  # 字典value
             pos_list = pos(dec_divlist, div(B))
             m = len(Ui) - 1
             while m >= 0:

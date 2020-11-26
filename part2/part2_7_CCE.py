@@ -5,7 +5,7 @@ from itertools import chain
 import numpy
 
 def readfile():
-    my_data = numpy.loadtxt('../data.txt')
+    my_data = numpy.loadtxt('../zoo.txt')
     print(my_data)
     return my_data
 
@@ -95,6 +95,7 @@ def core(con_data, dec_divlist,c_entropy):  #基于熵求核
     for i in range(con_data.shape[1]):
         temp_con_data = deal_data(con_data,i,i)
         temp_con_divlist = div(temp_con_data)
+        print(c_entropy , (C_Entropy(temp_con_divlist, dec_divlist)))
         if c_entropy != (C_Entropy(temp_con_divlist, dec_divlist)):
             print("核属性是第",i,"个")
             core_data = numpy.append(core_data, con_data[:, i,numpy.newaxis], axis=1)
@@ -108,13 +109,13 @@ def Red(C0_data,dec_divlist,con_data,attr_data,c_entropy):#约简
         return "无约简"
     B = C0_data
     dict = {}
-    con_key = -1  # 字典key
-    con_value = 10000000  # 字典value
     if C_Entropy(div(C0_data),dec_divlist) == c_entropy:
         print("约简为",C0_data)
     else:
         while  C_Entropy(divByUi(con_data,Ui),dec_divlist) != C_Entropy(divByUi(B,Ui),dec_divlist):
             dict.clear()
+            con_key = -1  # 字典key
+            con_value = 10000000  # 字典value
             pos_list = pos(dec_divlist, div(B))
             m = len(Ui) - 1
             while m >= 0:

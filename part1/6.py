@@ -85,17 +85,15 @@ def Red(C0_data,dec_divlist,con_entropy,attr_data):#约简
         return "无约简"
     B = C0_data
     dict = {}
-    con_key = -1  # 字典key
-    con_value = 10000000  # 字典value
     if con_Entropy(div(C0_data),dec_divlist) == con_entropy:
         print("约简为",C0_data)
     else:
         B_entropy = -1
         num = 0
         while con_entropy != B_entropy:
-            # print("第", num, "次循环了")
-            num += 1
             dict.clear()
+            con_key = -1  # 字典key
+            con_value = 10000000  # 字典value
             for i in range(attr_data.shape[1]):
                 temp_C0_data = B
                 temp_C0_data = numpy.append(temp_C0_data,attr_data[:,i,numpy.newaxis],axis=1)

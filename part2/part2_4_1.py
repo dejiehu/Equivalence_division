@@ -1,4 +1,5 @@
 import numpy
+from itertools import product
 
 def readfile():
     my_data = numpy.loadtxt('../data.txt')
@@ -67,6 +68,52 @@ def Matrix_construct(my_data,pos_list,con_divlist):  #构造基于正域的矩�
     print(DM)
     return DM
 
+def logic_operation(diffItem_list):#析取，吸收
+    DM_list = []
+    for i in diffItem_list:  #排序
+        if len(DM_list) != 0:  # 列表不等0要找位置插入
+            k = 0
+            while k < len(DM_list):
+                if len(set(i)) <= len(set(DM_list[k])):
+                    DM_list.insert(k, i)
+                    break
+                k += 1
+            if k == len(DM_list):
+                DM_list.append(i)
+        else:  # 列表为空直接加入
+            DM_list.append(i)
+
+    m = len(DM_list) - 1# 吸收多余的集合
+    while m > 0: #m从后往前
+        n = 0  #从前往后
+        while n < m:
+            # print(DM_list[n],DM_list[m],DM_list[n].issubset(DM_list[m]))
+            if set(DM_list[n]).issubset(DM_list[m]):
+                del DM_list[m]
+                m = len(DM_list)
+                break
+            n += 1
+        m -= 1
+    return DM_list
+
+def Red(DM):#逻辑运算
+    DM_list = []
+    for i in range(DM.shape[0]):   #矩阵差别项放到集合DM_list中
+        for j in range(i):
+            if DM[i][j] == None:#把集合为空的丢掉
+                continue
+            DM_list.append(DM[i][j])
+    DM_list = logic_operation(DM_list)#集合析取逻辑操作（多余集合被吸收）
+    print(DM_list,"多余集合被吸收")
+    loop_val = []#将合取式差分为析取式     loop_val = [{1,2},{1,3}]
+    for i in DM_list:
+        loop_val.append(i)
+    DM_list = []
+    for i in product(*loop_val):
+        DM_list.append(set(i))
+    DM_list = logic_operation(DM_list)
+    print("约简的集合为：",len(DM_list), DM_list)
+
 if __name__ == '__main__':
     my_data = readfile()
     con_data = deal_data(my_data, my_data.shape[1] - 1, my_data.shape[1] - 1)
@@ -76,4 +123,5 @@ if __name__ == '__main__':
     print("con_divlist", con_divlist)
     print("dec_divlist", dec_divlist)
     pos_list = pos(dec_divlist,con_divlist)
-    DM = Matrix_construct(con_data,pos_list,con_divlist)
+    DM = Matrix_construct(my_data,pos_list,con_divlist)
+    Red(DM)
