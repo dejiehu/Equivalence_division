@@ -133,6 +133,7 @@ def Red(C0_data,dec_divlist,con_data,attr_data,con_entropy):#约简
                 temp_C0_data = B
                 temp_C0_data = numpy.append(temp_C0_data,attr_data[:,i,numpy.newaxis],axis=1)
                 dict[i] = con_Entropy(divByUi(temp_C0_data,Ui),dec_divlist)
+                print(con_Entropy(divByUi(B,Ui),dec_divlist),con_Entropy(divByUi(temp_C0_data,Ui),dec_divlist))
             for key in dict:
                 if dict[key] < con_value:
                     con_value = dict[key]

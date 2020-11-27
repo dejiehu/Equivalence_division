@@ -5,7 +5,7 @@ from itertools import chain
 import numpy
 
 def readfile():
-    my_data = numpy.loadtxt('../train_4.txt')
+    my_data = numpy.loadtxt('../zoo.txt')
     print(my_data)
     return my_data
 
@@ -95,6 +95,7 @@ def core(con_data, dec_divlist,c_entropy):  #基于熵求核
     for i in range(con_data.shape[1]):
         temp_con_data = deal_data(con_data,i,i)
         temp_con_divlist = div(temp_con_data)
+        # print(c_entropy ,C_Entropy(temp_con_divlist, dec_divlist))
         if c_entropy != (C_Entropy(temp_con_divlist, dec_divlist)):
             print("核属性是第",i,"个")
             core_data = numpy.append(core_data, con_data[:, i,numpy.newaxis], axis=1)
@@ -126,10 +127,9 @@ def Red(C0_data,dec_divlist,con_data,attr_data,c_entropy):#约简
                 temp_C0_data = B
                 temp_C0_data = numpy.append(temp_C0_data,attr_data[:,i,numpy.newaxis],axis=1)
                 dict[i] = C_Entropy(divByUi(temp_C0_data,Ui),dec_divlist)
-                print(C_Entropy(divByUi(B,Ui),dec_divlist) ,C_Entropy(divByUi(temp_C0_data,Ui),dec_divlist))
-                print(temp_C0_data,Ui)
+                # print(C_Entropy(divByUi(B,Ui),dec_divlist) ,C_Entropy(divByUi(temp_C0_data,Ui),dec_divlist))
             for key in dict:
-                if dict[key] < con_value:
+                if dict[key] <= con_value:
                     con_value = dict[key]
                     con_key = key
             B = numpy.append(B,attr_data[:,con_key,numpy.newaxis],axis=1)

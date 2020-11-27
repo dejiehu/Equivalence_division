@@ -74,6 +74,7 @@ def core(con_data,dec_divlist,dep_num):# 根据 属性重要度  求核
         temp_con_data = deal_data(con_data,i,i)
         temp_con_divlist = div(temp_con_data)
         pos_list = pos(dec_divlist, temp_con_divlist)
+        # if dependency(pos(dec_divlist, div(con_data)), con_data) != dependency(pos_list, con_data):
         if dep_num != dependency(pos_list,con_data):
             print("第",i,"个属性为核属性")
             core_data = numpy.append(core_data,con_data[:,i,numpy.newaxis],axis=1)
@@ -95,20 +96,27 @@ def Red(core_data,dec_divlist,con_data):
                 continue
             j += 1
         k += 1
+    # print("U",Ui)
     while dependency(pos(dec_divlist,divByUi(red,Ui)),Ui) != dependency(pos(dec_divlist, divByUi(con_data,Ui)), Ui):
         dict.clear()
         con_key = -1  # 字典key
         con_value = 0  # 字典value
         pos_list = pos(dec_divlist,div(red))
+        # print("决策属性划分",dec_divlist)
+        # print("条件属性划分", div(red))
         m = len(Ui)-1
         while m >= 0:
             if set(pos_list).__contains__(Ui[m]):  #删除对象
                 del Ui[m]
             m -= 1
+        # print("正域",pos_list)
+        # print("Ui",Ui)
         for n in range(attr_data.shape[1]):
             temp_Red_data = red
             temp_Red_data = numpy.append(temp_Red_data, attr_data[:, n, numpy.newaxis], axis=1)
             dict[n] = dependency(pos(dec_divlist, divByUi(temp_Red_data,Ui)), Ui)
+            # print(dependency(pos(dec_divlist, divByUi(temp_Red_data,Ui)), Ui) , dependency(pos(dec_divlist, divByUi(red,Ui)), Ui))
+        # print(dict)
         for key in dict:
             if con_value < dict[key]:
                 con_value = dict[key]
@@ -123,7 +131,7 @@ def print_red(my_data,Red_data):
         for j in range( my_data.shape[1]):
             if (my_data[:, j] == Red_data[:, i]).all():
                 red_set.append(j)
-    print(red_set)
+    print("约简：",red_set)
 
 
 if __name__ == "__main__":
