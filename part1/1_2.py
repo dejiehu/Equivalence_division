@@ -1,4 +1,6 @@
 import time
+from itertools import chain
+
 import numpy
 
 def readfile():
@@ -6,18 +8,12 @@ def readfile():
     print(my_data)
     return my_data
 
-def is_exit_object(i,div_list):#划分表里是否存在某对象
-    for l in div_list:
-        if l.__contains__(i):
-           return True
-    return False
-
 def div(my_data):
     div_list = []
     list1= []
     for i in range(len(my_data)):
         list1.clear()
-        if is_exit_object(i, div_list):
+        if list(chain.from_iterable(div_list)).__contains__(i):    #展开
             continue
         list1.append(i)
         for j in range(i+1,len(my_data)):
