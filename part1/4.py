@@ -1,7 +1,7 @@
 import numpy
 
 def readfile():#读文件
-    my_data = numpy.loadtxt('zoo.txt')
+    my_data = numpy.loadtxt('../zoo.txt')
     print(my_data)
     print("my_data.shape:",my_data.shape)
     return my_data
@@ -68,12 +68,13 @@ def Red(con_data,dec_divlist,core_data,dep_num):#约简
                 continue
             j += 1
         i += 1
+    print(con_data.shape)
     Red_data = core_data
     Red_dep = core_dep
     dict = {}#字典存放添加的依赖度
     num = 0
     while Red_dep != dep_num:
-        # print("第",num,"次循环了")
+        print("第",num,"次循环了")
         num += 1
         dict.clear()
         con_key = -1#字典key

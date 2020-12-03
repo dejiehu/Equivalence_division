@@ -3,7 +3,7 @@ import time
 import numpy
 
 def readfile():#读文件
-    my_data = numpy.loadtxt('../zoo.txt')
+    my_data = numpy.loadtxt('../heart-c.txt')
     print(my_data)
     print("my_data.shape:",my_data.shape)
     return my_data
@@ -59,25 +59,30 @@ def core(con_data,dec_divlist,dep_num):# 根据 属性重要度  求核
     # print(core_data)
     return core_data
 
-def Red(con_data,dec_divlist,core_data,dep_num):#约简
+def Red(con_data,dec_divlist,core_data,dep_num,start):#约简
     core_list = div(core_data)
     core_dep = dependency(pos(dec_divlist,core_list),con_data)
-    # print("和属性依赖度：",core_dep)
+    # end = time.perf_counter()
+    # print(end - start)
     i = 0
-    j = 0
     while i < core_data.shape[1]:
+        j = 0
         while j < con_data.shape[1]:
             if (core_data[:,i] ==con_data[:,j]).all():
                 con_data = deal_data(con_data,j,j)
                 continue
             j += 1
         i += 1
+    # end = time.perf_counter()
+    # print(end - start)
     Red_data = core_data
     Red_dep = core_dep
     dict = {}#字典存放添加的依赖度
     num = 0
+    print(Red_dep, dep_num)
     while Red_dep != dep_num:
-        # print("第",num,"次循环了")
+        print(Red_dep,dep_num)
+        print("第",num,"次循环了")
         num += 1
         dict.clear()
         con_key = -1#字典key
@@ -86,7 +91,9 @@ def Red(con_data,dec_divlist,core_data,dep_num):#约简
             temp_Red_data = Red_data
             temp_Red_data = numpy.append(temp_Red_data,con_data[:,k,numpy.newaxis],axis=1)
             Red_divlist = div(temp_Red_data)
-            dict [k] = dependency(pos(dec_divlist,Red_divlist),con_data) - core_dep
+            print(Red_divlist)
+            dict[k] = dependency(pos(dec_divlist,Red_divlist),con_data) - core_dep
+        print(dict)
         for key in dict:
             if con_value < dict[key]:
                 con_value = dict[key]
@@ -94,9 +101,10 @@ def Red(con_data,dec_divlist,core_data,dep_num):#约简
         Red_data = numpy.append(Red_data,con_data[:,con_key,numpy.newaxis],axis=1)
         con_data = deal_data(con_data,con_key,con_key)
         Red_dep = dependency(pos(dec_divlist, div(Red_data)), con_data)#添加条件属性后的依赖度
+        print(Red_dep)
     return Red_data
 
-def De_redundancy(Red_data,dec_divlist,dep_num):# 去冗余
+def De_redundancy(Red_data,dec_divlist,dep_num,):# 去冗余
     i = 0
     while i < Red_data.shape[1]:
         temp_Red_data = Red_data
@@ -121,15 +129,14 @@ def print_red(my_data,Red_data):
 if __name__ == "__main__":
     start = time.perf_counter()
     my_data = readfile()
-    con_data = deal_data(my_data, 16, 16)
-    dec_data = deal_data(my_data, 0, 15)
+    con_data = deal_data(my_data, my_data.shape[1] - 1, my_data.shape[1] - 1)
+    dec_data = deal_data(my_data, 0, my_data.shape[1] - 2)
     con_divlist = div(con_data)
     dec_divlist = div(dec_data)
     pos_list = pos(dec_divlist,con_divlist)
-    print(pos_list,"pos_list")
     dep_num = dependency(pos_list,my_data)
     core_data = core(con_data, dec_divlist,dep_num)
-    Red_data = Red(con_data,dec_divlist,core_data,dep_num)
+    Red_data = Red(con_data,dec_divlist,core_data,dep_num,start)
     print_red(my_data, De_redundancy(Red_data,dec_divlist,dep_num))
     end = time.perf_counter()
     print(end - start)
