@@ -23,10 +23,20 @@ class Node(object):
         self.data = data
         self._next = None
 
+def div(my_data,Mm_list):
+    U_linkList = [i for i in range(len(my_data))]
+    for i in Mm_list:
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
     my_data = readfile()
     con_data = deal_data(my_data, my_data.shape[1] - 1, my_data.shape[1] - 1)
     dec_data = deal_data(my_data, 0, my_data.shape[1] - 2)
-    Max_min(con_data)
+    Mm_list = Max_min(con_data)
+    div(my_data, Mm_list)
