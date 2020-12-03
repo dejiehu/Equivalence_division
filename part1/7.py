@@ -1,8 +1,10 @@
 import math
+import time
+
 import numpy
 
 def readfile():
-    my_data = numpy.loadtxt('..\zoo.txt')
+    my_data = numpy.loadtxt('..\heart-c.txt')
     print(my_data)
     return my_data
 
@@ -121,9 +123,10 @@ def print_red(my_data,Red_data):
     print(red_set)
 
 if __name__ == '__main__':
+    start = time.perf_counter()
     my_data = readfile()
-    con_data = deal_data(my_data,16,16)
-    dec_data = deal_data(my_data,0,15)
+    con_data = deal_data(my_data, my_data.shape[1] - 1, my_data.shape[1] - 1)
+    dec_data = deal_data(my_data, 0, my_data.shape[1] - 2)
     con_divlist = div(con_data)
     dec_divlist = div(dec_data)
     print("con_divlist",con_divlist)
@@ -134,3 +137,5 @@ if __name__ == '__main__':
     print("H(D|C)", con_Entropy(con_divlist,dec_divlist))
     C0_data = core(con_data, dec_divlist, I)
     print_red(my_data, Red(C0_data,dec_divlist,I,con_data))
+    end = time.perf_counter()
+    print(end - start)

@@ -4,7 +4,7 @@ import time
 import numpy
 
 def readfile():
-    my_data = numpy.loadtxt('../data.txt')
+    my_data = numpy.loadtxt('../heart-c.txt')
     print(my_data)
     return my_data
 
@@ -16,8 +16,8 @@ def deal_data(my_data,m,n):#处理数据表
 
 def del_dup(con_data,core_data):#删除重复列
     i = 0
-    j = 0
     while i < core_data.shape[1]:
+        j = 0
         while j < con_data.shape[1]:
             if (core_data[:, i] == con_data[:, j]).all():
                 con_data = deal_data(con_data, j, j)

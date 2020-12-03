@@ -3,7 +3,7 @@ from itertools import chain
 import numpy
 
 def readfile():#读文件
-    my_data = numpy.loadtxt('../heart-c.txt')
+    my_data = numpy.loadtxt('../german.txt')
     print(my_data)
     print("my_data.shape:",my_data.shape)
     return my_data
@@ -67,8 +67,6 @@ def Red(con_data,dec_divlist,core_list,dep_num):#约简
     core_list = sorted(core_list,reverse=True)
     for i in core_list:
         att_data = deal_data(att_data,i,i)
-    # end = time.perf_counter()
-    # print(end - start)
     Red_dep = core_dep
     dict = {}#字典存放添加的依赖度
     num = 0
