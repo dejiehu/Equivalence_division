@@ -33,7 +33,7 @@ def pos(dec_divlist,con_divlist):  #子集
     for i in dec_divlist:
          for j in con_divlist:
             if set(j).issubset(i):
-                pos_list +=j
+                pos_list += j
     print(pos_list)
 
 

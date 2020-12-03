@@ -1,7 +1,7 @@
 import numpy
 
 def readfile():#读文件
-    my_data = numpy.loadtxt('data.txt')
+    my_data = numpy.loadtxt('../data.txt')
     print(my_data)
     print("my_data.shape:",my_data.shape)
     return my_data
@@ -47,10 +47,8 @@ def dependency(pos_list,my_data):#依赖度
 def core(con_data,dec_divlist,dep_num):# 根据 属性重要度  求核
     for i in range(con_data.shape[1]):
         temp_con_data = deal_data(con_data,i,i)
-        temp_con_divlist = div(temp_con_data)
-        pos_list = pos(dec_divlist, temp_con_divlist)
-        print("单个属性依赖度：",dependency(pos_list,con_data))
-        if dep_num != dependency(pos_list,con_data):
+        print("单个属性依赖度：",dependency(pos(dec_divlist, div(temp_con_data)),con_data))
+        if dep_num != dependency(pos(dec_divlist, div(temp_con_data)),con_data):
             print("第",i,"个属性为核属性")
 
 if __name__ == "__main__":
