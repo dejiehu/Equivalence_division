@@ -27,6 +27,6 @@ class Node(object):
 
 if __name__ == '__main__':
     my_data = readfile()
-    con_data = deal_data(my_data,4,4)
-    dec_data = deal_data(my_data,0,3)
+    con_data = deal_data(my_data, my_data.shape[1] - 1, my_data.shape[1] - 1)
+    dec_data = deal_data(my_data, 0, my_data.shape[1] - 2)
     Max_min(con_data)
