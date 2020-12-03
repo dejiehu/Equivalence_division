@@ -59,7 +59,7 @@ def core(con_data,dec_divlist,dep_num):# 根据 属性重要度  求核
     print(core_list)
     return core_list
 
-def Red(con_data,dec_divlist,core_list,dep_num,start):#约简
+def Red(con_data,dec_divlist,core_list,dep_num):#约简
     core_data = getCore_data(core_list,con_data)
     core_dep = dependency(pos(dec_divlist,div(core_data)),con_data)
     Red_data = core_data
@@ -82,18 +82,17 @@ def Red(con_data,dec_divlist,core_list,dep_num,start):#约简
         con_value = 0#字典value
         for k in range(att_data.shape[1]):
             temp_Red_data = Red_data
-            temp_Red_data = numpy.append(temp_Red_data,con_data[:,k,numpy.newaxis],axis=1)
+            temp_Red_data = numpy.append(temp_Red_data,att_data[:,k,numpy.newaxis],axis=1)
             Red_divlist = div(temp_Red_data)
-            print(Red_divlist)
             dict[k] = dependency(pos(dec_divlist,Red_divlist),con_data) - core_dep
         print(dict)
         for key in dict:
             if con_value < dict[key]:
                 con_value = dict[key]
                 con_key = key
-        Red_data = numpy.append(Red_data,con_data[:,con_key,numpy.newaxis],axis=1)
-        att_data = deal_data(con_data,con_key,con_key)
-        Red_dep = dependency(pos(dec_divlist, div(Red_data)), con_data)#添加条件属性后的依赖度
+        Red_data = numpy.append(Red_data,att_data[:,con_key,numpy.newaxis],axis=1)
+        att_data = deal_data(att_data,con_key,con_key)
+        Red_dep = dependency(pos(dec_divlist,div(Red_data)), con_data)#添加条件属性后的依赖度
         print(Red_dep)
     return Red_data
 
@@ -127,7 +126,7 @@ if __name__ == "__main__":
     pos_list = pos(dec_divlist,con_divlist)
     dep_num = dependency(pos_list,my_data)
     core_list = core(con_data, dec_divlist,dep_num)
-    Red_data = Red(con_data,dec_divlist,core_list,dep_num,start)
+    Red_data = Red(con_data,dec_divlist,core_list,dep_num)
     print_red(my_data, De_redundancy(Red_data,dec_divlist,dep_num))
     end = time.perf_counter()
     print(end - start)

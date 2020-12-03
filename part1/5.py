@@ -59,7 +59,7 @@ def core(con_data,dec_divlist,dep_num):# 根据 属性重要度  求核
     # print(core_data)
     return core_data
 
-def Red(con_data,dec_divlist,core_data,dep_num,start):#约简
+def Red(con_data,dec_divlist,core_data,dep_num):#约简
     core_list = div(core_data)
     core_dep = dependency(pos(dec_divlist,core_list),con_data)
     # end = time.perf_counter()
@@ -91,7 +91,6 @@ def Red(con_data,dec_divlist,core_data,dep_num,start):#约简
             temp_Red_data = Red_data
             temp_Red_data = numpy.append(temp_Red_data,con_data[:,k,numpy.newaxis],axis=1)
             Red_divlist = div(temp_Red_data)
-            print(Red_divlist)
             dict[k] = dependency(pos(dec_divlist,Red_divlist),con_data) - core_dep
         print(dict)
         for key in dict:
@@ -136,7 +135,7 @@ if __name__ == "__main__":
     pos_list = pos(dec_divlist,con_divlist)
     dep_num = dependency(pos_list,my_data)
     core_data = core(con_data, dec_divlist,dep_num)
-    Red_data = Red(con_data,dec_divlist,core_data,dep_num,start)
+    Red_data = Red(con_data,dec_divlist,core_data,dep_num)
     print_red(my_data, De_redundancy(Red_data,dec_divlist,dep_num))
     end = time.perf_counter()
     print(end - start)
