@@ -33,6 +33,3 @@ from itertools import product
 
 list1 = [[]]*4
 print(list1)
-list1[1] = list1[1] +[4]
-list1[1] = list1[1] +[5]
-print(list1)
