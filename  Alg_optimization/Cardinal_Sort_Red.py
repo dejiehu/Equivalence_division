@@ -1,11 +1,9 @@
-import operator
 import time
 from itertools import chain
-
 import numpy
 
 def readfile():
-    my_data = numpy.loadtxt('../german.txt')
+    my_data = numpy.loadtxt('../data.txt')
     my_data = my_data.astype(int)
     print(my_data)
     return my_data
@@ -22,13 +20,7 @@ def Max_min(con_data):#找出最大最小值
         Mm_list.append([numpy.max(con_data[:, i]),numpy.min(con_data[:, i])])
     return Mm_list
 
-class Node(object):
-    def __init__(self, data):
-        self.data = data
-        self._next = None
-
 def div(my_data,Mm_list):
-    print(Mm_list)
     U_linkList = [i for i in range(len(my_data))]
     for i in range(len(Mm_list)):
         queue_linkList = [[]]*(Mm_list[i][0] - Mm_list[i][1] + 1)
@@ -36,26 +28,16 @@ def div(my_data,Mm_list):
             queue_linkList[my_data[j][i] - Mm_list[i][1]] = queue_linkList[my_data[j][i] - Mm_list[i][1]] + [j]
         U_linkList.clear()
         U_linkList = list(chain.from_iterable(queue_linkList))
-    print(U_linkList)
     div_list = []
     temp_list = [U_linkList[0]]
     for i in range(1,len(U_linkList)):
-        print((my_data[U_linkList[i]] == my_data[U_linkList[i-1]]).all(),U_linkList[i]+1,my_data[U_linkList[i]] ,U_linkList[i-1]+1, my_data[U_linkList[i-1]])
         if((my_data[U_linkList[i]] == my_data[U_linkList[i-1]]).all()):
             temp_list.append(U_linkList[i])
             continue
         div_list.append(temp_list)
         temp_list = [U_linkList[i]]
     div_list.append(temp_list)
-    print(div_list)
     return U_linkList
-
-
-
-
-
-
-
 
 if __name__ == '__main__':
     start = time.perf_counter()

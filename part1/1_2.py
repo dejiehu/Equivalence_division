@@ -4,7 +4,7 @@ from itertools import chain
 import numpy
 
 def readfile():
-    my_data = numpy.loadtxt('../german.txt')
+    my_data = numpy.loadtxt('../data.txt')
     print(my_data)
     return my_data
 
