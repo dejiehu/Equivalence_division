@@ -1,11 +1,14 @@
 from itertools import product
 #
-a = [1,2]
-b = [4,5,5]
-c = [6]
-loop_val = [a,b,c]
-for i in product(*loop_val):
-    print(i)
+# a = [1,2]
+# b = [4,5,5]
+# c = [6]
+# loop_val = [a,b,c]
+# for i in product(*loop_val):
+#     print(i)
+
+
+
 # for i in range(9):
 #     print(i, "pre")
 #     if i == 4:
@@ -26,3 +29,10 @@ for i in product(*loop_val):
 # for i in range(len(data[0])):
 #     a.append(chr(97 + i))
 # data.insert(0, a)
+
+
+list1 = [[]]*4
+print(list1)
+list1[1] = list1[1] +[4]
+list1[1] = list1[1] +[5]
+print(list1)
