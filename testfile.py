@@ -31,5 +31,11 @@ from itertools import product
 # data.insert(0, a)
 
 
-list1 = [[]]*4
+# list1 = [[]]*4
+import numpy
+
+list1 = [1,2,3]
+list1 = [4,65,6]
 print(list1)
+R_data = numpy.empty(shape=(0,0))   #约简
+print(R_data.shape)
