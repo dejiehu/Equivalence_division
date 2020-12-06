@@ -3,7 +3,7 @@ from itertools import chain
 import numpy
 
 def readfile():     #读文件
-    my_data = numpy.loadtxt('../cardinal.txt')
+    my_data = numpy.loadtxt('../zoo.txt')
     my_data = my_data.astype(int)
     print(my_data)
     print("*******************************************************************")
@@ -68,7 +68,7 @@ def is_belongTo(con_list,Upos_list):  #判断是否属于
 
 def is_card_yes(con_list,dec_data):   # 判断基数是否为1
     for i in con_list:
-        if dec_data[i] !=dec_data[0]:
+        if not(dec_data[i] == dec_data[con_list[0]]).all():
             return False
     return True
 
@@ -83,8 +83,7 @@ def cal_Up(U_list,P_data,Upos_list,Uneg_list,dec_data):
     return Up
 
 def calculate(U_list,P_data,attr_data,Upos_list,Uneg_list,dec_data):
-
-    if len(P_data) == 0:
+    if P_data.shape[1] == 0:
         X_list = [U_list.copy()]
     else:
         Up_list = cal_Up(U_list,P_data,Upos_list,Uneg_list,dec_data)
@@ -92,14 +91,17 @@ def calculate(U_list,P_data,attr_data,Upos_list,Uneg_list,dec_data):
     sig_list = []
     Bp_list = []
     NBp_list = []
-    UPa_divlist = div(attr_data,list(chain.from_iterable(X_list)))
+    UPa_divlist = []
+    for j_list in X_list:
+        temp_UPa_divlist = div(attr_data,j_list)
+        UPa_divlist = UPa_divlist + temp_UPa_divlist
     for i_list in UPa_divlist:
         if is_belongTo(i_list,Upos_list) & is_card_yes(i_list,dec_data):
             Bp_list = Bp_list + i_list
         if is_belongTo(i_list,Uneg_list):
             NBp_list = NBp_list + i_list
     sig_list = Bp_list + NBp_list
-    print(Bp_list , NBp_list)
+    return sig_list,Bp_list,NBp_list,UPa_divlist
 
 def Reduce_basedSig(my_data):
     con_data = deal_data(my_data, my_data.shape[1] - 1, my_data.shape[1] - 1)
@@ -107,11 +109,43 @@ def Reduce_basedSig(my_data):
     dec_data = deal_data(my_data, 0, my_data.shape[1] - 2)
     con_list = div(con_data,U_list)      #U/C
     Upos_list,Uneg_list = U_pos_nes(con_list, dec_data)   #   U'pos    U'neg
-    U_list = Upos_list +Uneg_list
-    P_data = []
-    attr_data = deal_data(con_data,3 , con_data.shape[1] - 1)
-    attr_data = deal_data(attr_data, 0,1 )
-    calculate(U_list,P_data,attr_data,Upos_list,Uneg_list,dec_data)
+    U_list = Upos_list + Uneg_list    #  U'
+    attr_data = con_data
+    R_data = numpy.empty(shape=(my_data.shape[0],0))   #约简
+    R_data = R_data.astype(int)
+    while len(U_list) != 0:
+        sig_num = 0
+        sig_list = []
+        Bp_list = []
+        NBp_list = []
+        UPa_divlist =[]
+        n = -1
+        i = 0
+        while i < attr_data.shape[1]:
+            temp_sig_list, temp_Bp_list, temp_NBp_list, temp_UPa_divlist = \
+                calculate(U_list.copy(), R_data, attr_data[:,i,numpy.newaxis], Upos_list, Uneg_list, dec_data)
+            if len(temp_sig_list) > sig_num:
+                n = i
+                sig_num = len(temp_sig_list)
+                sig_list = temp_sig_list
+                Bp_list = temp_Bp_list
+                NBp_list = temp_NBp_list
+                UPa_divlist = temp_UPa_divlist
+            i += 1
+        R_data = numpy.append(R_data, attr_data[:,n, numpy.newaxis], axis=1)
+        attr_data = deal_data(attr_data, n, n)
+        U_list = list(set(U_list).difference(set(Bp_list + NBp_list)))
+        Upos_list = list(set(Upos_list).difference(set(Bp_list)))
+        Uneg_list = list(set(Uneg_list).difference(set(NBp_list)))
+    print_red(my_data,R_data)
+
+def print_red(my_data, Red_data):
+    red_set = []
+    for i in range(Red_data.shape[1]):
+        for j in range(my_data.shape[1]):
+            if (my_data[:, j] == Red_data[:, i]).all():
+                red_set.append(j)
+    print(red_set)
 
 if __name__ == '__main__':
     start = time.perf_counter()
