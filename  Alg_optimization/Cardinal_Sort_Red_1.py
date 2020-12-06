@@ -2,7 +2,7 @@ import time
 from itertools import chain
 import numpy
 
-def readfile():     #读文件
+def readfile():     #读文件l
     my_data = numpy.loadtxt('../cardinal.txt')
     my_data = my_data.astype(int)
     print(my_data)
