@@ -1,7 +1,11 @@
+import os
+import sys
 import time
 from itertools import chain
 import numpy
-
+# o_path = os.getcwd() # 返回当前工作目录
+# sys.path.append(o_path) # 添加自己指定的搜索路径
+# from part2 import
 def readfile():     #读文件
     my_data = numpy.loadtxt('../cardinal.txt')
     my_data = my_data.astype(int)
