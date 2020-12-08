@@ -32,10 +32,27 @@ from itertools import product
 
 
 # list1 = [[]]*4
-import numpy
+# import numpy
+#
+# list1 = [1,2,3]
+# list1 = [4,65,6]
+# print(list1)
+# R_data = numpy.empty(shape=(0,0))   #约简
+# print(R_data.shape)
 
-list1 = [1,2,3]
-list1 = [4,65,6]
-print(list1)
-R_data = numpy.empty(shape=(0,0))   #约简
-print(R_data.shape)
+
+
+
+import time
+# import numpy
+#
+# def readfile():
+#     my_data = numpy.loadtxt('data.txt')
+#     print(my_data)
+#     new_data = numpy.empty(shape=(0,5))
+#
+#     print(my_data[range(0 , 4)].shape)
+#     new_data = numpy.append(new_data,my_data[range(0,4)],axis=0)
+#     print(new_data.shape)
+#     # R_data = numpy.append(R_data, attr_data[:, n, numpy.newaxis], axis=1)
+# readfile()

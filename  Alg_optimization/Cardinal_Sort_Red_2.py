@@ -1,6 +1,10 @@
+
 import time
 from itertools import chain
 import numpy
+
+from draw.drawing import draw
+
 
 def readfile():     #读文件
     my_data = numpy.loadtxt('../german.txt')
@@ -35,6 +39,7 @@ def div(my_data,U_list):    #等价类的划分
         queue_linkList = [[]]*(Mm_list[i][0] - Mm_list[i][1] + 1)
         for j in U_linkList:
             queue_linkList[my_data[j][i] - Mm_list[i][1]] = queue_linkList[my_data[j][i] - Mm_list[i][1]] + [j]
+        # print(queue_linkList)
         U_linkList.clear()
         U_linkList = list(chain.from_iterable(queue_linkList))
     div_list = []
@@ -95,7 +100,6 @@ def calculate(U_list,P_data,attr_data,Upos_list,Uneg_list,dec_data):
     for j_list in X_list:
         temp_UPa_divlist = div(attr_data,j_list)
         UPa_divlist = UPa_divlist + temp_UPa_divlist
-
     for i_list in UPa_divlist:
         if is_belongTo(i_list,Upos_list) & is_card_yes(i_list,dec_data):
             Bp_list = Bp_list + i_list
@@ -105,10 +109,14 @@ def calculate(U_list,P_data,attr_data,Upos_list,Uneg_list,dec_data):
     return sig_list,Bp_list,NBp_list,UPa_divlist
 
 def Reduce_basedSig(my_data):
+    if len(my_data) == 0:
+        print("无数据")
+        return
     con_data = deal_data(my_data, my_data.shape[1] - 1, my_data.shape[1] - 1)
     U_list = [i for i in range(len(my_data))]
     dec_data = deal_data(my_data, 0, my_data.shape[1] - 2)
     con_list = div(con_data,U_list)      #U/C
+    print(len(con_list))
     Upos_list,Uneg_list = U_pos_nes(con_list, dec_data)   #   U'pos    U'neg
     U_list = Upos_list + Uneg_list    #  U'
     # print("con_list",con_list)
@@ -139,7 +147,6 @@ def Reduce_basedSig(my_data):
             # print(temp_Bp_list, "temp_Bp_list")
             # print(temp_NBp_list, "temp_NBp_list")
             # print(temp_UPa_divlist,"U/(P,{x})")
-
             if len(temp_sig_list) > sig_num:
                 n = i
                 sig_num = len(temp_sig_list)
@@ -166,6 +173,17 @@ def print_red(my_data, Red_data):
 if __name__ == '__main__':
     start = time.perf_counter()
     my_data = readfile()
+    # x = []
+    # y = []
+    # for i in range(len(my_data)):
+    #     if (i+1)%100 ==0:
+    #         start = time.perf_counter()
+    #         Reduce_basedSig(my_data[range(0, i)])
+    #         end = time.perf_counter()
+    #         x.append(i+1)
+    #         y.append(end - start)
+    # print(x,y)
+    # draw(x,y);
+    # end = time.perf_counter()
+    # print(end - start)
     Reduce_basedSig(my_data)
-    end = time.perf_counter()
-    print(end - start)

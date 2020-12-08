@@ -42,10 +42,6 @@ def Max_min(con_data):  #找出属性最大最小值
         Mm_list.append([numpy.max(con_data[:, i]),numpy.min(con_data[:, i])])
     return Mm_list
 
-# def Max_min_obj(con_data,):
-#     Mm_list = []
-#     for i in range
-
 def div(my_data,Mm_list):    #等价类的划分
     U_linkList = [i for i in range(len(my_data))]
     for i in range(len(Mm_list)):
