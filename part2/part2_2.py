@@ -1,6 +1,7 @@
 from itertools import product
 
-import part2
+from part2 import part2_1
+
 
 def logic_operation(diffItem_list):#析取，吸收
     DM_list = []
@@ -51,7 +52,7 @@ def Red(DM):#逻辑运算
 
 
 if __name__ == '__main__':
-    my_data = part2.part2_1.readfile()
-    DM = part2.part2_1.Matrix_construct(my_data) #差别矩阵
+    my_data = part2_1.readfile()
+    DM = part2_1.Matrix_construct(my_data) #差别矩阵
     Red(DM)
 
