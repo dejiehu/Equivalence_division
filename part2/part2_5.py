@@ -5,7 +5,7 @@ from itertools import product
 
 
 def readfile():
-    my_data = numpy.loadtxt('../zz.txt')
+    my_data = numpy.loadtxt('../zoo.txt')
     print(my_data)
     return my_data
 

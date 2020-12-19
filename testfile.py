@@ -56,3 +56,11 @@ import time
 #     print(new_data.shape)
 #     # R_data = numpy.append(R_data, attr_data[:, n, numpy.newaxis], axis=1)
 # readfile()
+
+
+loop_val = [{1,2},{1,3}]#将合取式差分为析取式     loop_val = [{1,2},{1,3}]
+
+DM_list = []
+for i in product(*loop_val):
+    DM_list.append(set(i))
+print(DM_list)
