@@ -53,16 +53,19 @@ def Matrix_construct(con_data,pos_list,con_divlist):  #构造基于正域的矩�
     for i in range(con_data.shape[0]):
         for j in range(i):
             s.clear()
-            index = 0
-            for m in range(len(con_divlist)):
-                if con_divlist[m].__contains__(i):
-                    if set(con_divlist[m]).issubset(set(pos_list)):
-                        # print(set(con_divlist[m]),set(pos_list),"子集")
-                        break
-                if m == len(con_divlist) - 1:
-                    index = len(con_divlist) - 1
-            if index == len(con_divlist) - 1:
-                DM[i][j] = None
+            # index = 0
+            # for m in range(len(con_divlist)):
+            #     if con_divlist[m].__contains__(i):
+            #         if set(con_divlist[m]).issubset(set(pos_list)):
+            #             # print(set(con_divlist[m]),set(pos_list),"子集")
+            #             break
+            #     if m == len(con_divlist) - 1:
+            #         index = len(con_divlist) - 1
+            # if index == len(con_divlist) - 1:
+            #     DM[i][j] = None
+            #     continue
+            # print(not set([i]).issubset(set(pos_list)))
+            if not(set([i]).issubset(set(pos_list)) or set([j]).issubset(set(pos_list))):
                 continue
             for k in range(con_data.shape[1]):
                 if(con_data[i][k] != con_data[j][k]):

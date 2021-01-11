@@ -2,7 +2,7 @@ import numpy
 from itertools import product
 
 def readfile():
-    my_data = numpy.loadtxt('../data.txt')
+    my_data = numpy.loadtxt('../traffic.txt')
     print(my_data)
     return my_data
 

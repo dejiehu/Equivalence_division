@@ -5,7 +5,7 @@ from itertools import product
 关系保持约简
 '''
 def readfile():
-    my_data = numpy.loadtxt('data.txt')
+    my_data = numpy.loadtxt('../traffic.txt')
     print(my_data)
     return my_data
 
@@ -118,13 +118,11 @@ def Red(DM):#逻辑运算
 
 if __name__ == '__main__':
     my_data = readfile()
-    con_data = deal_data(my_data,3,4)
-    dec_data = deal_data(my_data,0,2)
+    con_data = deal_data(my_data, my_data.shape[1] - 1, my_data.shape[1] - 1)
+    dec_data = deal_data(my_data, 0, my_data.shape[1] - 2)
     con_divlist = div(con_data)
     dec_divlist = div(dec_data)
     print("con_divlist", con_divlist)
     print("dec_divlist", dec_divlist)
     DM = Matrix_construct(con_data,dis_relation(con_data, dec_data))
     Red(DM)
-    # dis_list =  dis_relation(con_data, dec_data)
-    # print(not(dis_list.__contains__([4,0])))

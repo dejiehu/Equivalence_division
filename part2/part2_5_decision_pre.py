@@ -43,7 +43,6 @@ def gen_decision(con_divlist,dec_data): # 广义决策表
             dec_set += list(dec_data[j])
         for j in i:
             dec_list[j] = list(set(dec_set))
-    print(dec_list)
     return dec_list
 
 def Matrix_construct(my_data,dec_list):  #构造基于正域的矩阵
@@ -79,7 +78,6 @@ def logic_operation(diffItem_list):#析取，吸收
                 DM_list.append(i)
         else:  # 列表为空直接加入
             DM_list.append(i)
-    # print( len(DM_list),DM_list,"排序后集合")  #排序后集合
 
     m = len(DM_list) - 1# 吸收多余的集合
     while m > 0: #m从后往前
@@ -114,8 +112,8 @@ def Red(DM):#逻辑运算
 
 if __name__ == '__main__':
     my_data = readfile()
-    con_data = deal_data(my_data,3,4)
-    dec_data = deal_data(my_data,0,2)
+    con_data = deal_data(my_data, my_data.shape[1] - 1, my_data.shape[1] - 1)
+    dec_data = deal_data(my_data, 0, my_data.shape[1] - 2)
     con_divlist = div(con_data)
     dec_divlist = div(dec_data)
     print("con_divlist", con_divlist)
