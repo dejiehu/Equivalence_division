@@ -1,10 +1,12 @@
 import numpy
-
+'''
+正域保持约简
+'''
 # numpy.set_printoptions(suppress=True)
 numpy.set_printoptions(threshold=10000000000,linewidth =  8888)
 from itertools import product
 def readfile():
-    my_data = numpy.loadtxt('../zoo.txt')
+    my_data = numpy.loadtxt('../traffic.txt')
     print(my_data)
     return my_data
 
@@ -40,7 +42,7 @@ def pos(dec_divlist,con_divlist):  #子集  正域
          for j in con_divlist:
             if set(j).issubset(i):
                 pos_list +=j
-    # print(pos_list)
+    print(pos_list,"pos_list")
     return pos_list
 
 def Matrix_construct(con_data,pos_list,con_divlist):  #构造基于正域的矩阵
@@ -66,7 +68,7 @@ def Matrix_construct(con_data,pos_list,con_divlist):  #构造基于正域的矩�
                 if(con_data[i][k] != con_data[j][k]):
                     s.add(k)
             DM[i][j] = s.copy()
-    # print(DM)
+    print(DM)
     return DM
 
 def logic_operation(diffItem_list):#析取，吸收

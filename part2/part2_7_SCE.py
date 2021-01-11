@@ -1,3 +1,6 @@
+'''
+香农（条件）熵 正域加速
+'''
 import math
 import time
 import numpy

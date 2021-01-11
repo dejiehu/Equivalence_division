@@ -1,3 +1,6 @@
+'''
+基于正域 正域加速
+'''
 import time
 import numpy
 

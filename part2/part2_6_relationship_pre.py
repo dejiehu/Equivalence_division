@@ -1,11 +1,11 @@
 import operator
-
 import numpy
 from itertools import product
-
-
+'''
+关系保持约简
+'''
 def readfile():
-    my_data = numpy.loadtxt('../zoo.txt')
+    my_data = numpy.loadtxt('data.txt')
     print(my_data)
     return my_data
 
@@ -35,18 +35,20 @@ def div(my_data):  #划分等价类
         div_list.append(list1.copy())
     return div_list
 
-def gen_decision(con_divlist,dec_data): # 广义决策表
-    dec_list = [[]]*len(dec_data)
-    for i in con_divlist:
-        dec_set =[]
-        for j in i:
-            dec_set += list(dec_data[j])
-        for j in i:
-            dec_list[j] = list(set(dec_set))
-    print(dec_list)
-    return dec_list
+def dis_relation(con_data,dec_data): # 关系保持
+    dis_list = []
+    for i in range(con_data.shape[0]):
+        for j in range(con_data.shape[0]):
+            if(i == j):
+                continue
+            print(~((con_data[i] ==con_data[j]).all()) & ~((dec_data[i] == dec_data[j]).all()),~((con_data[i] ==con_data[j]).all()),~((dec_data[i] == dec_data[j]).all()))
+            if ~((con_data[i] ==con_data[j]).all()) & ~((dec_data[i] == dec_data[j]).all()):
+                print(i,j)
+                dis_list.append([i,j])
+    print(dis_list)
+    return dis_list
 
-def Matrix_construct(my_data,dec_list):  #构造基于正域的矩阵
+def Matrix_construct(my_data,dis_list):  #构造基于正域的矩阵
     s = set()
     DM = numpy.zeros(shape=(len(my_data), len(my_data)), dtype = tuple)
     for i in range(len(DM)):
@@ -54,8 +56,9 @@ def Matrix_construct(my_data,dec_list):  #构造基于正域的矩阵
     for i in range(my_data.shape[0]):
         for j in range(i):
             s.clear()
-            if operator.eq(dec_list[i],dec_list[j]):
+            if not(dis_list.__contains__([i,j])):#约束条件
                 DM[i][j] = None
+                # print(i, j, "otherwise")
                 continue
             for k in range(my_data.shape[1]):
                 if(my_data[i][k] != my_data[j][k]):
@@ -64,6 +67,7 @@ def Matrix_construct(my_data,dec_list):  #构造基于正域的矩阵
     print(DM)
 
     return DM
+
 
 def logic_operation(diffItem_list):#析取，吸收
     DM_list = []
@@ -120,5 +124,7 @@ if __name__ == '__main__':
     dec_divlist = div(dec_data)
     print("con_divlist", con_divlist)
     print("dec_divlist", dec_divlist)
-    DM = Matrix_construct(con_data,gen_decision(con_divlist,dec_data))
+    DM = Matrix_construct(con_data,dis_relation(con_data, dec_data))
     Red(DM)
+    # dis_list =  dis_relation(con_data, dec_data)
+    # print(not(dis_list.__contains__([4,0])))

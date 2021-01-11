@@ -1,7 +1,9 @@
 import numpy
-
+'''
+正域保持约简
+'''
 def readfile():
-    my_data = numpy.loadtxt('../data.txt')
+    my_data = numpy.loadtxt('../traffic.txt')
     print(my_data)
     return my_data
 

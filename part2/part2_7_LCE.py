@@ -1,3 +1,6 @@
+'''
+liang熵 正域加速
+'''
 import time
 from itertools import chain
 import numpy
