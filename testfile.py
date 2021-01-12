@@ -31,7 +31,10 @@ from itertools import product
 # data.insert(0, a)
 
 
-# list1 = [[]]*4
+list1 = []
+list1+= [0]
+list1+= [1]
+print(list1 == [0,1])
 # import numpy
 #
 # list1 = [1,2,3]
@@ -58,9 +61,9 @@ import time
 # readfile()
 
 
-loop_val = [{1,2},{1,3}]#将合取式差分为析取式     loop_val = [{1,2},{1,3}]
-
-DM_list = []
-for i in product(*loop_val):
-    DM_list.append(set(i))
-print(DM_list)
+# loop_val = [{1,2},{1,3}]#将合取式差分为析取式     loop_val = [{1,2},{1,3}]
+#
+# DM_list = []
+# for i in product(*loop_val):
+#     DM_list.append(set(i))
+# print(DM_list)

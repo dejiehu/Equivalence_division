@@ -1,8 +1,7 @@
-import operator
 import numpy
 from itertools import product
 '''
-不可分辨关系保持约简
+分布保持约简
 '''
 def readfile():
     my_data = numpy.loadtxt('../traffic.txt')
@@ -35,18 +34,20 @@ def div(my_data):  #划分等价类
         div_list.append(list1.copy())
     return div_list
 
-def ind_relation(con_data,dec_data): # 关系保持
+def distribution(con_divlist,dec_divlist): # 关系保持
     dis_list = []
-    for i in range(con_data.shape[0]):
-        for j in range(con_data.shape[0]):
-            if(i == j):
-                continue
-            if ((con_data[i] ==con_data[j]).all()) or ((dec_data[i] == dec_data[j]).all()):
-                dis_list.append([i,j])
+    for i in con_divlist:
+        p_list = []
+        for j in dec_divlist:
+            p_list += [len(set(i)&set(j))/len(i)]
+        dis_list.append(p_list)
     print(dis_list)
     return dis_list
-
-def Matrix_construct(my_data,dis_list):  #构造基于正域的矩阵
+def listContain(con_divlist,n):
+    for i in range(len(con_divlist)):
+        if con_divlist[i].__contains__(n):
+            return i
+def Matrix_construct(my_data,con_divlist,dis_list):  #构造基于正域的矩阵
     s = set()
     DM = numpy.zeros(shape=(len(my_data), len(my_data)), dtype = tuple)
     for i in range(len(DM)):
@@ -54,16 +55,14 @@ def Matrix_construct(my_data,dis_list):  #构造基于正域的矩阵
     for i in range(my_data.shape[0]):
         for j in range(i):
             s.clear()
-            if (dis_list.__contains__([i,j])):#约束条件
+            if dis_list[listContain(con_divlist,i)] == dis_list[listContain(con_divlist,j)]:
                 continue
             for k in range(my_data.shape[1]):
                 if(my_data[i][k] != my_data[j][k]):
                     s.add(k)
             DM[i][j] = s.copy()
     print(DM)
-
     return DM
-
 
 def logic_operation(diffItem_list):#析取，吸收
     DM_list = []
@@ -79,13 +78,11 @@ def logic_operation(diffItem_list):#析取，吸收
                 DM_list.append(i)
         else:  # 列表为空直接加入
             DM_list.append(i)
-    # print( len(DM_list),DM_list,"排序后集合")  #排序后集合
 
     m = len(DM_list) - 1# 吸收多余的集合
     while m > 0: #m从后往前
         n = 0  #从前往后
         while n < m:
-            # print(DM_list[n],DM_list[m],DM_list[n].issubset(DM_list[m]))
             if set(DM_list[n]).issubset(DM_list[m]):
                 del DM_list[m]
                 m = len(DM_list)
@@ -120,5 +117,5 @@ if __name__ == '__main__':
     dec_divlist = div(dec_data)
     print("con_divlist", con_divlist)
     print("dec_divlist", dec_divlist)
-    DM = Matrix_construct(con_data,dis_relation(con_data, dec_data))
+    DM = Matrix_construct(con_data,con_divlist,distribution(con_divlist, dec_divlist))
     Red(DM)
