@@ -1,8 +1,7 @@
-import operator
 import numpy
 from itertools import product
 '''
-关系保持约简
+可分辨关系保持约简
 '''
 def readfile():
     my_data = numpy.loadtxt('../traffic.txt')
@@ -41,9 +40,7 @@ def dis_relation(con_data,dec_data): # 关系保持
         for j in range(con_data.shape[0]):
             if(i == j):
                 continue
-            print(~((con_data[i] ==con_data[j]).all()) & ~((dec_data[i] == dec_data[j]).all()),~((con_data[i] ==con_data[j]).all()),~((dec_data[i] == dec_data[j]).all()))
             if ~((con_data[i] ==con_data[j]).all()) & ~((dec_data[i] == dec_data[j]).all()):
-                print(i,j)
                 dis_list.append([i,j])
     print(dis_list)
     return dis_list
