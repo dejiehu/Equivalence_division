@@ -39,7 +39,6 @@ def div(my_data,U_list):    #等价类的划分
         queue_linkList = [[]]*(Mm_list[i][0] - Mm_list[i][1] + 1)
         for j in U_linkList:
             queue_linkList[my_data[j][i] - Mm_list[i][1]] = queue_linkList[my_data[j][i] - Mm_list[i][1]] + [j]
-        # print(queue_linkList)
         U_linkList.clear()
         U_linkList = list(chain.from_iterable(queue_linkList))
     div_list = []
@@ -119,17 +118,11 @@ def Reduce_basedSig(my_data):
     print(len(con_list))
     Upos_list,Uneg_list = U_pos_nes(con_list, dec_data)   #   U'pos    U'neg
     U_list = Upos_list + Uneg_list    #  U'
-    # print("con_list",con_list)
-    # print("Upos_list",Upos_list)
-    # print("Uneg_list",Uneg_list)
     attr_data = con_data
     R_data = numpy.empty(shape=(my_data.shape[0],0))   #约简
     R_data = R_data.astype(int)
     num = 0
     while len(U_list) != 0:
-        # print("第",num,"次\n\n",)
-        # print(Upos_list,"Upos_list")
-        # print(Uneg_list,"Uneg_list")
         num += 1
         sig_num = 0
         sig_list = []
@@ -138,15 +131,9 @@ def Reduce_basedSig(my_data):
         UPa_divlist =[]
         n = -1
         i = 0
-        # print(R_data.shape)
-        # print(U_list)
         while i < attr_data.shape[1]:
             temp_sig_list, temp_Bp_list, temp_NBp_list, temp_UPa_divlist = \
                 calculate(U_list.copy(), R_data, attr_data[:,i,numpy.newaxis], Upos_list, Uneg_list, dec_data)
-            # print(temp_sig_list,"temp_sig_list")
-            # print(temp_Bp_list, "temp_Bp_list")
-            # print(temp_NBp_list, "temp_NBp_list")
-            # print(temp_UPa_divlist,"U/(P,{x})")
             if len(temp_sig_list) > sig_num:
                 n = i
                 sig_num = len(temp_sig_list)
@@ -187,3 +174,5 @@ if __name__ == '__main__':
     # end = time.perf_counter()
     # print(end - start)
     Reduce_basedSig(my_data)
+    end = time.perf_counter()
+    print(end - start)
