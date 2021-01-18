@@ -31,10 +31,25 @@ from itertools import product
 # data.insert(0, a)
 
 
-list1 = []
-list1+= [0]
-list1+= [1]
-print(list1 == [0,1])
+# list1 = []
+# list1+= [0]
+# list1+= [1]
+# print(list1 == [0,1])
+
+
+import numpy as np
+
+a = np.array([[1, 3], [5, 7]])
+b = np.array([[2, 4], [6, 8]])
+
+c = np.append(a, b)
+d = np.append(a, b, axis=0)
+e = np.append(a, b, axis=1)
+
+print(a)
+print("c=\n", c)
+print("d=\n", d)
+print("e=\n", e)
 # import numpy
 #
 # list1 = [1,2,3]

@@ -2,7 +2,7 @@ import time
 import numpy
 
 def readfile():
-    my_data = numpy.loadtxt('../data.txt')
+    my_data = numpy.loadtxt('../data_2.txt')
     print(my_data)
     return my_data
 

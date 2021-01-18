@@ -4,7 +4,7 @@ import time
 import numpy
 
 def readfile():
-    my_data = numpy.loadtxt('../heart-c.txt')
+    my_data = numpy.loadtxt('../table_1.txt')
     print(my_data)
     return my_data
 
