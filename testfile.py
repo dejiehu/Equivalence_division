@@ -1,3 +1,4 @@
+import itertools
 from itertools import product
 #
 # a = [1,2]
@@ -37,19 +38,22 @@ from itertools import product
 # print(list1 == [0,1])
 
 
-import numpy as np
+# import numpy as np
+#
+# a = np.array([[1, 3], [5, 7]])
+# b = np.array([[2, 4], [6, 8]])
+#
+# c = np.append(a, b)
+# d = np.append(a, b, axis=0)
+# e = np.append(a, b, axis=1)
+#
+# print(a)
+# print("c=\n", c)
+# print("d=\n", d)
+# print("e=\n", e)
 
-a = np.array([[1, 3], [5, 7]])
-b = np.array([[2, 4], [6, 8]])
 
-c = np.append(a, b)
-d = np.append(a, b, axis=0)
-e = np.append(a, b, axis=1)
 
-print(a)
-print("c=\n", c)
-print("d=\n", d)
-print("e=\n", e)
 # import numpy
 #
 # list1 = [1,2,3]
@@ -78,7 +82,12 @@ import time
 
 # loop_val = [{1,2},{1,3}]#将合取式差分为析取式     loop_val = [{1,2},{1,3}]
 #
-# DM_list = []
+DM_list = []
 # for i in product(*loop_val):
 #     DM_list.append(set(i))
 # print(DM_list)
+
+
+for i in itertools.combinations([0,5,7], 2):
+    DM_list.append(i)
+print(len(DM_list))

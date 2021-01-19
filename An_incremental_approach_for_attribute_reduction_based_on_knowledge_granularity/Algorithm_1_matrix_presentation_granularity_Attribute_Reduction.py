@@ -1,10 +1,10 @@
+import itertools
 import math
 from itertools import chain
 import numpy
 '''
-基于知识粒的属性约简
+基于知识粒矩阵保持的属性约简
 '''
-
 def readfile():     #读文件
     my_data = numpy.loadtxt('table_1.txt')
     my_data = my_data.astype(int)
@@ -52,11 +52,17 @@ def div(my_data):    #等价类的划分
     return div_list
 
 def granularity(con_divlist): #知识粒
+    # print(con_divlist,"con_divlist")
     GP = 0
     U = len(list(chain.from_iterable(con_divlist)))
-    for i in con_divlist:
-        GP = math.pow(len(i),2)/math.pow(U,2) +GP
-    return GP
+    for j in con_divlist:
+        if len(j)>1:
+            combination_list = []
+            for i in itertools.combinations(j, 2):
+                combination_list.append(i)
+            GP = len(combination_list) * 2 + GP
+    # print((GP + 9),math.pow(U,2))
+    return (GP + 9)/math.pow(U,2)
 
 def condition_granularity(dec_data,con_data):  #相对条件粒计算
     return granularity(div(con_data)) - granularity(div(numpy.append(con_data,dec_data,axis=1)))
@@ -66,11 +72,13 @@ def Core(dec_data,con_data):  #求核
     core_data = core_data.astype(int)
     core = []
     for i in range(con_data.shape[1]):
-        temp_core_data = deal_data(con_data,i,i)
-        if condition_granularity(dec_data,temp_core_data) - condition_granularity(dec_data,con_data) != 0:
+        # print("第n个属性",i)
+        temp_con_data = deal_data(con_data,i,i)
+        # print(condition_granularity(dec_data,temp_con_data) - condition_granularity(dec_data,con_data),"condition_granularity(dec_data,temp_con_data) - condition_granularity(dec_data,con_data)")
+        if condition_granularity(dec_data,temp_con_data) - condition_granularity(dec_data,con_data) > 0:
             core_data = numpy.append(core_data, con_data[:, i, numpy.newaxis], axis=1)
             core += [i]
-    print(core)
+    print(core,"core")
     return core_data,core
 
 def red(dec_data, con_data):# 求约简
@@ -126,5 +134,7 @@ if __name__ == '__main__':
     dec_data = deal_data(my_data, 0, my_data.shape[1] - 2)
     con_divlist = div(con_data)
     dec_divlist = div(dec_data)
+    # Core(dec_data, con_data)
+    # print(granularity(con_divlist))
     red_data,red_num = red(dec_data, con_data)
     red_data,red_num = De_redundancy(red_data, red_num, dec_data, con_data)
