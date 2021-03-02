@@ -60,6 +60,7 @@ def granularity(con_divlist): #知识粒
             combination_list = []
             for i in itertools.combinations(j, 2):
                 combination_list.append(i)
+            # print(combination_list,"combination_list")
             GP = len(combination_list) * 2 + GP
     # print((GP + 9),math.pow(U,2))
     return (GP + 9)/math.pow(U,2)
@@ -89,7 +90,7 @@ def red(dec_data, con_data):# 求约简
     attr_data = numpy.empty(shape=(len(con_data), 0))
     attr_data = attr_data.astype(int)
     attr_num = []
-    for i in range(con_data.shape[1]):
+    for i in range(con_data.shape[1]): # 选出C-core（attr_data）
         if not(red_num.__contains__(i)):
             attr_data = numpy.append(attr_data, con_data[:, i, numpy.newaxis], axis=1)
             attr_num += [i]

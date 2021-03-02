@@ -82,12 +82,28 @@ import time
 
 # loop_val = [{1,2},{1,3}]#将合取式差分为析取式     loop_val = [{1,2},{1,3}]
 #
-DM_list = []
+# DM_list = []
 # for i in product(*loop_val):
 #     DM_list.append(set(i))
 # print(DM_list)
 
+#
+# for i in itertools.combinations([0,5,7], 2):
+#     DM_list.append(i)
+# print(len(DM_list))
 
-for i in itertools.combinations([0,5,7], 2):
-    DM_list.append(i)
-print(len(DM_list))
+# import time
+import numpy
+
+# def readfile():
+# my_data = numpy.loadtxt('data.txt')
+# print((my_data[0] ==my_data[1]).all())
+i = [[0],[1],[2]]
+z=[[5]]
+# for r in range(len(i)-1,-1,-1):
+#     print(i[r])
+#     if r == 1:
+#         del i[r]
+#         print("shanchu ")
+z.append(i+i)
+print(z)

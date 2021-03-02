@@ -118,8 +118,32 @@ def De_redundancy(red_data,red_num,dec_data,con_data):# 去冗余
     print(red_data)
     print(red_num)
     return red_data,red_num
-def Add_U_dataShape(U_data,Ux_data,Ux_con_divlist):
-    print()
+
+def Add_Ux_dataShape(U_data,Ux_divlist):
+    for i in range(len(Ux_divlist)):
+        for j in range(len(Ux_divlist[i])):
+            Ux_divlist[i][j] += U_data.shape[0]
+    return Ux_divlist
+
+def cal_red_divlist(red_num,con_data):   #根据核属性数值计算核属性数据
+    red_data = numpy.empty(shape=(len(con_data), 0))
+    red_data = red_data.astype(int)
+    for i in red_num:
+        red_data =  numpy.append(red_data,con_data[:,i,numpy.newaxis],axis=1)
+    return red_data
+
+def merge_divlist(U_divlist,Ux_divlist,U_data,Ux_data):
+    U_Ux_divlist = []
+    for i in range(len(Ux_divlist)-1,-1,-1):
+        for j in range(len(U_divlist)-1,-1,-1):
+            if (U_data[U_divlist[j][0]] == Ux_data[(Ux_divlist[i][0]) - U_data.shape[0]]).all():
+                U_Ux_divlist.append(U_divlist[j] + Ux_divlist[i])
+                del U_divlist[j],Ux_divlist[i]
+                break
+    k = len(U_Ux_divlist)
+    U_Ux_divlist.append(U_divlist +Ux_divlist)
+    return k,U_Ux_divlist
+
 
 if __name__ == '__main__':
     U_data = readfile('table_1.txt')
@@ -132,9 +156,15 @@ if __name__ == '__main__':
     U_dec_divlist = div(U_dec_data)
     Ux_con_data = deal_data(Ux_data, Ux_data.shape[1] - 1, Ux_data.shape[1] - 1)
     Ux_dec_data = deal_data(Ux_data, 0, Ux_data.shape[1] - 2)
-    Ux_con_divlist = div(Ux_con_data)
+    Ux_con_divlist = Add_Ux_dataShape(U_data, div(Ux_con_data))
     Ux_dec_divlist = div(Ux_dec_data)
-    print(U_con_divlist,Ux_con_divlist)
-
+    U_red_data = cal_red_divlist(RED,U_con_data)
+    Ux_red_data = cal_red_divlist(RED,Ux_con_data)
+    U_red_divlist = div(U_red_data)
+    Ux_red_divlist = Add_Ux_dataShape(U_red_data, div(Ux_red_data))
+    Ck,CU_Ux_divlist = merge_divlist(U_con_divlist.copy(), Ux_con_divlist.copy(), U_con_data, Ux_con_data)
+    REDk,RED_U_Ux_divlist = merge_divlist(U_red_divlist.copy(), Ux_red_divlist.copy(), U_red_data, Ux_red_data)
+    print(CU_Ux_divlist)
+    print(RED_U_Ux_divlist)
     # red_data,red_num = red(dec_data, con_data)
     # red_data,red_num = De_redundancy(red_data, red_num, dec_data, con_data)
