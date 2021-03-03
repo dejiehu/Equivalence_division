@@ -120,5 +120,5 @@ if __name__ == '__main__':
     dec_divlist = div(dec_data)
     print("con_divlist", con_divlist)
     print("dec_divlist", dec_divlist)
-    DM = Matrix_construct(con_data,dis_relation(con_data, dec_data))
+    DM = Matrix_construct(con_data,ind_relation(con_data, dec_data))
     Red(DM)

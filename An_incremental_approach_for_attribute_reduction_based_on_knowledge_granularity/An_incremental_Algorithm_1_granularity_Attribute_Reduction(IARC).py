@@ -56,15 +56,15 @@ def granularity(con_divlist): #知识粒
     U = len(list(chain.from_iterable(con_divlist)))
     for i in con_divlist:
         GP = math.pow(len(i),2)/math.pow(U,2) +GP
-    print(GP,"gp")
+    # print(GP,"gp")
     return GP
 
 def condition_granularity(dec_data,con_data):  #相对条件粒计算
     return granularity(div(con_data)) - granularity(div(numpy.append(con_data,dec_data,axis=1)))
 
 def U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data):  #相对条件粒计算
-    Ck, Csum, CU_Ux_divlist = merge_divlist(div(U_con_data).copy(), Add_Ux_dataShape(U_data, div(Ux_con_data)).copy(), U_con_data, Ux_con_data)
-    Ck, C_D_sum, CU_Ux_divlist = merge_divlist(div(numpy.append(U_con_data,U_dec_data,axis=1)).copy(),Add_Ux_dataShape(U_data, div(numpy.append(Ux_con_data,Ux_dec_data,axis=1))).copy(),numpy.append(U_con_data,U_dec_data,axis=1), numpy.append(Ux_con_data,Ux_dec_data,axis=1))
+    Ck, Csum, CU_Ux_divlist = merge_divlist(div(U_con_data).copy(), Add_Ux_dataShape(U_con_data, div(Ux_con_data)).copy(), U_con_data, Ux_con_data)
+    Ck, C_D_sum, CU_Ux_divlist = merge_divlist(div(numpy.append(U_con_data,U_dec_data,axis=1)).copy(),Add_Ux_dataShape(U_con_data, div(numpy.append(Ux_con_data,Ux_dec_data,axis=1))).copy(),numpy.append(U_con_data,U_dec_data,axis=1), numpy.append(Ux_con_data,Ux_dec_data,axis=1))
     return (math.pow(len(U_con_data),2) * condition_granularity(U_dec_data,U_con_data) + math.pow(len(Ux_con_data),2) * condition_granularity(Ux_dec_data,Ux_con_data) + 2 * Csum - 2 * C_D_sum)/math.pow((U_con_data.shape[0] + Ux_con_data.shape[0]),2)
 
 # def Core(dec_data,con_data):  #求核
@@ -79,11 +79,39 @@ def U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data):  
 #     # print(core)
 #     return core_data,core
 
-def red(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,Ux_red_data):# 求约简
+def red(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,U_red_data,Ux_red_data,RED):# 求约简
     if condition_granularity(Ux_dec_data, Ux_con_data) == condition_granularity(Ux_dec_data, Ux_red_data):
         return
     else:
-        print(U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data))
+        attr_num = []
+        for i in range(U_con_data.shape[1]):
+            if not (RED.__contains__(i)):
+                attr_num += [i]
+        U_attr_data = cal_red_divlist(attr_num,U_con_data)
+        Ux_attr_data = cal_red_divlist(attr_num,Ux_con_data)
+        while U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_red_data,Ux_red_data) != U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data):
+            dict = {}
+            con_key = -1  # 字典key
+            con_value = -1  # 字典value
+            for i in range(U_attr_data.shape[1]):
+                U_temp_red_data = U_red_data
+                Ux_temp_red_data = Ux_red_data
+                U_temp_red_data = numpy.append(U_temp_red_data, U_attr_data[:, i, numpy.newaxis], axis=1)
+                Ux_temp_red_data = numpy.append(Ux_temp_red_data, Ux_attr_data[:, i, numpy.newaxis], axis=1)
+                Ck, red_sum, CU_Ux_divlist = merge_divlist(div(U_red_data).copy(),
+                                                        Add_Ux_dataShape(U_con_data, div(Ux_red_data)).copy(), U_red_data,
+                                                        Ux_red_data)
+                Ck, red_D_sum, CU_Ux_divlist = merge_divlist(div(numpy.append(U_red_data, U_dec_data, axis=1)).copy(),
+                                                           Add_Ux_dataShape(U_con_data, div(
+                                                               numpy.append(Ux_red_data, Ux_dec_data, axis=1))).copy(),
+                                                           numpy.append(U_red_data,U_dec_data,axis=1), numpy.append(Ux_red_data,Ux_dec_data,axis=1))
+
+
+                dict[i] = (math.pow(U_con_data.shape[0],2) * (condition_granularity(U_dec_data,U_red_data)
+                                                              - condition_granularity(U_dec_data,U_temp_red_data)) + math.pow(Ux_con_data.shape[0],2) *
+                           (condition_granularity(Ux_dec_data,Ux_red_data) - condition_granularity(Ux_dec_data,Ux_temp_red_data))
+                           + 2 * red_sum - 2 * red_D_sum - 2 * )/math.pow((U_con_data.shape[0] + Ux_con_data.shape[0]),2)
+
 
     # red_data,red_num = Core(dec_data,con_data)
     # if len(red_num) == 0:
@@ -163,6 +191,11 @@ if __name__ == '__main__':
     RED = [1, 4]
     Ux_data = readfile('incremental.txt')
     U_Ux_data = numpy.append(U_data,Ux_data,axis=0)
+    # U_Ux_con_data = deal_data(U_Ux_data, U_Ux_data.shape[1] - 1, U_Ux_data.shape[1] - 1)
+    # U_Ux_dec_data = deal_data(U_Ux_data, 0, U_Ux_data.shape[1] - 2)
+    # U_Ux_red_data = cal_red_divlist(RED, U_Ux_data)
+    # print(condition_granularity(U_Ux_dec_data,U_Ux_red_data))
+
     U_con_data = deal_data(U_data, U_data.shape[1] - 1, U_data.shape[1] - 1)
     U_dec_data = deal_data(U_data, 0, U_data.shape[1] - 2)
     U_con_divlist = div(U_con_data)
@@ -177,16 +210,15 @@ if __name__ == '__main__':
     Ux_red_data = cal_red_divlist(RED,Ux_con_data)
     U_red_divlist = div(U_red_data)
     Ux_red_divlist = Add_Ux_dataShape(U_red_data, div(Ux_red_data))
-    Ck,sum,CU_Ux_divlist = merge_divlist(U_con_divlist.copy(), Ux_con_divlist.copy(), U_con_data, Ux_con_data)
+    # Ck,sum,CU_Ux_divlist = merge_divlist(U_con_divlist.copy(), Ux_con_divlist.copy(), U_con_data, Ux_con_data)
     # REDk,RED_U_Ux_divlist = merge_divlist(U_red_divlist.copy(), Ux_red_divlist.copy(), U_red_data, Ux_red_data)
-    red(U_dec_data, U_con_data, Ux_dec_data, Ux_con_data,Ux_red_data)
+    red(U_dec_data, U_con_data, Ux_dec_data, Ux_con_data,U_red_data,Ux_red_data,RED)
     # red_data,red_num = red(dec_data, con_data)
     # red_data,red_num = De_redundancy(red_data, red_num, dec_data, con_data)
 
-
-    U_divlist = div(U_data)
-    Ux_divlist = Add_Ux_dataShape(U_data, div(Ux_data))
-    k, sum, U_Ux_divlist = merge_divlist(U_divlist.copy(), Ux_divlist.copy(), U_data, Ux_data)
-    print(U_divlist,k)
-    print(Ux_divlist, k)
-    print(U_Ux_divlist, k)
+    # U_divlist = div(U_data)
+    # Ux_divlist = Add_Ux_dataShape(U_data, div(Ux_data))
+    # k, sum, U_Ux_divlist = merge_divlist(U_divlist.copy(), Ux_divlist.copy(), U_data, Ux_data)
+    # print(U_divlist,k)
+    # print(Ux_divlist, k)
+    # print(U_Ux_divlist, k)

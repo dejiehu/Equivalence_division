@@ -160,6 +160,7 @@ def print_red(my_data, Red_data):
 if __name__ == '__main__':
     start = time.perf_counter()
     my_data = readfile()
+
     # x = []
     # y = []
     # for i in range(len(my_data)):
@@ -173,6 +174,7 @@ if __name__ == '__main__':
     # draw(x,y);
     # end = time.perf_counter()
     # print(end - start)
+
     Reduce_basedSig(my_data)
     end = time.perf_counter()
     print(end - start)
