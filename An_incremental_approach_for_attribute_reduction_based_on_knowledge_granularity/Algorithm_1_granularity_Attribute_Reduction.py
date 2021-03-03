@@ -85,7 +85,7 @@ def red(dec_data, con_data):# 求约简
         if not(red_num.__contains__(i)):
             attr_data = numpy.append(attr_data, con_data[:, i, numpy.newaxis], axis=1)
             attr_num += [i]
-
+    print(condition_granularity(dec_data,con_data),"gpu")
     while condition_granularity(dec_data,con_data) != condition_granularity(dec_data,red_data):
         dict = {}
         con_key = -1  # 字典key
