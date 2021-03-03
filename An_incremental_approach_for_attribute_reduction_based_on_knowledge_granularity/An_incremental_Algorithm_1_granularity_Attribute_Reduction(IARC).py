@@ -134,7 +134,6 @@ def De_redundancy(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,U_red_data,Ux_r
             i = 0
             continue
         i += 1
-
     return RED,U_red_data,Ux_red_data
 
 def Add_Ux_dataShape(U_data,Ux_divlist):   #  调整增加的属性的对象序号
