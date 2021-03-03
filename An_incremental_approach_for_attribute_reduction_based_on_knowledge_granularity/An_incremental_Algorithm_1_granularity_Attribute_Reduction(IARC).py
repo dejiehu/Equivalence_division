@@ -185,4 +185,5 @@ if __name__ == '__main__':
     Ux_red_divlist = Add_Ux_dataShape(U_red_data, div(Ux_red_data))
     RED,U_red_data,Ux_red_data = red(U_dec_data, U_con_data, Ux_dec_data, Ux_con_data,U_red_data,Ux_red_data,RED)
     RED,U_red_data,Ux_red_data =De_redundancy(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,U_red_data,Ux_red_data,RED)
+
     print(RED)
