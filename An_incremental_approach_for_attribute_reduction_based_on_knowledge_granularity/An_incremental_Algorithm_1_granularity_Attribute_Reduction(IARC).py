@@ -171,19 +171,12 @@ if __name__ == '__main__':
 
     U_con_data = deal_data(U_data, U_data.shape[1] - 1, U_data.shape[1] - 1)
     U_dec_data = deal_data(U_data, 0, U_data.shape[1] - 2)
-    U_con_divlist = div(U_con_data)
 
-    U_dec_divlist = div(U_dec_data)
     Ux_con_data = deal_data(Ux_data, Ux_data.shape[1] - 1, Ux_data.shape[1] - 1)
     Ux_dec_data = deal_data(Ux_data, 0, Ux_data.shape[1] - 2)
-    Ux_con_divlist = Add_Ux_dataShape(U_data, div(Ux_con_data))
 
-    Ux_dec_divlist = div(Ux_dec_data)
     U_red_data = cal_red_divlist(RED,U_con_data)
     Ux_red_data = cal_red_divlist(RED,Ux_con_data)
-    U_red_divlist = div(U_red_data)
-    Ux_red_divlist = Add_Ux_dataShape(U_red_data, div(Ux_red_data))
     RED,U_red_data,Ux_red_data = red(U_dec_data, U_con_data, Ux_dec_data, Ux_con_data,U_red_data,Ux_red_data,RED)
     RED,U_red_data,Ux_red_data =De_redundancy(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,U_red_data,Ux_red_data,RED)
-
     print(RED)
