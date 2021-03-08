@@ -131,8 +131,8 @@ def De_redundancy(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,U_red_data,Ux_r
         U_temp_Red_data = deal_data(U_temp_Red_data,i,i)
         Ux_temp_Red_data = deal_data(Ux_temp_Red_data, i, i)
         if U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_temp_Red_data,Ux_temp_Red_data) == GP:
-            U_Red_data = deal_data(U_Red_data,i,i)
-            Ux_Red_data = deal_data(Ux_Red_data, i, i)
+            U_red_data = deal_data(U_red_data,i,i)
+            Ux_red_data = deal_data(Ux_red_data, i, i)
             del RED[i]
             i = 0
             continue
