@@ -69,8 +69,14 @@ def condition_granularity(dec_data,con_data):  #相对条件粒计算
     return granularity(div(con_data)) - granularity(div(numpy.append(con_data,dec_data,axis=1)))
 #  = red(U_dec_data, U_con_data, Ux_dec_data, Ux_con_data, U_red_data, Ux_red_data, RED)
 def red(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,U_red_data, Ux_red_data, RED):# 求约简
-    k,sum,U_Ux_divlist = merge_divlist(div(U_con_data), Add_Ux_dataShape(U_con_data,div(Ux_con_data)), U_con_data, Ux_con_data)
-    print(granularity(U_Ux_divlist)) # 第一个
+    U_Ux_divlist = merge_divlist(div(U_con_data), Add_Ux_dataShape(U_con_data,div(Ux_con_data)), U_con_data, Ux_con_data)
+    print(granularity(U_Ux_divlist),"第一个") # 第一个
+    CU_Ux_divlist = merge_divlist(div(numpy.append(U_con_data, U_dec_data, axis=1)).copy(),
+                                               Add_Ux_dataShape(U_con_data, div(
+                                                   numpy.append(Ux_con_data, Ux_dec_data, axis=1))).copy(),
+                                               numpy.append(U_con_data, U_dec_data, axis=1),
+                                               numpy.append(Ux_con_data, Ux_dec_data, axis=1))
+    print(granularity(CU_Ux_divlist),"第二个")  # 第二个
 
 
 
@@ -137,8 +143,6 @@ def cal_red_divlist(red_num,con_data):   #根据核属性数值计算核属性�
     return red_data
 
 def merge_divlist(U_divlist,Ux_divlist,U_data,Ux_data):#      U/C + Ux/C
-    print(U_divlist,"U_divlist")
-    print(Ux_divlist,"Ux_divlist")
     U_Ux_divlist = []
     sum = 0
     for i in range(len(Ux_divlist)-1,-1,-1):
@@ -149,10 +153,8 @@ def merge_divlist(U_divlist,Ux_divlist,U_data,Ux_data):#      U/C + Ux/C
                 del U_divlist[j],Ux_divlist[i]
                 break
     k = len(U_Ux_divlist)
-    print(U_Ux_divlist)
     U_Ux_divlist += U_divlist + Ux_divlist
-    print(U_Ux_divlist)
-    return k,sum,U_Ux_divlist
+    return U_Ux_divlist
 
 if __name__ == '__main__':
     U_data = readfile('table_1.txt')
@@ -175,7 +177,10 @@ if __name__ == '__main__':
     Ux_red_data = cal_red_divlist(RED, Ux_con_data)
     red(U_dec_data, U_con_data, Ux_dec_data, Ux_con_data, U_red_data, Ux_red_data, RED)
 
-    # print(div(U_Ux_con_data))
+    print(div(U_con_data))
+
+    print(div(U_Ux_con_data))
     print(granularity(div(U_Ux_con_data)))
+    print(granularity(div(U_Ux_data)))
 
 
