@@ -62,10 +62,13 @@ def granularity(con_divlist): #知识粒
 def condition_granularity(dec_data,con_data):  #相对条件粒计算
     return granularity(div(con_data)) - granularity(div(numpy.append(con_data,dec_data,axis=1)))
 
-def U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data):  #相对条件粒计算
+def U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data):  #相对条件粒计算  U_UX
     Ck, Csum, CU_Ux_divlist = merge_divlist(div(U_con_data).copy(), Add_Ux_dataShape(U_con_data, div(Ux_con_data)).copy(), U_con_data, Ux_con_data)
-    Ck, C_D_sum, CU_Ux_divlist = merge_divlist(div(numpy.append(U_con_data,U_dec_data,axis=1)).copy(),Add_Ux_dataShape(U_con_data, div(numpy.append(Ux_con_data,Ux_dec_data,axis=1))).copy(),numpy.append(U_con_data,U_dec_data,axis=1), numpy.append(Ux_con_data,Ux_dec_data,axis=1))
-    return (math.pow(len(U_con_data),2) * condition_granularity(U_dec_data,U_con_data) + math.pow(len(Ux_con_data),2) * condition_granularity(Ux_dec_data,Ux_con_data) + 2 * Csum - 2 * C_D_sum)/math.pow((U_con_data.shape[0] + Ux_con_data.shape[0]),2)
+    Ck, C_D_sum, CU_Ux_divlist = merge_divlist(div(numpy.append(U_con_data,U_dec_data,axis=1)).copy(),
+                                               Add_Ux_dataShape(U_con_data, div(numpy.append(Ux_con_data,Ux_dec_data,axis=1))).copy(),
+                                               numpy.append(U_con_data,U_dec_data,axis=1), numpy.append(Ux_con_data,Ux_dec_data,axis=1))
+    return (math.pow(len(U_con_data),2) * condition_granularity(U_dec_data,U_con_data) + math.pow(len(Ux_con_data),2) *
+            condition_granularity(Ux_dec_data,Ux_con_data) + 2 * Csum - 2 * C_D_sum)/math.pow((U_con_data.shape[0] + Ux_con_data.shape[0]),2)
 
 
 def red(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,U_red_data,Ux_red_data,RED):# 求约简
@@ -78,7 +81,8 @@ def red(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,U_red_data,Ux_red_data,RE
                 attr_num += [i]
         U_attr_data = cal_red_divlist(attr_num,U_con_data)
         Ux_attr_data = cal_red_divlist(attr_num,Ux_con_data)
-        while U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_red_data,Ux_red_data) != U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data):
+        while U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_red_data,Ux_red_data) != \
+                U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data):
             dict = {}
             con_key = -1  # 字典key
             con_value = -1  # 字典value
@@ -160,7 +164,7 @@ def merge_divlist(U_divlist,Ux_divlist,U_data,Ux_data):#      U/C + Ux/C
                 del U_divlist[j],Ux_divlist[i]
                 break
     k = len(U_Ux_divlist)
-    U_Ux_divlist.append(U_divlist + Ux_divlist)
+    U_Ux_divlist += U_divlist + Ux_divlist
     return k,sum,U_Ux_divlist
 
 if __name__ == '__main__':
