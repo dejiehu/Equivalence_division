@@ -55,7 +55,7 @@ def granularity(con_divlist): #知识粒
     GP = 0
     U = len(list(chain.from_iterable(con_divlist)))
     for i in con_divlist:
-        GP = math.pow(len(i),2)/math.pow(U,2) +GP
+        GP = math.pow(len(i),2)/math.pow(U,2) + GP
     # print(GP,"gp")
     return GP
 
@@ -182,5 +182,5 @@ if __name__ == '__main__':
     U_red_data = cal_red_divlist(RED,U_con_data)
     Ux_red_data = cal_red_divlist(RED,Ux_con_data)
     RED,U_red_data,Ux_red_data = red(U_dec_data, U_con_data, Ux_dec_data, Ux_con_data,U_red_data,Ux_red_data,RED)
-    RED,U_red_data,Ux_red_data =De_redundancy(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,U_red_data,Ux_red_data,RED)
+    RED,U_red_data,Ux_red_data = De_redundancy(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,U_red_data,Ux_red_data,RED)
     print(RED)

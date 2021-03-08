@@ -60,24 +60,67 @@ def granularity(con_divlist): #知识粒
             combination_list = []
             for i in itertools.combinations(j, 2):
                 combination_list.append(i)
-            # print(combination_list,"combination_list")
             GP = len(combination_list) * 2 + GP
-    # print((GP + 9),math.pow(U,2))
-    return (GP + 9)/math.pow(U,2)
+    return (GP + U)/math.pow(U,2)
 
 def condition_granularity(dec_data,con_data):  #相对条件粒计算
     return granularity(div(con_data)) - granularity(div(numpy.append(con_data,dec_data,axis=1)))
-#  = red(U_dec_data, U_con_data, Ux_dec_data, Ux_con_data, U_red_data, Ux_red_data, RED)
-def red(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,U_red_data, Ux_red_data, RED):# 求约简
-    U_Ux_divlist = merge_divlist(div(U_con_data), Add_Ux_dataShape(U_con_data,div(Ux_con_data)), U_con_data, Ux_con_data)
-    print(granularity(U_Ux_divlist),"第一个") # 第一个
-    CU_Ux_divlist = merge_divlist(div(numpy.append(U_con_data, U_dec_data, axis=1)).copy(),
-                                               Add_Ux_dataShape(U_con_data, div(
-                                                   numpy.append(Ux_con_data, Ux_dec_data, axis=1))).copy(),
-                                               numpy.append(U_con_data, U_dec_data, axis=1),
-                                               numpy.append(Ux_con_data, Ux_dec_data, axis=1))
-    print(granularity(CU_Ux_divlist),"第二个")  # 第二个
 
+def U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data):  #相对条件粒计算  U_UX
+    C_sum = Sum_Up(div(U_con_data).copy(),Add_Ux_dataShape(U_con_data,div(Ux_con_data)).copy(),U_con_data,Ux_con_data)
+    C_D_sum = Sum_Up(div(numpy.append(U_con_data,U_dec_data,axis=1)).copy(),
+                                               Add_Ux_dataShape(U_con_data, div(numpy.append(Ux_con_data,Ux_dec_data,axis=1))).copy(),
+                                               numpy.append(U_con_data,U_dec_data,axis=1), numpy.append(Ux_con_data,Ux_dec_data,axis=1))
+    return (math.pow(len(U_con_data),2) * condition_granularity(U_dec_data,U_con_data) + math.pow(len(Ux_con_data),2) *
+            condition_granularity(Ux_dec_data,Ux_con_data) + 2 * C_sum - 2 * C_D_sum)/math.pow((U_con_data.shape[0] + Ux_con_data.shape[0]),2)
+
+def red(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,U_red_data, Ux_red_data, RED):# 求约简
+    if U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data) \
+            == U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_red_data,Ux_red_data):
+        return RED
+    else:
+        attr_num = []
+        for i in range(U_con_data.shape[1]):
+            if not (RED.__contains__(i)):
+                attr_num += [i]
+        U_attr_data = cal_red_divlist(attr_num, U_con_data)
+        Ux_attr_data = cal_red_divlist(attr_num, Ux_con_data)
+        while U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data) \
+            == U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_red_data,Ux_red_data):
+            dict = {}
+            con_key = -1  # 字典key
+            con_value = -1  # 字典value
+            for i in range(U_attr_data.shape[1]):
+                U_temp_red_data = U_red_data
+                Ux_temp_red_data = Ux_red_data
+                U_temp_red_data = numpy.append(U_temp_red_data, U_attr_data[:, i, numpy.newaxis], axis=1)
+                Ux_temp_red_data = numpy.append(Ux_temp_red_data, Ux_attr_data[:, i, numpy.newaxis], axis=1)
+                red_sum = Sum_Up(div(U_red_data).copy(),Add_Ux_dataShape(U_red_data,div(Ux_red_data)).copy(),U_red_data,Ux_red_data)
+                red_D_sum = Sum_Up(div(numpy.append(U_red_data,U_dec_data,axis=1)).copy(),
+                                               Add_Ux_dataShape(U_red_data, div(numpy.append(Ux_red_data,Ux_dec_data,axis=1))).copy(),
+                                               numpy.append(U_red_data,U_dec_data,axis=1), numpy.append(Ux_red_data,Ux_dec_data,axis=1))
+                red_a_sum = Sum_Up(div(U_temp_red_data).copy(), Add_Ux_dataShape(U_temp_red_data, div(Ux_temp_red_data)).copy(),
+                                 U_temp_red_data, Ux_temp_red_data)
+                red_a_D_sum = Sum_Up(div(numpy.append(U_temp_red_data, U_dec_data, axis=1)).copy(),
+                                   Add_Ux_dataShape(U_temp_red_data,div(numpy.append(Ux_temp_red_data, Ux_dec_data, axis=1))).copy(),
+                                   numpy.append(U_temp_red_data, U_dec_data, axis=1),
+                                   numpy.append(Ux_temp_red_data, Ux_dec_data, axis=1))
+                dict[i] = (math.pow(U_con_data.shape[0], 2) * (condition_granularity(U_dec_data, U_red_data)
+                    - condition_granularity(U_dec_data,U_temp_red_data)) + math.pow(
+                    Ux_con_data.shape[0], 2) * (condition_granularity(Ux_dec_data, Ux_red_data) - condition_granularity(Ux_dec_data,
+                    Ux_temp_red_data)) + 2 * red_sum - 2 * red_D_sum - 2 * red_a_sum + 2 * red_a_D_sum) / math.pow(
+                    (U_con_data.shape[0] + Ux_con_data.shape[0]), 2)
+            for key in dict:
+                if dict[key] > con_value:
+                    con_value = dict[key]
+                    con_key = key
+            U_red_data = numpy.append(U_red_data, U_attr_data[:, con_key, numpy.newaxis], axis=1)
+            Ux_red_data = numpy.append(Ux_red_data, Ux_attr_data[:, con_key, numpy.newaxis], axis=1)
+            RED += [attr_num[con_key]]
+            U_attr_data = deal_data(U_attr_data, con_key, con_key)
+            Ux_attr_data = deal_data(Ux_attr_data, con_key, con_key)
+            del attr_num[con_key]
+        return RED, U_red_data, Ux_red_data
 
 
 
@@ -114,20 +157,22 @@ def red(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,U_red_data, Ux_red_data, 
     #     del attr_num[con_key]
     # return red_data,red_num
 
-def De_redundancy(red_data,red_num,dec_data,con_data):# 去冗余
+def De_redundancy(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,U_red_data,Ux_red_data,RED):# 去冗余
+    GP = U_Ux_condition_granularity(U_dec_data, Ux_dec_data, U_con_data, Ux_con_data)
     i = 0
-    while i < red_data.shape[1]:
-        temp_Red_data = red_data
-        temp_Red_data = deal_data(temp_Red_data,i,i)
-        if condition_granularity(dec_data,con_data) == condition_granularity(dec_data,temp_Red_data):
-            red_data = deal_data(red_data,i,i)
-            del red_num[i]
+    while i < U_red_data.shape[1]:
+        U_temp_Red_data = U_red_data
+        Ux_temp_Red_data = Ux_red_data
+        U_temp_Red_data = deal_data(U_temp_Red_data,i,i)
+        Ux_temp_Red_data = deal_data(Ux_temp_Red_data, i, i)
+        if U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_temp_Red_data,Ux_temp_Red_data) == GP:
+            U_Red_data = deal_data(U_Red_data,i,i)
+            Ux_Red_data = deal_data(Ux_Red_data, i, i)
+            del RED[i]
             i = 0
             continue
         i += 1
-    print(red_data)
-    print(red_num)
-    return red_data,red_num
+    return RED,U_red_data,Ux_red_data
 
 def Add_Ux_dataShape(U_data,Ux_divlist):   #  调整增加的属性的对象序号
     for i in range(len(Ux_divlist)):
@@ -142,19 +187,15 @@ def cal_red_divlist(red_num,con_data):   #根据核属性数值计算核属性�
         red_data =  numpy.append(red_data,con_data[:,i,numpy.newaxis],axis=1)
     return red_data
 
-def merge_divlist(U_divlist,Ux_divlist,U_data,Ux_data):#      U/C + Ux/C
-    U_Ux_divlist = []
+def Sum_Up(U_divlist,Ux_divlist,U_data,Ux_data):#      U/C + Ux/C
     sum = 0
     for i in range(len(Ux_divlist)-1,-1,-1):
         for j in range(len(U_divlist)-1,-1,-1):
             if (U_data[U_divlist[j][0]] == Ux_data[(Ux_divlist[i][0]) - U_data.shape[0]]).all():
-                U_Ux_divlist.append(U_divlist[j] + Ux_divlist[i])
                 sum += len(U_divlist[j]) * len(Ux_divlist[i])
                 del U_divlist[j],Ux_divlist[i]
                 break
-    k = len(U_Ux_divlist)
-    U_Ux_divlist += U_divlist + Ux_divlist
-    return U_Ux_divlist
+    return sum
 
 if __name__ == '__main__':
     U_data = readfile('table_1.txt')
@@ -175,12 +216,14 @@ if __name__ == '__main__':
 
     U_red_data = cal_red_divlist(RED, U_con_data)
     Ux_red_data = cal_red_divlist(RED, Ux_con_data)
-    red(U_dec_data, U_con_data, Ux_dec_data, Ux_con_data, U_red_data, Ux_red_data, RED)
+    RED, U_red_data, Ux_red_data = red(U_dec_data, U_con_data, Ux_dec_data, Ux_con_data, U_red_data, Ux_red_data, RED)
+    RED, U_red_data, Ux_red_data = De_redundancy(U_dec_data, U_con_data, Ux_dec_data, Ux_con_data, U_red_data, Ux_red_data, RED)
+    print(RED)
 
-    print(div(U_con_data))
-
-    print(div(U_Ux_con_data))
-    print(granularity(div(U_Ux_con_data)))
-    print(granularity(div(U_Ux_data)))
+    # print(div(U_con_data))
+    #
+    # print(div(U_Ux_con_data))
+    # print(granularity(div(U_Ux_con_data)))
+    # print(granularity(div(U_Ux_data)))
 
 
