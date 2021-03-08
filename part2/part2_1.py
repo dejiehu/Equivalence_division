@@ -6,6 +6,7 @@ def readfile():#读文件
     print("my_data.shape:",my_data.shape)
     return my_data
 
+
 def Matrix_construct(my_data):  #构造矩阵
     s = set()
     DM = numpy.zeros(shape=(len(my_data), len(my_data)), dtype = tuple)
