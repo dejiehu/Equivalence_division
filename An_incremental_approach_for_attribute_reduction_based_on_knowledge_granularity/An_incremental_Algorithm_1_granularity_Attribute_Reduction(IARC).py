@@ -72,6 +72,8 @@ def U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data):  
 
 
 def red(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,U_red_data,Ux_red_data,RED):# 求约简
+    print(U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_red_data,Ux_red_data) ,
+                U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data))
     if condition_granularity(Ux_dec_data, Ux_con_data) == condition_granularity(Ux_dec_data, Ux_red_data):
         return
     else:

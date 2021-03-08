@@ -77,7 +77,7 @@ def U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data):  
 def red(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,U_red_data, Ux_red_data, RED):# 求约简
     if U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data) \
             == U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_red_data,Ux_red_data):
-        print("123456")
+        print(U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data),U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_red_data,Ux_red_data))
         return RED
     else:
         attr_num = []
@@ -86,8 +86,7 @@ def red(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,U_red_data, Ux_red_data, 
                 attr_num += [i]
         U_attr_data = cal_red_divlist(attr_num, U_con_data)
         Ux_attr_data = cal_red_divlist(attr_num, Ux_con_data)
-        while U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data) \
-            == U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_red_data,Ux_red_data):
+        while U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data) != U_Ux_condition_granularity(U_dec_data,Ux_dec_data,U_red_data,Ux_red_data):
             dict = {}
             con_key = -1  # 字典key
             con_value = -1  # 字典value
