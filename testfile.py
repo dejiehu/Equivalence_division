@@ -98,12 +98,20 @@ import numpy
 # def readfile():
 # my_data = numpy.loadtxt('data.txt')
 # print((my_data[0] ==my_data[1]).all())
-i = [[0],[1],[2]]
-z=[[5]]
+# i = [[0],[1],[2]]
+# z=[[5]]
 # for r in range(len(i)-1,-1,-1):
 #     print(i[r])
 #     if r == 1:
 #         del i[r]
 #         print("shanchu ")
-z.append(i+i)
-print(z)
+# z.append(i+i)
+# print(z)
+dict = {"1":4,"2":2,"3":6}
+print(dict)
+dict = sorted(dict.items(), key=lambda d:d[1])
+print(dict)
+for i in dict:
+    print(i)
+    print(i[0])
+    print(i[1])
