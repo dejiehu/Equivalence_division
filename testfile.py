@@ -107,11 +107,17 @@ import numpy
 #         print("shanchu ")
 # z.append(i+i)
 # print(z)
-dict = {"1":4,"2":2,"3":6}
-print(dict)
-dict = sorted(dict.items(), key=lambda d:d[1])
-print(dict)
-for i in dict:
-    print(i)
-    print(i[0])
-    print(i[1])
+# dict = {"1":4,"2":2,"3":6}
+# print(dict)
+# dict = sorted(dict.items(), key=lambda d:d[1],reverse= True)
+# print(dict)
+# del dict[0]
+# print(dict)
+# print(dict[0][1])
+# for i in dict:
+#     print(i)
+#     print(i[0])
+#     print(i[1])
+p =[[1,2,3],[4,5,6]]
+p[1].remove(6)
+print(p)

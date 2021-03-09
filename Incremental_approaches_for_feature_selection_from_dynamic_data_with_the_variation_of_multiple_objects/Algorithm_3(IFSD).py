@@ -3,7 +3,7 @@ from itertools import chain
 import numpy
 '''
 《多目标变化下动态数据特征选择的增量方法》
-基于依赖度的增量式属性约简   添加
+基于依赖度的增量式属性约简  删除
 '''
 
 def readfile(file):     #读文件
@@ -81,67 +81,57 @@ def Positive_reign(con_data,dec_data): #正域
                 pos_list += j
     return len(pos_list)
 
-def U_Ux_dependency(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data):#计算新的依赖度函数
-    return (Positive_reign(U_con_data,U_dec_data) + Positive_reign(Ux_con_data,Ux_dec_data) -
-            merge_divlist(U_con_data,Ux_con_data,U_dec_data,Ux_dec_data))/(U_con_data.shape[0] + Ux_con_data.shape[0])
+def U_Ud_dependency(U_dec_data,U_con_data,Ud_num):#计算新的依赖度函数
+    print(Positive_reign(U_con_data,U_dec_data),len(Ud_num),merge_divlist(U_con_data,U_dec_data,Ud_num))
+    return (Positive_reign(U_con_data,U_dec_data) - len(Ud_num) +
+            merge_divlist(U_con_data,U_dec_data,Ud_num))/(U_con_data.shape[0] -len(Ud_num))
 
-def red(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,RED):# 求约简
+def red(U_dec_data, U_con_data,RED,Ud_num):# 求约简
     U_red_data = cal_red_divlist(RED, U_con_data)
-    Ux_red_data = cal_red_divlist(RED, Ux_con_data)
-    U_Ux_C_dep = U_Ux_dependency(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data)
-    # print(U_Ux_C_dep, U_Ux_dependency(U_dec_data,Ux_dec_data,U_red_data,Ux_red_data),"add")
-    if U_Ux_C_dep  == U_Ux_dependency(U_dec_data,Ux_dec_data,U_red_data,Ux_red_data):
+    U_Ud_C_dep = U_Ud_dependency(U_dec_data,U_con_data,Ud_num)
+    print(U_Ud_C_dep,U_Ud_dependency(U_dec_data,U_red_data,Ud_num))
+    if U_Ud_C_dep  == U_Ud_dependency(U_dec_data,U_red_data,Ud_num):
         print("去冗余了")
-        RED, U_red_data, Ux_red_data = De_redundancy(U_Ux_C_dep, U_dec_data, Ux_dec_data, U_red_data, Ux_red_data, RED)
-        return RED, U_red_data, Ux_red_data
+        RED,U_red_data, = De_redundancy(U_Ud_C_dep, U_dec_data, U_red_data, RED,Ud_num)
+        print(RED)
+        return RED, U_red_data
     attr_num = []
     for i in range(U_con_data.shape[1]):
         if not (RED.__contains__(i)):
             attr_num += [i]
     U_attr_data = cal_red_divlist(attr_num,U_con_data)
-    Ux_attr_data = cal_red_divlist(attr_num,Ux_con_data)
     dict = {}
     for i in range(U_attr_data.shape[1]):
         U_temp_red_data = U_red_data
-        Ux_temp_red_data = Ux_red_data
         U_temp_red_data = numpy.append(U_temp_red_data, U_attr_data[:, i, numpy.newaxis], axis=1)
-        Ux_temp_red_data = numpy.append(Ux_temp_red_data, Ux_attr_data[:, i, numpy.newaxis], axis=1)
-        dict[i] = U_Ux_dependency(U_dec_data,Ux_dec_data,U_temp_red_data,Ux_temp_red_data) - \
-                  U_Ux_dependency(U_dec_data,Ux_dec_data,U_red_data,Ux_red_data)
+        dict[i] = U_Ud_dependency(U_dec_data,U_temp_red_data,Ud_num) - \
+                  U_Ud_dependency(U_dec_data,U_red_data,Ud_num)
     dict = sorted(dict.items(), key=lambda d: d[1], reverse=True)
     U_temp_red_data = U_red_data
-    Ux_temp_red_data = Ux_red_data
-    while U_Ux_dependency(U_dec_data,Ux_dec_data,U_temp_red_data,Ux_temp_red_data) != U_Ux_C_dep:
+    while U_Ud_dependency(U_dec_data,U_temp_red_data,Ud_num) != U_Ud_C_dep:
         U_temp_red_data = U_red_data
-        Ux_temp_red_data = Ux_red_data
         U_temp_red_data = numpy.append(U_temp_red_data, U_attr_data[:, dict[0][0], numpy.newaxis], axis=1)
-        Ux_temp_red_data = numpy.append(Ux_temp_red_data, Ux_attr_data[:, dict[0][0], numpy.newaxis], axis=1)
         U_red_data = numpy.append(U_red_data, U_attr_data[:, dict[0][0], numpy.newaxis], axis=1)
-        Ux_red_data = numpy.append(Ux_red_data, Ux_attr_data[:, dict[0][0], numpy.newaxis], axis=1)
         RED += [attr_num[dict[0][0]]]
         U_attr_data = deal_data(U_attr_data, dict[0][0], dict[0][0])
-        Ux_attr_data = deal_data(Ux_attr_data, dict[0][0], dict[0][0])
         del attr_num[dict[0][0]]
         del dict[0]
-    RED,U_red_data,Ux_red_data = De_redundancy(U_Ux_C_dep, U_dec_data, Ux_dec_data, U_red_data, Ux_red_data, RED)
+    RED,U_red_data, = De_redundancy(U_Ud_C_dep, U_dec_data, U_red_data, RED,Ud_num)
     print(RED)
-    return RED,U_red_data,Ux_red_data
+    return RED,U_red_data
 
-def De_redundancy(U_Ux_C_dep,U_dec_data, Ux_dec_data,U_red_data,Ux_red_data,RED):# 去冗余
+def De_redundancy(U_Ud_C_dep,U_dec_data,U_red_data,RED,Ud_num):# 去冗余
     i = 0
     while i < U_red_data.shape[1]:
         U_temp_red_data = U_red_data
-        Ux_temp_red_data = Ux_red_data
         U_temp_red_data = deal_data(U_temp_red_data,i,i)
-        Ux_temp_red_data = deal_data(Ux_temp_red_data, i, i)
-        if U_Ux_dependency(U_dec_data,Ux_dec_data,U_temp_red_data,Ux_temp_red_data) == U_Ux_C_dep:
+        if U_Ud_dependency(U_dec_data,U_temp_red_data,Ud_num) == U_Ud_C_dep:
             U_red_data = deal_data(U_red_data,i,i)
-            Ux_red_data = deal_data(Ux_red_data, i, i)
             del RED[i]
             i = 0
             continue
         i += 1
-    return RED,U_red_data,Ux_red_data
+    return RED,U_red_data
 
 def Add_Ux_dataShape(U_data,Ux_divlist):   #  调整增加的属性的对象序号
     for i in range(len(Ux_divlist)):
@@ -156,37 +146,35 @@ def cal_red_divlist(red_num,con_data):   #根据核属性数值计算核属性�
         red_data =  numpy.append(red_data,con_data[:,i,numpy.newaxis],axis=1)
     return red_data
 
-def merge_divlist(U_data,Ux_data,U_dec,Ux_dec):#      U/C + Ux/C
+def merge_divlist(U_data,U_dec,Ud_num):#      U/C + Ux/C
     U_divlist = div(U_data)
-    Ux_divlist = div(Ux_data)
-    Ux_divlist = Add_Ux_dataShape(U_data, Ux_divlist)
-    U_Ux_divlist = []
+    Ud_divlist = []
     sum = 0
-    for i in range(len(Ux_divlist)-1,-1,-1):  #逆序循环
+    for i in Ud_num:  #
         for j in range(len(U_divlist)-1,-1,-1):
-            if (U_data[U_divlist[j][0]] == Ux_data[(Ux_divlist[i][0]) - U_data.shape[0]]).all():
-                U_Ux_divlist.append(U_divlist[j] + Ux_divlist[i])
-                del U_divlist[j],Ux_divlist[i]
+            if U_divlist[j].__contains__(i):
+                U_divlist[j].remove(i)
+                if len(U_divlist[j]) > 0:
+                    Ud_divlist.append(U_divlist[j])
+                del U_divlist[j]
                 break
-    # for i in U_Ux_divlist:
-    #     Xi = len(div_object(numpy.append(U_dec,Ux_dec,axis=0),i))
-    #     if Xi != 1:
-    #         sum += Xi
-    for i in U_Ux_divlist:
-        if len(div_object(numpy.append(U_dec, Ux_dec, axis=0), i)) != 1:
-            sum += len(i)
+    for i in Ud_divlist:
+        if len(div_object(U_dec,i)) == 1:
+            sum += 1
     return sum
 
 if __name__ == '__main__':
     U_data = readfile('table_1.txt')
     RED = [0, 3]
-    Ux_data = readfile('incremental.txt')
-    U_Ux_data = numpy.append(U_data,Ux_data,axis=0)
+    Ud_num = [1,5]
+    # U_Ux_data = numpy.append(U_data,Ux_data,axis=0)
 
     U_con_data = deal_data(U_data, U_data.shape[1] - 1, U_data.shape[1] - 1)
     U_dec_data = deal_data(U_data, 0, U_data.shape[1] - 2)
 
-    Ux_con_data = deal_data(Ux_data, Ux_data.shape[1] - 1, Ux_data.shape[1] - 1)
-    Ux_dec_data = deal_data(Ux_data, 0, Ux_data.shape[1] - 2)
+    # Ux_con_data = deal_data(Ux_data, Ux_data.shape[1] - 1, Ux_data.shape[1] - 1)
+    # Ux_dec_data = deal_data(Ux_data, 0, Ux_data.shape[1] - 2)
 
-    red(U_dec_data, U_con_data, Ux_dec_data, Ux_con_data,RED)
+    red(U_dec_data, U_con_data, RED, Ud_num)
+    # RED,U_red_data,Ux_red_data = De_redundancy(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,U_red_data,Ux_red_data,RED)
+    # print(RED)
