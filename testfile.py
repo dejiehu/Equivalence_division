@@ -1,4 +1,5 @@
 import itertools
+import string
 from itertools import product
 #
 # a = [1,2]
@@ -118,6 +119,21 @@ import numpy
 #     print(i)
 #     print(i[0])
 #     print(i[1])
-p =[[1,2,3],[4,5,6]]
-p[1].remove(6)
-print(p)
+# my_data = numpy.loadtxt('incomplete_table1.txt')
+# if '*' == '*':
+#     print("y")
+# else:
+#     print('N')
+# print(my_data)
+
+f = open("incomplete_table1.txt", "r", encoding='utf-8')
+
+lines = f.readlines()  # 读取全部内容
+
+for i in range(0, lines.__len__(), 1):  # (开始/左边界, 结束/右边界, 步长)
+
+    list = []  ## 空列表, 将第i行数据存入list中
+    for word in lines[i].split():
+        word = word.strip()
+        list.append(word);
+    print(list[0])
