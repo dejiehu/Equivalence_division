@@ -61,30 +61,53 @@ def get_matrix(my_data): #
                 Sp_matrix[i].append(sp_set.copy())
     return Sp_matrix
 
-def div_base_matric(Sp_matrix,dec_data,con_list):
-    dec_divlist = div(dec_data)
-    print(dec_divlist)
+def div_base_matric(Sp_matrix,con_list,del_list):
+    con_list = list(set(con_list) - set(del_list))
+    sp_list = []
+    for j in range(len(Sp_matrix)):
+        sp = set(k for k in range(len(dec_data)))
+        for i in con_list:
+            sp = sp & Sp_matrix[j][i]
+        sp_list.append(list(sp.copy()))
+    return sp_list
 
-
-def pos(dec_divlist,con_divlist):  #子集  正域集合
+def pos(dec_divlist,sp_divlist):  #子集  正域集合
     pos_list=[]
-    for i in dec_divlist:
-         for j in con_divlist:
-            if j.issubset(i):
-                pos_list += j
-    return  pos_list
+    for i in range(len(dec_divlist)):
+         for j in range(len(sp_divlist)):
+            if set(sp_divlist[j]).issubset(dec_divlist[i]):
+                pos_list += [j]
+    return pos_list
 
-# def core(con_data,dec_divlist,dep_num):# 根据 属性重要度  求核
-#     core_list = []
-#     for i in range(con_data.shape[1]):
-#         temp_con_data = deal_data(con_data,i,i)
-#         temp_con_divlist = div(temp_con_data)
-#         pos_list = pos(dec_divlist, temp_con_divlist)
-#         if dep_num != dependency(pos_list,con_data):
-#             print("第",i,"个属性为核属性")
-#             core_list.append(i)
-#     print(core_list)
-#     return core_list
+def core(Sp_matrix,con_list,dec_divlist):# 根据 属性重要度  求核
+    core_list = []
+    pos_c = pos(dec_divlist,div_base_matric(Sp_matrix,con_list,[]))
+    for i in con_list:
+        if len(set(pos_c) - set(pos(dec_divlist,div_base_matric(Sp_matrix,con_list,[i])))) > 0:
+            core_list.append(i)
+    print(core_list)
+    return core_list
+
+def red(Sp_matrix,con_list,dec_divlist,core_list):
+    red_list = core_list.copy()
+    pos_c = pos(dec_divlist, div_base_matric(Sp_matrix, con_list, []))
+    attr_list = list(set(con_list) - set(red_list))
+    while pos_c != pos(dec_divlist,div_base_matric(Sp_matrix,red_list,[])):
+        print("111111")
+        dict = {}
+        con_key = -1  # 字典key
+        con_value = -1  # 字典value
+        for i in attr_list:
+            dict[i] = len(set(pos(dec_divlist, div_base_matric(Sp_matrix, red_list + [i], []))) - set(pos(dec_divlist,div_base_matric(Sp_matrix,core_list,[]))))
+        for key in dict:
+            if dict[key] > con_value:
+                con_value = dict[key]
+                con_key = key
+        attr_list.remove(con_key)
+        red_list += [con_key]
+    print(red_list)
+    return red_list
+
 
 if __name__ == "__main__":
     start = time.perf_counter()
@@ -92,70 +115,7 @@ if __name__ == "__main__":
     con_data = deal_data(my_data, len(my_data[0]) - 1, len(my_data[0]) - 1)
     dec_data = deal_data(my_data, 0, len(my_data[0])  - 2)
     Sp_matrix = get_matrix(con_data)
-    print(Sp_matrix)
     con_list = [i for i in range(len(con_data[0]))]
-    div_base_matric(Sp_matrix, dec_data, con_list)
-
-    # con_divlist = div(con_data)
-    # pos_list = pos(dec_divlist,con_divlist)
-    # dep_num = dependency(pos_list,my_data)
-    # core_list = core(con_data, dec_divlist,dep_num)
-    # Red_data = Red(con_data,dec_divlist,core_list,dep_num)
-    # print_red(my_data, De_redundancy(Red_data,dec_divlist,dep_num))
-    # end = time.perf_counter()
-    # print(end - start)
-
-    # def Red(con_data,dec_divlist,core_list,dep_num):#约简
-    #     core_data = getCore_data(core_list,con_data)
-    #     core_dep = dependency(pos(dec_divlist,div(core_data)),con_data)
-    #     Red_data = core_data
-    #     att_data = con_data
-    #     core_list = sorted(core_list,reverse=True)
-    #     for i in core_list:
-    #         att_data = deal_data(att_data,i,i)
-    #     Red_dep = core_dep
-    #     dict = {}#字典存放添加的依赖度
-    #     num = 0
-    #     print(Red_dep, dep_num)
-    #     while Red_dep != dep_num:
-    #         print(Red_dep, dep_num)
-    #         print("第",num,"次循环了")
-    #         num += 1
-    #         dict.clear()
-    #         con_key = -1#字典key
-    #         con_value = 0#字典value
-    #         for k in range(att_data.shape[1]):
-    #             temp_Red_data = Red_data
-    #             temp_Red_data = numpy.append(temp_Red_data,att_data[:,k,numpy.newaxis],axis=1)
-    #             Red_divlist = div(temp_Red_data)
-    #             dict[k] = dependency(pos(dec_divlist,Red_divlist),con_data) - core_dep
-    #         print(dict)
-    #         for key in dict:
-    #             if con_value < dict[key]:
-    #                 con_value = dict[key]
-    #                 con_key = key
-    #         Red_data = numpy.append(Red_data,att_data[:,con_key,numpy.newaxis],axis=1)
-    #         att_data = deal_data(att_data,con_key,con_key)
-    #         Red_dep = dependency(pos(dec_divlist,div(Red_data)), con_data)#添加条件属性后的依赖度
-    #         print(Red_dep)
-    #     return Red_data
-    #
-    # def De_redundancy(Red_data,dec_divlist,dep_num):# 去冗余
-    #     i = 0
-    #     while i < Red_data.shape[1]:
-    #         temp_Red_data = deal_data(Red_data,i,i)
-    #         dep = dependency(pos(dec_divlist, div(temp_Red_data)), Red_data)
-    #         if dep_num == dep:
-    #             Red_data = deal_data(Red_data,i,i)
-    #             i = 0
-    #             continue
-    #         i += 1
-    #     return Red_data
-    #
-    # def print_red(my_data,Red_data):
-    #     red_set =[]
-    #     for i in range(Red_data.shape[1]):
-    #         for j in range( my_data.shape[1]):
-    #             if (my_data[:, j] == Red_data[:, i]).all():
-    #                 red_set.append(j)
-    #     print(red_set)
+    dec_divlist = div(dec_data)
+    core_list = core(Sp_matrix, con_list, dec_divlist)
+    red(Sp_matrix, con_list, dec_divlist, core_list)
