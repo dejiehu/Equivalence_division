@@ -108,7 +108,6 @@ def red(Sp_matrix,con_list,dec_divlist,core_list):
     print(red_list)
     return red_list
 
-
 if __name__ == "__main__":
     start = time.perf_counter()
     my_data = readfile()
