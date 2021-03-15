@@ -2,9 +2,9 @@ import time
 from itertools import chain
 import numpy
 
-def readfile():#读文件
+def readfile(file_name):#读文件
     my_data = []
-    f = open("../incomplete_table.txt", "r", encoding='utf-8')
+    f = open(file_name, "r", encoding='utf-8')
     lines = f.readlines()  # 读取全部内容
     for i in range(0, lines.__len__(), 1):  # (开始/左边界, 结束/右边界, 步长)
         list = []  ## 空列表, 将第i行数据存入list中
@@ -61,6 +61,26 @@ def get_matrix(my_data): #
                 Sp_matrix[i].append(sp_set.copy())
     return Sp_matrix
 
+def get_new_matrix(my_data,new_data,Sp_matrix): #
+    U_list = {(i + len(my_data)) for i in range(len(new_data))}
+    new_Sp_matrix = [[] for i in range(len(new_data))]
+    for i in range(len(new_data)):
+        for j in range(len(new_data[0])):
+            sp_set = set()
+            index = 1
+            for k in range(len(my_data + new_data)):
+                if new_data[i][j] == '*':
+                    new_Sp_matrix[i].append(U_list)
+                    index = 0
+                    break
+                if new_data[i][j] == (my_data + new_data)[k][j] or (my_data + new_data)[k][j] == '*':
+                    sp_set.add(k)
+            if index == 1:
+                new_Sp_matrix[i].append(sp_set.copy())
+    # new_Sp_matrix = Sp_matrix + new_Sp_matrix
+    print("\n",new_Sp_matrix)
+    return new_Sp_matrix
+
 def div_base_matric(Sp_matrix,con_list,del_list):
     con_list = list(set(con_list) - set(del_list))
     sp_list = []
@@ -110,11 +130,15 @@ def red(Sp_matrix,con_list,dec_divlist,core_list):
 
 if __name__ == "__main__":
     start = time.perf_counter()
-    my_data = readfile()
+    my_data = readfile("incomplete_table.txt")
+    single_data = readfile("immigrate_singal.txt")
     con_data = deal_data(my_data, len(my_data[0]) - 1, len(my_data[0]) - 1)
     dec_data = deal_data(my_data, 0, len(my_data[0])  - 2)
+    single_con_data = deal_data(single_data, len(single_data[0]) - 1, len(single_data[0]) - 1)
+    single_dec_data = deal_data(single_data, 0, len(single_data[0]) - 2)
     Sp_matrix = get_matrix(con_data)
     con_list = [i for i in range(len(con_data[0]))]
     dec_divlist = div(dec_data)
     core_list = core(Sp_matrix, con_list, dec_divlist)
     red(Sp_matrix, con_list, dec_divlist, core_list)
+    get_new_matrix(my_data, single_con_data, Sp_matrix)
