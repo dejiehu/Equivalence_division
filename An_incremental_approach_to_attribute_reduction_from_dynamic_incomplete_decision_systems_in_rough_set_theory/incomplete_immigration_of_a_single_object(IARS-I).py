@@ -125,7 +125,6 @@ def issubset_dec(dec_list,con_list):
 
 def red(Sp_matrix,new_Sp_matrix,con_list,dec_divlist,new_dec_divlist,red_num,con_data,single_con_data):
     red_list = red_num.copy()
-    pos_c = pos(dec_divlist, div_base_matric(Sp_matrix, con_list, []))
     print(div_base_matric(new_Sp_matrix,con_list,[]),len(con_data + single_con_data ) - 1)
     if len(div_base_matric(new_Sp_matrix,con_list,[])[len(con_data + single_con_data)-1]) == 1 & issubset_dec(
             new_dec_divlist,div_base_matric(new_Sp_matrix,red_list,[])[len(con_data + single_con_data)-1]) == 1:
@@ -136,23 +135,23 @@ def red(Sp_matrix,new_Sp_matrix,con_list,dec_divlist,new_dec_divlist,red_num,con
     for i in attr_list:
         dict[i] = len((new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_list + [i],con_data,single_con_data)) -
                       (new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_list,con_data,single_con_data)))
+    dict = sorted(dict.items(), key=lambda d: d[1], reverse=True)
     pos_c = new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,con_list,con_data,single_con_data)
+    print(pos_c,new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_list,con_data,single_con_data))
     while pos_c != new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_list,con_data,single_con_data):
+        red_list = red_list + dict[0][1]
+        del dict[0]
+    print(red_list)
+    De_redundancy(Sp_matrix, new_Sp_matrix, con_list, dec_divlist, new_dec_divlist, red_num, con_data, single_con_data,
+                  pos_c)
 
-    # while pos_c != pos(dec_divlist,div_base_matric(Sp_matrix,red_list,[])):
-    #     dict = {}
-    #     con_key = -1  # 字典key
-    #     con_value = -1  # 字典value
-    #     for i in attr_list:
-    #         dict[i] = len(set(pos(dec_divlist, div_base_matric(Sp_matrix, red_list + [i], []))) - set(pos(dec_divlist,div_base_matric(Sp_matrix,core_list,[]))))
-    #     for key in dict:
-    #         if dict[key] > con_value:
-    #             con_value = dict[key]
-    #             con_key = key
-    #     attr_list.remove(con_key)
-    #     red_list += [con_key]
-    # print(red_list)
-    # return red_list
+def De_redundancy(Sp_matrix,new_Sp_matrix,con_list,dec_divlist,new_dec_divlist,red_num,con_data,single_con_data,pos_c):
+    i =  len(red_num) - 1
+    while i >= 0:
+        if pos_c == new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,set(red_num) - set([red_num[i]]),con_data,single_con_data):
+            del red_num[i]
+        i = i - 1
+    print(red_num)
 
 if __name__ == "__main__":
     start = time.perf_counter()

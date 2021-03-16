@@ -108,10 +108,10 @@ import numpy
 #         print("shanchu ")
 # z.append(i+i)
 # print(z)
-# dict = {"1":4,"2":2,"3":6}
-# print(dict)
-# dict = sorted(dict.items(), key=lambda d:d[1],reverse= True)
-# print(dict)
+dict = {"1":4,"2":2,"3":6}
+print(dict)
+dict = sorted(dict.items(), key=lambda d:d[1],reverse= True)
+print(dict)
 # del dict[0]
 # print(dict)
 # print(dict[0][1])
@@ -120,11 +120,11 @@ import numpy
 #     print(i[0])
 #     print(i[1])
 # my_data = numpy.loadtxt('incomplete_table1.txt')
-p = [1,2,5,'*','*']
-if p[3] == p[4]:
-    print("y")
-else:
-    print('N')
+# p = [1,2,5,'*','*']
+# if p[3] == p[4]:
+#     print("y")
+# else:
+#     print('N')
 # print(my_data)
 
 # a  = [[1,2,4,5],[5,8,9,6]]
@@ -141,7 +141,7 @@ else:
 #     a.append(list)
 
 # a  = [[1,2,4,5],[5
-sett = set()
-sett.add(1)
-sett.add(11)
-print(sett)
+# sett = set()
+# sett.add(1)
+# sett.add(11)
+# print(sett)
