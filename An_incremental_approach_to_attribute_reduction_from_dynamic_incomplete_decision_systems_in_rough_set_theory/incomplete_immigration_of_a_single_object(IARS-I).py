@@ -23,12 +23,6 @@ def deal_data(my_data,m,n):#处理数据表
                 del data[i][d]
     return data
 
-def getCore_data(core_list,con_data):    #从所有数据中取出和属性数据
-    core_data = numpy.empty(shape=(con_data.shape[0],0))
-    for i in core_list:
-        core_data = numpy.append(core_data,con_data[:,i,numpy.newaxis],axis=1)
-    return core_data
-
 def div(my_data): #1.数据表，2、3.删除元素下表   求划分集合
     div_list =[]#返回的划分集合
     list1 = []
@@ -132,6 +126,7 @@ def red(Sp_matrix,new_Sp_matrix,con_list,dec_divlist,new_dec_divlist,red_num,con
         return red_num
     attr_list = list(set(con_list) - set(red_list))
     dict = {}
+    print(div_base_matric(new_Sp_matrix,red_list,[]))
     for i in attr_list:
         dict[i] = len((new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_list + [i],con_data,single_con_data)) -
                       (new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_list,con_data,single_con_data)))
@@ -142,10 +137,10 @@ def red(Sp_matrix,new_Sp_matrix,con_list,dec_divlist,new_dec_divlist,red_num,con
         red_list = red_list + dict[0][1]
         del dict[0]
     print(red_list)
-    De_redundancy(Sp_matrix, new_Sp_matrix, con_list, dec_divlist, new_dec_divlist, red_num, con_data, single_con_data,
+    De_redundancy(Sp_matrix, new_Sp_matrix, dec_divlist, new_dec_divlist, red_num, con_data, single_con_data,
                   pos_c)
 
-def De_redundancy(Sp_matrix,new_Sp_matrix,con_list,dec_divlist,new_dec_divlist,red_num,con_data,single_con_data,pos_c):
+def De_redundancy(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_num,con_data,single_con_data,pos_c):
     i =  len(red_num) - 1
     while i >= 0:
         if pos_c == new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,set(red_num) - set([red_num[i]]),con_data,single_con_data):
