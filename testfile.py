@@ -108,10 +108,15 @@ import numpy
 #         print("shanchu ")
 # z.append(i+i)
 # print(z)
-dict = {"1":4,"2":2,"3":6}
-print(dict)
-dict = sorted(dict.items(), key=lambda d:d[1],reverse= True)
-print(dict)
+
+# dict = {"1":4,"2":2,"3":6}
+# print(dict)
+# dict = sorted(dict.items(), key=lambda d:d[1],reverse= True)
+# print(dict)
+a=[[1,2,3],[1,9]]
+b=[]
+b = b+a
+print(b)
 # del dict[0]
 # print(dict)
 # print(dict[0][1])
