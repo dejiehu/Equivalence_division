@@ -83,14 +83,14 @@ def get_new_matrix(my_data,new_data,Sp_matrix): #
         for k in range(len(new_Sp_matrix[i])):
             for j in new_Sp_matrix[i][k]:
                 new_Sp_matrix[j][k].add(i)
-    print(new_Sp_matrix)
+    # print(new_Sp_matrix)
     return new_Sp_matrix
 
 def div_base_matric(Sp_matrix,con_list,del_list):
     con_list = list(set(con_list) - set(del_list))
     sp_list = []
     for j in range(len(Sp_matrix)):
-        sp = set(k for k in range(len(dec_data)))
+        sp = set(k for k in range(len(Sp_matrix)))
         for i in con_list:
             sp = sp & Sp_matrix[j][i]
         sp_list.append(list(sp.copy()))
@@ -112,9 +112,8 @@ def new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_list,con_dat
         for k in new_dec_divlist:
             if set(new_sp_list[i]).issubset(k):
                 list1 +=[i]
-            for j in new_sp_list[i]:
-                if set(new_sp_list[j]).issubset(k):
-                    continue
+        for j in new_sp_list[i]:
+            if issubset_dec(new_dec_divlist, new_sp_list[j]) == 0:
                 list2 +=[j]
     return (set(pos(dec_divlist, div_base_matric(Sp_matrix, red_list, []))) | set(list1) - set(list2))
 
@@ -135,10 +134,11 @@ def red(Sp_matrix,new_Sp_matrix,con_list,dec_divlist,new_dec_divlist,red_num,con
     attr_list = list(set(con_list) - set(red_list))
     dict = {}
     for i in attr_list:
-        print(new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_list + [i],con_data,single_con_data),new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_list + [i],con_data,single_con_data))
         dict[i] = len((new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_list + [i],con_data,single_con_data)) -
                       (new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_list,con_data,single_con_data)))
-    print(dict,"dict")
+    pos_c = new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,con_list,con_data,single_con_data)
+    while pos_c != new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_list,con_data,single_con_data):
+
     # while pos_c != pos(dec_divlist,div_base_matric(Sp_matrix,red_list,[])):
     #     dict = {}
     #     con_key = -1  # 字典key
