@@ -55,6 +55,17 @@ def get_matrix(my_data): #
                 Sp_matrix[i].append(sp_set.copy())
     return Sp_matrix
 
+def get_new_matrix(Sp_matrix,em_list):
+    new_sp_matrix = [Sp_matrix[i][:] for i in range(len(Sp_matrix))]
+    for i in em_list:
+        # print(i)
+        for j in range(len(new_sp_matrix[i])):
+            # print(new_sp_matrix[i][j])
+            for k in new_sp_matrix[i][j]:
+                # print(k)
+                new_sp_matrix[k][j] = new_sp_matrix[k][j] - {i}
+    return new_sp_matrix
+
 def div_base_matric(Sp_matrix,con_list,del_list):
     con_list = list(set(con_list) - set(del_list))
     sp_list = []
@@ -73,52 +84,42 @@ def pos(dec_divlist,sp_divlist):  #子集  正域集合
                 pos_list += [j]
     return pos_list
 
-def core(Sp_matrix,con_list,dec_divlist):# 根据 属性重要度  求核
-    core_list = []
-    pos_c = pos(dec_divlist,div_base_matric(Sp_matrix,con_list,[]))
-    for i in con_list:
-        if len(set(pos_c) - set(pos(dec_divlist,div_base_matric(Sp_matrix,con_list,[i])))) > 0:
-            core_list.append(i)
-    print(core_list)
-    return core_list
+def new_pos(new_sp_matrix,red_list,dec_divlist,em_list):
+    sp_divlist = div_base_matric(new_sp_matrix, red_list, [])
+    list1 = []
+    for i in em_list:
+        for j in sp_divlist[i]:
+            if issubset_dec(dec_divlist,sp_divlist[j]) == 1:
+               list1.append(j)
+    return set(pos(dec_divlist,sp_divlist)) - set(em_list) | set(list1)
 
-def red(Sp_matrix,con_list,dec_divlist,core_list):
-    red_list = core_list.copy()
-    pos_c = pos(dec_divlist, div_base_matric(Sp_matrix, con_list, []))
+def issubset_dec(dec_list,con_list):
+    for i in dec_list:
+        if set(con_list).issubset(i):
+            return 1
+    return 0
 
-
-    print(pos(dec_divlist, div_base_matric(Sp_matrix, red_list, [])),"pos")
-
-
-    attr_list = list(set(con_list) - set(red_list))
-    print(div_base_matric(Sp_matrix,red_list,[]))
-    print(pos_c,pos(dec_divlist,div_base_matric(Sp_matrix,red_list,[])))
-    while pos_c != pos(dec_divlist,div_base_matric(Sp_matrix,red_list,[])):
-        print("111111")
-        dict = {}
-        con_key = -1  # 字典key
-        con_value = -1  # 字典value
-        for i in attr_list:
-            dict[i] = len(set(pos(dec_divlist, div_base_matric(Sp_matrix, red_list + [i], []))) - set(pos(dec_divlist,div_base_matric(Sp_matrix,core_list,[]))))
-        print(dict)
-        for key in dict:
-            if dict[key] > con_value:
-                con_value = dict[key]
-                con_key = key
-        attr_list.remove(con_key)
-        red_list += [con_key]
+def red(Sp_matrix,con_list,dec_divlist,red_list,em_list):
+    new_sp_matrix = get_new_matrix(Sp_matrix, em_list)
+    pos_c = new_pos(new_sp_matrix, con_list, dec_divlist, em_list)
+    print(pos_c)
+    i = len(red_list) - 1
+    while i >= 0:
+        if pos_c  == new_pos(new_sp_matrix, set(red_list) - {red_list[i]}, dec_divlist, em_list):
+            del red_list[i]
+        i = i - 1
     print(red_list)
-    return red_list
 
 if __name__ == "__main__":
     start = time.perf_counter()
-    my_data = readfile("IARM-I.txt")
+    my_data = readfile("incomplete_table.txt")
+    red_list = [2,3]
+    em_list =[3,5]
     con_data = deal_data(my_data, len(my_data[0]) - 1, len(my_data[0]) - 1)
     dec_data = deal_data(my_data, 0, len(my_data[0])  - 2)
     Sp_matrix = get_matrix(con_data)
     con_list = [i for i in range(len(con_data[0]))]
     dec_divlist = div(dec_data)
-    core_list = core(Sp_matrix, con_list, dec_divlist)
-    red(Sp_matrix, con_list, dec_divlist, core_list)
+    red(Sp_matrix,con_list,dec_divlist,red_list,em_list)
     end = time.perf_counter()
     print(end - start)

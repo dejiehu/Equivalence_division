@@ -124,7 +124,7 @@ print(b)
 #     print(i)
 #     print(i[0])
 #     print(i[1])
-# my_data = numpy.loadtxt('incomplete_table1.txt')
+# my_data = numpy.loadtxt('IARS_I.txt')
 # p = [1,2,5,'*','*']
 # if p[3] == p[4]:
 #     print("y")

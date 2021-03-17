@@ -120,3 +120,5 @@ if __name__ == "__main__":
     con_list = [i for i in range(len(con_data[0]))]
     dec_divlist = div(dec_data)
     red(Sp_matrix,con_list,dec_divlist,red_list,em_list)
+    end = time.perf_counter()
+    print(end - start)

@@ -136,7 +136,6 @@ def red(Sp_matrix,new_Sp_matrix,con_list,dec_divlist,new_dec_divlist,red_num,con
     while pos_c != new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_list,con_data,single_con_data):
         red_list = red_list + dict[0][1]
         del dict[0]
-    print(red_list)
     De_redundancy(Sp_matrix, new_Sp_matrix, dec_divlist, new_dec_divlist, red_num, con_data, single_con_data,
                   pos_c)
 
@@ -165,3 +164,5 @@ if __name__ == "__main__":
     new_Sp_matrix = get_new_matrix(my_data, single_con_data, Sp_matrix)
     # new_pos(Sp_matrix, new_Sp_matrix, dec_divlist, new_dec_divlist, red_num, con_data, single_con_data)
     red(Sp_matrix, new_Sp_matrix, con_list, dec_divlist, new_dec_divlist, red_num, con_data, single_con_data)
+    end = time.perf_counter()
+    print(end - start)
