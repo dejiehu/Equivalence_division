@@ -143,7 +143,7 @@ def red(Sp_matrix,new_Sp_matrix,con_list,dec_divlist,new_dec_divlist,red_num,con
 def De_redundancy(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_num,con_data,single_con_data,pos_c):
     i =  len(red_num) - 1
     while i >= 0:
-        if pos_c == new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,set(red_num) - set([red_num[i]]),con_data,single_con_data):
+        if pos_c == new_pos(Sp_matrix, new_Sp_matrix, dec_divlist, new_dec_divlist, set(red_num) - {red_num[i]}, con_data, single_con_data):
             del red_num[i]
         i = i - 1
     print(red_num)
