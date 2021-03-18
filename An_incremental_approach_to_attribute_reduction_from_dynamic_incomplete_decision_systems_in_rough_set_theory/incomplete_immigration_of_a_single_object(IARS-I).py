@@ -39,54 +39,54 @@ def div(my_data): #1.数据表，2、3.删除元素下表   求划分集合
 
 def get_matrix(my_data): #
     U_list = {i for i in range(len(my_data))}
-    Sp_matrix = [[] for i in range(len(my_data))]
+    U_sp_matrix = [[] for i in range(len(my_data))]
     for i in range(len(my_data)):
         for j in range(len(my_data[0])):
             sp_set = set()
             index = 1
             for k in range(len(my_data)):
                 if my_data[i][j] == '*':
-                    Sp_matrix[i].append(U_list)
+                    U_sp_matrix[i].append(U_list)
                     index = 0
                     break
                 if my_data[i][j] == my_data[k][j] or my_data[k][j] == '*':
                     sp_set.add(k)
             if index == 1:
-                Sp_matrix[i].append(sp_set.copy())
-    return Sp_matrix
+                U_sp_matrix[i].append(sp_set.copy())
+    return U_sp_matrix
 
-def get_new_matrix(my_data,new_data,Sp_matrix): #
+def get_new_matrix(my_data,new_data,U_sp_matrix): #
     U_list = {(i + len(my_data)) for i in range(len(new_data))}
-    new_Sp_matrix = [[] for i in range(len(new_data))]
+    U_Ux_sp_matrix = [[] for i in range(len(new_data))]
     for i in range(len(new_data)):
         for j in range(len(new_data[0])):
             sp_set = set()
             index = 1
             for k in range(len(my_data + new_data)):
                 if new_data[i][j] == '*':
-                    new_Sp_matrix[i].append(U_list)
+                    U_Ux_sp_matrix[i].append(U_list)
                     index = 0
                     break
                 if new_data[i][j] == (my_data + new_data)[k][j] or (my_data + new_data)[k][j] == '*':
                     sp_set.add(k)
             if index == 1:
-                new_Sp_matrix[i].append(sp_set.copy())
-    new_Sp_matrix = Sp_matrix + new_Sp_matrix
-    print(new_Sp_matrix)
+                U_Ux_sp_matrix[i].append(sp_set.copy())
+    U_Ux_sp_matrix = U_sp_matrix + U_Ux_sp_matrix
+    print(U_Ux_sp_matrix)
     for i in range(len(my_data), len(my_data + new_data)):
-        for k in range(len(new_Sp_matrix[i])):
-            for j in new_Sp_matrix[i][k]:
-                new_Sp_matrix[j][k].add(i)
-    # print(new_Sp_matrix)
-    return new_Sp_matrix
+        for k in range(len(U_Ux_sp_matrix[i])):
+            for j in U_Ux_sp_matrix[i][k]:
+                U_Ux_sp_matrix[j][k].add(i)
+    # print(U_Ux_sp_matrix)
+    return U_Ux_sp_matrix
 
-def div_base_matric(Sp_matrix,con_list,del_list):
+def div_base_matric(U_sp_matrix,con_list,del_list):
     con_list = list(set(con_list) - set(del_list))
     sp_list = []
-    for j in range(len(Sp_matrix)):
-        sp = set(k for k in range(len(Sp_matrix)))
+    for j in range(len(U_sp_matrix)):
+        sp = set(k for k in range(len(U_sp_matrix)))
         for i in con_list:
-            sp = sp & Sp_matrix[j][i]
+            sp = sp & U_sp_matrix[j][i]
         sp_list.append(list(sp.copy()))
     return sp_list
 
@@ -98,18 +98,18 @@ def pos(dec_divlist,sp_divlist):  #子集  正域集合
                 pos_list += [j]
     return pos_list
 
-def new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_list,con_data,single_con_data):
+def new_pos(U_sp_matrix,U_Ux_sp_matrix,dec_divlist,U_Ux_dec_divlist,red_list,U_con_data,Ux_con_data):
     list1 = []
     list2 = []
-    new_sp_list = div_base_matric(new_Sp_matrix, red_list, [])
-    for i in range(len(my_data), len(con_data + single_con_data)):
-        for k in new_dec_divlist:
+    new_sp_list = div_base_matric(U_Ux_sp_matrix, red_list, [])
+    for i in range(len(my_data), len(U_con_data + Ux_con_data)):
+        for k in U_Ux_dec_divlist:
             if set(new_sp_list[i]).issubset(k):
                 list1 +=[i]
         for j in new_sp_list[i]:
-            if issubset_dec(new_dec_divlist, new_sp_list[j]) == 0:
+            if issubset_dec(U_Ux_dec_divlist, new_sp_list[j]) == 0:
                 list2 +=[j]
-    return (set(pos(dec_divlist, div_base_matric(Sp_matrix, red_list, []))) | set(list1) - set(list2))
+    return (set(pos(dec_divlist, div_base_matric(U_sp_matrix, red_list, []))) | set(list1) - set(list2))
 
 def issubset_dec(dec_list,con_list):
     for i in dec_list:
@@ -117,32 +117,32 @@ def issubset_dec(dec_list,con_list):
             return 1
     return 0
 
-def red(Sp_matrix,new_Sp_matrix,con_list,dec_divlist,new_dec_divlist,red_num,con_data,single_con_data):
+def red(U_sp_matrix,U_Ux_sp_matrix,con_list,dec_divlist,U_Ux_dec_divlist,red_num,U_con_data,Ux_con_data):
     red_list = red_num.copy()
-    print(div_base_matric(new_Sp_matrix,con_list,[]),len(con_data + single_con_data ) - 1)
-    if len(div_base_matric(new_Sp_matrix,con_list,[])[len(con_data + single_con_data)-1]) == 1 & issubset_dec(
-            new_dec_divlist,div_base_matric(new_Sp_matrix,red_list,[])[len(con_data + single_con_data)-1]) == 1:
+    print(div_base_matric(U_Ux_sp_matrix,con_list,[]),len(U_con_data + Ux_con_data ) - 1)
+    if len(div_base_matric(U_Ux_sp_matrix,con_list,[])[len(U_con_data + Ux_con_data)-1]) == 1 & issubset_dec(
+            U_Ux_dec_divlist,div_base_matric(U_Ux_sp_matrix,red_list,[])[len(U_con_data + Ux_con_data)-1]) == 1:
         print("输出了")
         return red_num
     attr_list = list(set(con_list) - set(red_list))
     dict = {}
-    print(div_base_matric(new_Sp_matrix,red_list,[]))
+    print(div_base_matric(U_Ux_sp_matrix,red_list,[]))
     for i in attr_list:
-        dict[i] = len((new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_list + [i],con_data,single_con_data)) -
-                      (new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_list,con_data,single_con_data)))
+        dict[i] = len((new_pos(U_sp_matrix,U_Ux_sp_matrix,dec_divlist,U_Ux_dec_divlist,red_list + [i],U_con_data,Ux_con_data)) -
+                      (new_pos(U_sp_matrix,U_Ux_sp_matrix,dec_divlist,U_Ux_dec_divlist,red_list,U_con_data,Ux_con_data)))
     dict = sorted(dict.items(), key=lambda d: d[1], reverse=True)
-    pos_c = new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,con_list,con_data,single_con_data)
-    print(pos_c,new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_list,con_data,single_con_data))
-    while pos_c != new_pos(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_list,con_data,single_con_data):
-        red_list = red_list + dict[0][1]
+    pos_c = new_pos(U_sp_matrix,U_Ux_sp_matrix,dec_divlist,U_Ux_dec_divlist,con_list,U_con_data,Ux_con_data)
+    print(pos_c,new_pos(U_sp_matrix,U_Ux_sp_matrix,dec_divlist,U_Ux_dec_divlist,red_list,U_con_data,Ux_con_data))
+    while pos_c != new_pos(U_sp_matrix,U_Ux_sp_matrix,dec_divlist,U_Ux_dec_divlist,red_list,U_con_data,Ux_con_data):
+        red_list = red_list + [attr_list[dict[0][0]]]
         del dict[0]
-    De_redundancy(Sp_matrix, new_Sp_matrix, dec_divlist, new_dec_divlist, red_num, con_data, single_con_data,
+    De_redundancy(U_sp_matrix, U_Ux_sp_matrix, dec_divlist, U_Ux_dec_divlist, red_num, U_con_data, Ux_con_data,
                   pos_c)
 
-def De_redundancy(Sp_matrix,new_Sp_matrix,dec_divlist,new_dec_divlist,red_num,con_data,single_con_data,pos_c):
+def De_redundancy(U_sp_matrix,U_Ux_sp_matrix,dec_divlist,U_Ux_dec_divlist,red_num,U_con_data,Ux_con_data,pos_c):
     i =  len(red_num) - 1
     while i >= 0:
-        if pos_c == new_pos(Sp_matrix, new_Sp_matrix, dec_divlist, new_dec_divlist, set(red_num) - {red_num[i]}, con_data, single_con_data):
+        if pos_c == new_pos(U_sp_matrix, U_Ux_sp_matrix, dec_divlist, U_Ux_dec_divlist, set(red_num) - {red_num[i]}, U_con_data, Ux_con_data):
             del red_num[i]
         i = i - 1
     print(red_num)
@@ -152,17 +152,15 @@ if __name__ == "__main__":
     my_data = readfile("incomplete_table.txt")
     single_data = readfile("immigrate_singal.txt")
     red_num = [2,3]
-    con_data = deal_data(my_data, len(my_data[0]) - 1, len(my_data[0]) - 1)
+    U_con_data = deal_data(my_data, len(my_data[0]) - 1, len(my_data[0]) - 1)
     dec_data = deal_data(my_data, 0, len(my_data[0])  - 2)
-    single_con_data = deal_data(single_data, len(single_data[0]) - 1, len(single_data[0]) - 1)
-    single_dec_data = deal_data(single_data, 0, len(single_data[0]) - 2)
-    Sp_matrix = get_matrix(con_data)
-    con_list = [i for i in range(len(con_data[0]))]
+    Ux_con_data = deal_data(single_data, len(single_data[0]) - 1, len(single_data[0]) - 1)
+    Ux_dec_data = deal_data(single_data, 0, len(single_data[0]) - 2)
+    U_sp_matrix = get_matrix(U_con_data)
+    con_list = [i for i in range(len(U_con_data[0]))]
     dec_divlist = div(dec_data)
-    new_dec_divlist = div(dec_data + single_dec_data)
-    # red(Sp_matrix, con_list, dec_divlist, core_list)
-    new_Sp_matrix = get_new_matrix(my_data, single_con_data, Sp_matrix)
-    # new_pos(Sp_matrix, new_Sp_matrix, dec_divlist, new_dec_divlist, red_num, con_data, single_con_data)
-    red(Sp_matrix, new_Sp_matrix, con_list, dec_divlist, new_dec_divlist, red_num, con_data, single_con_data)
+    U_Ux_dec_divlist = div(dec_data + Ux_dec_data)
+    U_Ux_sp_matrix = get_new_matrix(my_data, Ux_con_data, U_sp_matrix)
+    red(U_sp_matrix,U_Ux_sp_matrix,con_list,dec_divlist,U_Ux_dec_divlist,red_num,U_con_data,Ux_con_data)
     end = time.perf_counter()
     print(end - start)

@@ -106,23 +106,23 @@ def get_changelist(U_Ux_sp_matrix,red_list,U_con_data):
             if j > len(U_con_data):
                 change_list.append(i)
                 change_list.append(j)
-    print(set(change_list),"set(change_list)")
+    # print(set(change_list),"set(change_list)")
     return set(change_list)
 
 def new_pos(U_sp_matrix,Ux_sp_matrix,U_Ux_sp_matrix,dec_divlist,U_Ux_dec_divlist,red_list,U_con_data):
     list1 = []
-    print(red_list,"red_list")
+    # print(red_list,"red_list")
     U_Ux_sp_list = div_base_matric(U_Ux_sp_matrix, red_list, [])
-    print(U_Ux_sp_list,"U_Ux_sp_list")
+    # print(U_Ux_sp_list,"U_Ux_sp_list")
     change_set = get_changelist(U_Ux_sp_matrix,red_list,U_con_data)
     for i in change_set:
         if issubset_dec(U_Ux_dec_divlist,U_Ux_sp_list[i]) == 0:
             list1.append(i)
     Ux_poslist = pos(dec_divlist, div_base_matric(Ux_sp_matrix, red_list, []))
-    print([i +len(U_sp_matrix)  for i in Ux_poslist])
-    print(list1,"list1")
-    print((set(pos(dec_divlist, div_base_matric(U_sp_matrix, red_list, []))) ,
-            set([i +len(U_sp_matrix)  for i in Ux_poslist]) , set(list1)))
+    # print([i +len(U_sp_matrix)  for i in Ux_poslist])
+    # print(list1,"list1")
+    # print((set(pos(dec_divlist, div_base_matric(U_sp_matrix, red_list, []))) ,
+    #         set([i +len(U_sp_matrix)  for i in Ux_poslist]) , set(list1)))
     return ((set(pos(dec_divlist, div_base_matric(U_sp_matrix, red_list, []))) |
             set([i +len(U_sp_matrix)  for i in Ux_poslist])) - set(list1))
 
@@ -133,21 +133,18 @@ def issubset_dec(dec_list,con_list):
     return 0
 
 def red(U_sp_matrix, Ux_sp_matrix,U_Ux_sp_matrix, con_list, dec_divlist, U_Ux_dec_divlist, red_num, U_con_data):
-    # U_Ux_pos_c = new_pos(U_sp_matrix,Ux_sp_matrix,U_Ux_sp_matrix,dec_divlist,U_Ux_dec_divlist,red_num,U_con_data)
     U_Ux_pos_c = new_pos(U_sp_matrix, Ux_sp_matrix, U_Ux_sp_matrix, dec_divlist, U_Ux_dec_divlist, con_list, U_con_data)
-    print(U_Ux_pos_c,"U_Ux_pos_c")
     if U_Ux_pos_c == new_pos(U_sp_matrix,Ux_sp_matrix,U_Ux_sp_matrix,dec_divlist,U_Ux_dec_divlist,red_num,U_con_data):
         De_redundancy(U_sp_matrix,Ux_sp_matrix,U_Ux_sp_matrix,dec_divlist,U_Ux_dec_divlist,red_num,U_con_data,U_Ux_pos_c)
         return
     attr_list = list(set(con_list) - set(red_num))
     dict = {}
-    # print(div_base_matric(U_Ux_sp_matrix,red_list,[]))
     for i in attr_list:
         dict[i] = len(new_pos(U_sp_matrix,Ux_sp_matrix,U_Ux_sp_matrix,dec_divlist,U_Ux_dec_divlist,red_num + [i],U_con_data) -
                       new_pos(U_sp_matrix,Ux_sp_matrix,U_Ux_sp_matrix,dec_divlist,U_Ux_dec_divlist,red_num,U_con_data))
     dict = sorted(dict.items(), key=lambda d: d[1], reverse=True)
     while U_Ux_pos_c != new_pos(U_sp_matrix,Ux_sp_matrix,U_Ux_sp_matrix,dec_divlist,U_Ux_dec_divlist,red_num,U_con_data):
-        red_list = red_num + dict[0][1]
+        red_num = red_num + [attr_list[dict[0][0]]]
         del dict[0]
     De_redundancy(U_sp_matrix,Ux_sp_matrix,U_Ux_sp_matrix,dec_divlist,U_Ux_dec_divlist,red_num,U_con_data,U_Ux_pos_c)
 
@@ -174,6 +171,6 @@ if __name__ == "__main__":
     dec_divlist = div(dec_data)
     U_Ux_dec_divlist = div(dec_data + single_dec_data)
     U_Ux_sp_matrix = get_new_matrix(my_data, Ux_con_data, U_sp_matrix)
-    red(U_sp_matrix, Ux_sp_matrix,U_Ux_sp_matrix, con_list, dec_divlist, U_Ux_dec_divlist, red_num, U_con_data, Ux_con_data)
+    red(U_sp_matrix, Ux_sp_matrix,U_Ux_sp_matrix, con_list, dec_divlist, U_Ux_dec_divlist, red_num, U_con_data)
     end = time.perf_counter()
     print(end - start)

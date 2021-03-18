@@ -86,10 +86,7 @@ def red(Sp_matrix,con_list,dec_divlist,core_list):
     red_list = core_list.copy()
     pos_c = pos(dec_divlist, div_base_matric(Sp_matrix, con_list, []))
 
-
-    print(pos(dec_divlist, div_base_matric(Sp_matrix, red_list, [])),"pos")
-
-
+    print(red_list)
     attr_list = list(set(con_list) - set(red_list))
     print(div_base_matric(Sp_matrix,red_list,[]))
     print(pos_c,pos(dec_divlist,div_base_matric(Sp_matrix,red_list,[])))
@@ -112,13 +109,14 @@ def red(Sp_matrix,con_list,dec_divlist,core_list):
 
 if __name__ == "__main__":
     start = time.perf_counter()
-    my_data = readfile("IARM-I.txt")
+    my_data = readfile("IARM-E.txt")
     con_data = deal_data(my_data, len(my_data[0]) - 1, len(my_data[0]) - 1)
     dec_data = deal_data(my_data, 0, len(my_data[0])  - 2)
     Sp_matrix = get_matrix(con_data)
     con_list = [i for i in range(len(con_data[0]))]
     dec_divlist = div(dec_data)
     core_list = core(Sp_matrix, con_list, dec_divlist)
+    print(core_list,"core_list")
     red(Sp_matrix, con_list, dec_divlist, core_list)
     end = time.perf_counter()
     print(end - start)

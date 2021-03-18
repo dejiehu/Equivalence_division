@@ -90,7 +90,6 @@ def red(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,RED):# 求约简
     U_red_data = cal_red_divlist(RED, U_con_data)
     Ux_red_data = cal_red_divlist(RED, Ux_con_data)
     U_Ux_C_dep = U_Ux_dependency(U_dec_data,Ux_dec_data,U_con_data,Ux_con_data)
-    # print(U_Ux_C_dep, U_Ux_dependency(U_dec_data,Ux_dec_data,U_red_data,Ux_red_data),"add")
     if U_Ux_C_dep  == U_Ux_dependency(U_dec_data,Ux_dec_data,U_red_data,Ux_red_data):
         print("去冗余了")
         RED, U_red_data, Ux_red_data = De_redundancy(U_Ux_C_dep, U_dec_data, Ux_dec_data, U_red_data, Ux_red_data, RED)
@@ -102,27 +101,21 @@ def red(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,RED):# 求约简
     U_attr_data = cal_red_divlist(attr_num,U_con_data)
     Ux_attr_data = cal_red_divlist(attr_num,Ux_con_data)
     dict = {}
+    U_Ux_red_dep = U_Ux_dependency(U_dec_data, Ux_dec_data, U_red_data, Ux_red_data)
     for i in range(U_attr_data.shape[1]):
         U_temp_red_data = U_red_data
         Ux_temp_red_data = Ux_red_data
         U_temp_red_data = numpy.append(U_temp_red_data, U_attr_data[:, i, numpy.newaxis], axis=1)
         Ux_temp_red_data = numpy.append(Ux_temp_red_data, Ux_attr_data[:, i, numpy.newaxis], axis=1)
-        dict[i] = U_Ux_dependency(U_dec_data,Ux_dec_data,U_temp_red_data,Ux_temp_red_data) - \
-                  U_Ux_dependency(U_dec_data,Ux_dec_data,U_red_data,Ux_red_data)
+        dict[i] = U_Ux_dependency(U_dec_data,Ux_dec_data,U_temp_red_data,Ux_temp_red_data) - U_Ux_red_dep
     dict = sorted(dict.items(), key=lambda d: d[1], reverse=True)
-    U_temp_red_data = U_red_data
-    Ux_temp_red_data = Ux_red_data
-    while U_Ux_dependency(U_dec_data,Ux_dec_data,U_temp_red_data,Ux_temp_red_data) != U_Ux_C_dep:
-        U_temp_red_data = U_red_data
-        Ux_temp_red_data = Ux_red_data
-        U_temp_red_data = numpy.append(U_temp_red_data, U_attr_data[:, dict[0][0], numpy.newaxis], axis=1)
-        Ux_temp_red_data = numpy.append(Ux_temp_red_data, Ux_attr_data[:, dict[0][0], numpy.newaxis], axis=1)
+    # print(dict)
+    while U_Ux_dependency(U_dec_data,Ux_dec_data,U_red_data,Ux_red_data) != U_Ux_C_dep:
+        print(dict,dict[0])
+        print(attr_num)
         U_red_data = numpy.append(U_red_data, U_attr_data[:, dict[0][0], numpy.newaxis], axis=1)
         Ux_red_data = numpy.append(Ux_red_data, Ux_attr_data[:, dict[0][0], numpy.newaxis], axis=1)
         RED += [attr_num[dict[0][0]]]
-        U_attr_data = deal_data(U_attr_data, dict[0][0], dict[0][0])
-        Ux_attr_data = deal_data(Ux_attr_data, dict[0][0], dict[0][0])
-        del attr_num[dict[0][0]]
         del dict[0]
     RED,U_red_data,Ux_red_data = De_redundancy(U_Ux_C_dep, U_dec_data, Ux_dec_data, U_red_data, Ux_red_data, RED)
     print(RED)
