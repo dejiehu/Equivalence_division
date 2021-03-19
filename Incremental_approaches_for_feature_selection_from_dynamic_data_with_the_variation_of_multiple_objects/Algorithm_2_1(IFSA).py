@@ -173,9 +173,10 @@ def merge_divlist(U_data,Ux_data,U_dec,Ux_dec):#      U/C + Ux/C
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    U_data = readfile('table_1.txt')
-    RED = [0, 3]
-    Ux_data = readfile('incremental.txt')
+    U_data = readfile('../zoo.txt')
+    # RED = [0, 3]
+    RED = [5,12,3,7,2]
+    Ux_data = readfile('../zoo1.txt')
     U_Ux_data = numpy.append(U_data,Ux_data,axis=0)
 
     U_con_data = deal_data(U_data, U_data.shape[1] - 1, U_data.shape[1] - 1)

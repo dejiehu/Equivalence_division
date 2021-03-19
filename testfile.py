@@ -114,9 +114,8 @@ import numpy
 # dict = sorted(dict.items(), key=lambda d:d[1],reverse= True)
 # print(dict)
 a=[[1,2,3],[1,9]]
-b=[]
-b = b+a
-print(b)
+sum(a,[])
+print(sum(a,[]))
 # del dict[0]
 # print(dict)
 # print(dict[0][1])

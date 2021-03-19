@@ -1,10 +1,12 @@
 import math
 import time
+from itertools import chain
 
 import numpy
 
 def readfile():
-    my_data = numpy.loadtxt('../table_1.txt')
+    my_data = numpy.loadtxt('../zoo.txt')
+    my_data = my_data.astype(int)
     print(my_data)
     return my_data
 
@@ -26,51 +28,60 @@ def del_dup(con_data,core_data):#删除重复列
         i += 1
     return con_data
 
-def div(my_data):  #划分等价类
-    div_list = []
-    jump = 1
-    list1= []
-    for i in range(len(my_data)):
-        list1.clear()
-        for l in range(len(div_list)):
-            if (div_list[l].__contains__(i)):
-                jump = 0
-                break
-        if jump == 0:
-            jump = 1
-            continue
-        list1.append(i)
-        for j in range(i+1,len(my_data)):
-            if((my_data[i] == my_data[j]).all()):
-                list1.append(j)
-        div_list.append(list1.copy())
-    return div_list
 
-def Entropy(attr_divlist):#信息熵
-    U_num = 0
-    for i in attr_divlist:
-        U_num += len(i)
+def Max_min(con_data,U_list):  #找出属性最大最小值
+    Mm_list = []
+    for i in range(con_data.shape[1]):
+        min = 10000
+        Max = 0
+        for j in U_list:
+            if con_data[j][i] > Max:
+                Max = con_data[j][i]
+            if con_data[j][i] < min:
+                min = con_data[j][i]
+        Mm_list.append([Max,min])
+    return Mm_list
+
+def div(my_data):    #等价类的划分
+    U_linkList = [i for i in range(len(my_data))]
+    Mm_list = Max_min(my_data,U_linkList)
+    for i in range(len(Mm_list)):
+        queue_linkList = [[]]*(Mm_list[i][0] - Mm_list[i][1] + 1)
+        for j in U_linkList:
+            queue_linkList[my_data[j][i] - Mm_list[i][1]] = queue_linkList[my_data[j][i] - Mm_list[i][1]] + [j]
+        U_linkList.clear()
+        U_linkList = list(chain.from_iterable(queue_linkList))
+    div_list = []
+    temp_list = [U_linkList[0]]
+    for i in range(1,len(U_linkList)):
+        if((my_data[U_linkList[i]] == my_data[U_linkList[i-1]]).all()):
+            temp_list.append(U_linkList[i])
+            continue
+        div_list.append(temp_list)
+        temp_list = [U_linkList[i]]
+    div_list.append(temp_list)
+    return div_list
+def Entropy(attr_divlist,j):#信息熵
     entropy = 0
     for i in attr_divlist:
-        p = len(i)/U_num
+        p = len(i)/len(j)
         entropy -= p*math.log(p)
     return entropy
 
 def con_Entropy(con_divlist,dec_divlist):  #条件熵
-    U_num = 0
-    for i in dec_divlist:
-        U_num += len(i)
+    U_num = len(sum(dec_divlist,[]))
     con_entropy = 0
     for j in con_divlist:
         s = list()
         for k in dec_divlist:
             if len((set(j) & set(k))) != 0:
                 s.append(list(set(j) & set(k)))
-        con_entropy += ((len(j)/U_num) * Entropy(s))
+        con_entropy += ((len(j)/U_num) * Entropy(s,j))
     return con_entropy
 
 def core(con_data, dec_divlist,con_entropy):  #基于条件熵求核
     core_data = numpy.empty(shape=(con_data.shape[0],0))
+    core_data = core_data.astype(int)
     for i in range(con_data.shape[1]):
         temp_con_data = deal_data(con_data,i,i)
         temp_con_divlist = div(temp_con_data)
@@ -126,7 +137,6 @@ if __name__ == '__main__':
     print("dec_divlist", dec_divlist)
     con_entropy = con_Entropy(con_divlist,dec_divlist)
     print("条件熵：",con_entropy)
-    print("Entropy(attr_divlist)",Entropy(dec_divlist))
     C0_data = core(con_data, dec_divlist,con_entropy)
     attr_data = del_dup(con_data,C0_data) #C-C0
     print_red(my_data, Red(C0_data,dec_divlist,con_entropy,attr_data))

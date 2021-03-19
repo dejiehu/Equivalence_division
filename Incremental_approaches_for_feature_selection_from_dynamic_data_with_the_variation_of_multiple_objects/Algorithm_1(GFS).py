@@ -118,7 +118,7 @@ def print_red(my_data,Red_data):
 
 if __name__ == "__main__":
     start = time.perf_counter()
-    my_data = readfile("IFSA.txt")
+    my_data = readfile("../zoo.txt")
     con_data = deal_data(my_data, my_data.shape[1] - 1, my_data.shape[1] - 1)
     dec_data = deal_data(my_data, 0, my_data.shape[1] - 2)
     con_divlist = div(con_data)
