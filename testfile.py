@@ -1,4 +1,6 @@
 import itertools
+import math
+import string
 from itertools import product
 #
 # a = [1,2]
@@ -98,12 +100,66 @@ import numpy
 # def readfile():
 # my_data = numpy.loadtxt('data.txt')
 # print((my_data[0] ==my_data[1]).all())
-i = [[0],[1],[2]]
-z=[[5]]
+# i = [[0],[1],[2]]
+# z=[[5]]
 # for r in range(len(i)-1,-1,-1):
 #     print(i[r])
 #     if r == 1:
 #         del i[r]
 #         print("shanchu ")
-z.append(i+i)
-print(z)
+# z.append(i+i)
+# print(z)
+
+# dict = {"1":4,"2":2,"3":6}
+# print(dict)
+# dict = sorted(dict.items(), key=lambda d:d[1],reverse= True)
+# print(dict)
+a=[[1,2,3],[1,9]]
+# sum(a,[])
+# print(sum(a,[]))
+# print(a)
+import copy
+b = copy.deepcopy(a)
+print(b)
+del a[0]
+del b[1]
+print(b)
+print(a)
+# del dict[0]
+# print(dict)
+# print(dict[0][1])
+# for i in dict:
+#     print(i)
+#     print(i[0])
+#     print(i[1])
+# my_data = numpy.loadtxt('IARS_I.txt')
+# p = [1,2,5,'*','*']
+# if p[3] == p[4]:
+#     print("y")
+# else:
+#     print('N')
+# print(my_data)
+
+# a  = [[1,2,4,5],[5,8,9,6]]
+# f = open("incomplete_table.txt", "r", encoding='utf-8')
+#
+# lines = f.readlines()  # 读取全部内容
+#
+# for i in range(0, lines.__len__(), 1):  # (开始/左边界, 结束/右边界, 步长)
+#
+#     list = []  ## 空列表, 将第i行数据存入list中
+#     for word in lines[i].split():
+#         word = word.strip()
+#         list.append(word);
+#     a.append(list)
+
+# a  = [[1,2,4,5],[5
+# sett = set()
+# sett.add(1)
+# sett.add(11)
+# print(sett)
+# math.log(((len(U_Ux_con_divlist) - 1) / len(U_Ux_con_divlist)))
+# U_Ux_con_divlist = [1]
+# a = ((len(U_Ux_con_divlist) - 1) / len(U_Ux_con_divlist))
+# print(a)
+# print(math.log(a))

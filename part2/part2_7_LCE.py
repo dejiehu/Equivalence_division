@@ -82,7 +82,6 @@ def L_Entropy(con_divlist,dec_divlist):  #梁的熵
             j_c = (set(U).difference(set(j)))   #补集
             if (len((set(i) & set(j))) != 0) & (len(i_c & j_c) != 0):
                 l_entropy += (((len((set(i) & set(j)))/U_num) * (len(i_c & j_c))/U_num))
-    # return round(l_entropy,14)
     return l_entropy
 
 def pos(dec_divlist,con_divlist):  #子集  正域集合
