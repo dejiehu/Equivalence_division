@@ -1,4 +1,5 @@
 import itertools
+import math
 import string
 from itertools import product
 #
@@ -114,8 +115,16 @@ import numpy
 # dict = sorted(dict.items(), key=lambda d:d[1],reverse= True)
 # print(dict)
 a=[[1,2,3],[1,9]]
-sum(a,[])
-print(sum(a,[]))
+# sum(a,[])
+# print(sum(a,[]))
+# print(a)
+import copy
+b = copy.deepcopy(a)
+print(b)
+del a[0]
+del b[1]
+print(b)
+print(a)
 # del dict[0]
 # print(dict)
 # print(dict[0][1])
@@ -149,3 +158,8 @@ print(sum(a,[]))
 # sett.add(1)
 # sett.add(11)
 # print(sett)
+# math.log(((len(U_Ux_con_divlist) - 1) / len(U_Ux_con_divlist)))
+# U_Ux_con_divlist = [1]
+# a = ((len(U_Ux_con_divlist) - 1) / len(U_Ux_con_divlist))
+# print(a)
+# print(math.log(a))

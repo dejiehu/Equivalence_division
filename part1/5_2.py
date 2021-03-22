@@ -3,7 +3,7 @@ from itertools import chain
 import numpy
 
 def readfile():#读文件
-    my_data = numpy.loadtxt('../table_1.txt')
+    my_data = numpy.loadtxt('../german.txt')
     my_data = my_data.astype(int)
     print(my_data)
     print("my_data.shape:",my_data.shape)

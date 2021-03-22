@@ -162,10 +162,6 @@ def merge_divlist(U_data,Ux_data,U_dec,Ux_dec):#      U/C + Ux/C
                 U_Ux_divlist.append(U_divlist[j] + Ux_divlist[i])
                 del U_divlist[j],Ux_divlist[i]
                 break
-    # for i in U_Ux_divlist:
-    #     Xi = len(div_object(numpy.append(U_dec,Ux_dec,axis=0),i))
-    #     if Xi != 1:
-    #         sum += Xi
     for i in U_Ux_divlist:
         if len(div_object(numpy.append(U_dec, Ux_dec, axis=0), i)) != 1:
             sum += len(i)
