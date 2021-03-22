@@ -67,17 +67,15 @@ def div(my_data):    #等价类的划分
     return div_list
 
 def merge_divlist(U_data,Ux_data,U_divlist,Ux_divlist):#      U/C + Ux/C
-    U_con_divlist = copy.deepcopy(U_divlist)
-    Ux_con_divlist = copy.deepcopy(Ux_divlist)
-    U_Ux_con_divlist = []
-    for i in range(len(Ux_con_divlist)-1,-1,-1):  #逆序循环
-        for j in range(len(U_con_divlist)-1,-1,-1):
-            if (U_con_data[U_con_divlist[j][0]] == Ux_con_data[(Ux_con_divlist[i][0]) - U_data.shape[0]]).all():
-                U_Ux_con_divlist += (U_con_divlist[j] + Ux_con_divlist[i])
-                del U_con_divlist[j]
-                del Ux_con_divlist[i]
+    U_con_divlist = []
+    Ux_con_divlist = []
+    for i in range(len(Ux_divlist)-1,-1,-1):  #逆序循环
+        for j in range(len(U_divlist)-1,-1,-1):
+            if (U_data[U_divlist[j][0]] == Ux_data[(Ux_divlist[i][0]) - U_data.shape[0]]).all():
+                U_con_divlist.append(U_divlist[j])
+                Ux_con_divlist.append(Ux_divlist[i])
                 break
-    return U_Ux_con_divlist,U_con_divlist,Ux_con_divlist
+    return U_con_divlist,Ux_con_divlist
 
 def pairs_of_object(x):  #类对的个数
     return x*(x-1)/2
@@ -99,18 +97,22 @@ def U_Ux_CCE_Entropy(U_con_data,U_dec_data,Ux_con_data,Ux_dec_data):
     U_dec_divlist = div(U_dec_data)
     Ux_con_divlist = div(Ux_con_data)
     Ux_dec_divlist = div(Ux_dec_data)
-    print(U_con_divlist,U_dec_divlist,"U_con_divlist,U_dec_divlist")
     U_len = U_con_data.shape[0]
     Ux_len = Ux_con_data.shape[0]
     Ux_con_divlist = Add_Ux_dataShape(U_len, Ux_con_divlist)
     Ux_dec_divlist = Add_Ux_dataShape(U_len, Ux_dec_divlist)
-    U_Ux_con_divlist,U_con_divlist,Ux_con_divlist = merge_divlist(U_con_data,Ux_con_data,U_con_divlist,Ux_con_divlist)
-    U_Ux_dec_divlist, U_dec_divlist, Ux_dec_divlist = merge_divlist(U_dec_data, Ux_dec_data, U_dec_divlist,
-                                                                    Ux_dec_divlist)
+    U_comb_con_divlist,Ux_comb_con_divlist = merge_divlist(U_con_data,Ux_con_data,U_con_divlist,Ux_con_divlist)
+    U_comb_dec_divlist, Ux_comb_dec_divlist = merge_divlist(U_dec_data, Ux_dec_data, U_dec_divlist,Ux_dec_divlist)
+    # print( U_comb_con_divlist,Ux_comb_con_divlist)
+    # print(U_comb_dec_divlist, Ux_comb_dec_divlist)
     latter = 0
-    for
-
-    return (math.pow(U_len) * (U_len - 1) * CCE_Entropy(U_con_divlist,U_dec_divlist) + math.pow(Ux_len) * (Ux_len - 1) * CCE_Entropy(Ux_con_divlist,Ux_dec_divlist))/(math.pow(U_len + Ux_len , 2) * (U_len + Ux_len - 1)) + latter
+    for i in range(len(U_comb_con_divlist)):
+        latter += ((len(U_comb_con_divlist[i]) * len(Ux_comb_con_divlist[i])) * (3 * len(U_comb_con_divlist[i]) + 3 * len(Ux_comb_con_divlist[i]) - 2))/(math.pow(U_len + Ux_len,2) * (U_len + Ux_len - 1))
+        for j in range(len(U_comb_dec_divlist)):
+            latter -= (len(set(U_comb_con_divlist[i]) & set(U_comb_dec_divlist[j])) * len(set(Ux_comb_con_divlist[i]) & set(Ux_comb_dec_divlist[j])) * (3 * len(set(U_comb_con_divlist[i]) & set(U_comb_dec_divlist[j])) + 3 * len(set(Ux_comb_con_divlist[i]) & set(Ux_comb_dec_divlist[j])) - 2)) / (math.pow(U_len + Ux_len,2) * (U_len + Ux_len - 1))
+    # print/(CCE_Entropy(U_con_divlist,U_dec_divlist),'')
+    # print((math.pow(U_len,2) * (U_len - 1) * CCE_Entropy(U_con_divlist,U_dec_divlist) + math.pow(Ux_len,2) * (Ux_len - 1) * CCE_Entropy(Ux_con_divlist,Ux_dec_divlist))/(math.pow(U_len + Ux_len , 2) * (U_len + Ux_len - 1)) + latter,"last")
+    return (math.pow(U_len,2) * (U_len - 1) * CCE_Entropy(U_con_divlist,U_dec_divlist) + math.pow(Ux_len,2) * (Ux_len - 1) * CCE_Entropy(Ux_con_divlist,Ux_dec_divlist))/(math.pow(U_len + Ux_len , 2) * (U_len + Ux_len - 1)) + latter
     # return (U_len * (U_len - 1) * CCE_Entropy(U_con_divlist,U_dec_divlist) + len(set(U_Ux_con_divlist) - set(U_Ux_dec_divlist)) * (3 * len(U_Ux_con_divlist) + 3 * len(set(U_Ux_con_divlist) & set(U_Ux_dec_divlist)) - 5))/math.pow(U_len + 1,2)
 
 def Add_Ux_dataShape(U_len,Ux_divlist):   #  调整增加的属性的对象序号
@@ -119,52 +121,64 @@ def Add_Ux_dataShape(U_len,Ux_divlist):   #  调整增加的属性的对象序�
             Ux_divlist[i][j] += U_len
     return Ux_divlist
 
-
-
-def Red(red_list,U_dec_divlist,con_entropy):#约简
-    # if CCE_Entropy(div(red_data),U_dec_divlist) == con_entropy:
-    #     print("约简为",red_list)
-    #     return red_list
-    print(con_entropy,"条件属性的熵")
-    attr_data, attr_list = del_dup(U_con_data, red_list)  # C-C0
-    B_entropy = -1
+def Red(red_list,U_con_data,Ux_con_data,U_dec_data,Ux_dec_data):#约简
+    C_entropy = U_Ux_CCE_Entropy(U_con_data, U_dec_data, Ux_con_data, Ux_dec_data)
+    U_red_data = cal_red_divlist(red_list, U_con_data)
+    Ux_red_data = cal_red_divlist(red_list, Ux_con_data)
+    Ux_con_divlist = Add_Ux_dataShape(U_con_data.shape[0], div(Ux_con_data))
+    Ux_dec_divlist = Add_Ux_dataShape(Ux_con_data.shape[0], div(Ux_dec_data))
+    U_comb_con_divlist, Ux_comb_con_divlist = merge_divlist(U_con_data, Ux_con_data, div(U_con_data), Ux_con_divlist)
+    U_comb_dec_divlist, Ux_comb_dec_divlist = merge_divlist(U_dec_data, Ux_dec_data, div(U_dec_data), Ux_dec_divlist)
+    red_entropy = U_Ux_CCE_Entropy(U_red_data, U_dec_data, Ux_red_data, Ux_dec_data)
+    if len(U_comb_con_divlist) == 0 & len(U_comb_dec_divlist) == 0:
+        if C_entropy == red_entropy:
+            print(red_list,"停止")
+    attr_data,attr_list = del_dup(U_con_data, red_list)
     dict = {}
-    while con_entropy - B_entropy > 0.000001:
-        print(con_entropy-B_entropy,"fffff")
+    while C_entropy != red_entropy:
         dict.clear()
         con_key = -1  # 字典key
-        con_value = 100000  # 字典value
+        con_value = -1  # 字典value
         for i in range(attr_data.shape[1]):
-            temp_core_data = B_data
-            temp_core_data = numpy.append(temp_core_data,attr_data[:,i,numpy.newaxis],axis=1)
-            dict[i] = CCE_Entropy(div(temp_core_data),U_dec_divlist)
-        print(dict)
+            U_temp_red_data = numpy.append(U_red_data,attr_data[:,i,numpy.newaxis],axis=1)
+            Ux_temp_red_data = numpy.append(Ux_red_data, attr_data[:, i, numpy.newaxis], axis=1)
+            dict[i] = U_Ux_CCE_Entropy(U_temp_red_data, U_dec_data, Ux_temp_red_data, Ux_dec_data)
         for key in dict:
-            if dict[key] < con_value:
+            if dict[key] > con_value:
                 con_value = dict[key]
                 con_key = key
-        B_data = numpy.append(B_data,attr_data[:,con_key,numpy.newaxis],axis=1)
-        B_entropy =CCE_Entropy(div(B_data),U_dec_divlist)
-        attr_data = deal_data(attr_data,con_key,con_key)
-        red_list.append(attr_list[con_key])
-        del attr_list[con_key]
+        U_red_data = numpy.append(U_red_data, attr_data[:, con_key, numpy.newaxis], axis=1)
+        Ux_red_data = numpy.append(Ux_red_data, attr_data[:, con_key, numpy.newaxis], axis=1)
+        red_entropy = U_Ux_CCE_Entropy(U_red_data, U_dec_data, Ux_red_data, Ux_dec_data)
+        red_list.append(attr_data[con_key])
+        del attr_data[con_key]
+    De_redundancy(C_entropy, U_dec_data, Ux_dec_data, U_red_data, Ux_red_data, red_list)
     print(attr_list)
     print(red_list,"core_list")
-    return B_data,red_list
+
+def De_redundancy(C_entropy, U_dec_data, Ux_dec_data, U_red_data, Ux_red_data, red_list):  #去冗余
+    i = 0
+    while i < U_red_data.shape[1]:
+        U_temp_red_data = deal_data(U_red_data, i, i)
+        Ux_temp_red_data = deal_data(Ux_red_data, i, i)
+        if U_Ux_CCE_Entropy(U_temp_red_data,U_dec_data,Ux_temp_red_data,Ux_dec_data) == C_entropy:
+            U_red_data = deal_data(U_red_data, i, i)
+            Ux_red_data = deal_data(Ux_red_data, i, i)
+            del red_list[i]
+            i = 0
+            continue
+        i += 1
+    return red_list, U_red_data, Ux_red_data
 
 if __name__ == '__main__':
     start = time.perf_counter()
     U_data = readfile("table_1.txt")
-    Ux_data = readfile("add_single.txt")
-    Ux_data = Ux_data.reshape(1,5)
+    Ux_data = readfile("add_multiple.txt")
     red_list = [0,1,3]
     U_con_data = deal_data(U_data, U_data.shape[1] - 1, U_data.shape[1] - 1)
     U_dec_data = deal_data(U_data, 0, U_data.shape[1] - 2)
     Ux_con_data = deal_data(Ux_data, Ux_data.shape[1] - 1, Ux_data.shape[1] - 1)
     Ux_dec_data = deal_data(Ux_data, 0, Ux_data.shape[1] - 2)
-    U_Ux_CCE_Entropy(U_con_data,U_dec_data,Ux_con_data,Ux_dec_data)
-    # core_list,core_data = core(U_con_data, U_dec_divlist,con_entropy)
-
-    # red_data,red_list = Red(red_list,U_dec_divlist,con_entropy)
+    Red(red_list,U_con_data,Ux_con_data,U_dec_data,Ux_dec_data)
     end = time.perf_counter()
     print(end - start)
