@@ -103,17 +103,12 @@ def U_Ux_CCE_Entropy(U_con_data,U_dec_data,Ux_con_data,Ux_dec_data):
     Ux_dec_divlist = Add_Ux_dataShape(U_len, Ux_dec_divlist)
     U_comb_con_divlist,Ux_comb_con_divlist = merge_divlist(U_con_data,Ux_con_data,U_con_divlist,Ux_con_divlist)
     U_comb_dec_divlist, Ux_comb_dec_divlist = merge_divlist(U_dec_data, Ux_dec_data, U_dec_divlist,Ux_dec_divlist)
-    # print( U_comb_con_divlist,Ux_comb_con_divlist)
-    # print(U_comb_dec_divlist, Ux_comb_dec_divlist)
     latter = 0
     for i in range(len(U_comb_con_divlist)):
         latter += ((len(U_comb_con_divlist[i]) * len(Ux_comb_con_divlist[i])) * (3 * len(U_comb_con_divlist[i]) + 3 * len(Ux_comb_con_divlist[i]) - 2))/(math.pow(U_len + Ux_len,2) * (U_len + Ux_len - 1))
         for j in range(len(U_comb_dec_divlist)):
             latter -= (len(set(U_comb_con_divlist[i]) & set(U_comb_dec_divlist[j])) * len(set(Ux_comb_con_divlist[i]) & set(Ux_comb_dec_divlist[j])) * (3 * len(set(U_comb_con_divlist[i]) & set(U_comb_dec_divlist[j])) + 3 * len(set(Ux_comb_con_divlist[i]) & set(Ux_comb_dec_divlist[j])) - 2)) / (math.pow(U_len + Ux_len,2) * (U_len + Ux_len - 1))
-    # print/(CCE_Entropy(U_con_divlist,U_dec_divlist),'')
-    # print((math.pow(U_len,2) * (U_len - 1) * CCE_Entropy(U_con_divlist,U_dec_divlist) + math.pow(Ux_len,2) * (Ux_len - 1) * CCE_Entropy(Ux_con_divlist,Ux_dec_divlist))/(math.pow(U_len + Ux_len , 2) * (U_len + Ux_len - 1)) + latter,"last")
     return (math.pow(U_len,2) * (U_len - 1) * CCE_Entropy(U_con_divlist,U_dec_divlist) + math.pow(Ux_len,2) * (Ux_len - 1) * CCE_Entropy(Ux_con_divlist,Ux_dec_divlist))/(math.pow(U_len + Ux_len , 2) * (U_len + Ux_len - 1)) + latter
-    # return (U_len * (U_len - 1) * CCE_Entropy(U_con_divlist,U_dec_divlist) + len(set(U_Ux_con_divlist) - set(U_Ux_dec_divlist)) * (3 * len(U_Ux_con_divlist) + 3 * len(set(U_Ux_con_divlist) & set(U_Ux_dec_divlist)) - 5))/math.pow(U_len + 1,2)
 
 def Add_Ux_dataShape(U_len,Ux_divlist):   #  调整增加的属性的对象序号
     for i in range(len(Ux_divlist)):
