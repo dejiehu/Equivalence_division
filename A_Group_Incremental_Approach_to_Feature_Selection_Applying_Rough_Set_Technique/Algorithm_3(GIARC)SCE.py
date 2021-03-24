@@ -97,13 +97,15 @@ def U_Ux_SCE_Entropy(U_con_data,U_dec_data,Ux_con_data,Ux_dec_data):
         U_con_data,Ux_con_data,copy.deepcopy(U_con_divlist),copy.deepcopy(Ux_con_divlist))
     U_Ux_dec_divlist, U_comb_dec_divlist, Ux_comb_dec_divlist, U_Ux_U_dec_divlist, U_Ux_Ux_dec_divlist = merge_divlist(
         U_dec_data, Ux_dec_data, copy.deepcopy(U_dec_divlist) , copy.deepcopy(Ux_dec_divlist))
+    print(U_Ux_con_divlist,U_comb_con_divlist,Ux_comb_con_divlist,U_Ux_U_con_divlist,U_Ux_Ux_con_divlist)
+    print(U_Ux_dec_divlist, U_comb_dec_divlist, Ux_comb_dec_divlist, U_Ux_U_dec_divlist, U_Ux_Ux_dec_divlist)
     latter = 0
     for i in range(len(U_Ux_con_divlist)):
         for j in range(len(U_Ux_dec_divlist)):
             print(U_Ux_dec_divlist,j)
-            if len(U_comb_con_divlist[i]) * len(set(U_Ux_con_divlist[i]) & set(U_Ux_dec_divlist[j])) / len(U_Ux_con_divlist[i]) * len(set(U_comb_con_divlist[i]) & set(U_comb_dec_divlist[j])) == 0:
+            if len(U_comb_con_divlist[i]) * len(set(U_Ux_con_divlist[i]) & set(U_Ux_dec_divlist[j])) /len(U_Ux_con_divlist[i]) * len(set(U_comb_con_divlist[i]) & set(U_comb_dec_divlist[j]))  == 0:
                 continue
-            if len(Ux_comb_con_divlist[i]) * len(set(U_Ux_con_divlist[i]) & set(U_Ux_dec_divlist[j])) / len(U_Ux_con_divlist[i]) * len(set(Ux_comb_con_divlist[i]) & set(Ux_comb_dec_divlist[j])) == 0:
+            if len(Ux_comb_con_divlist[i]) * len(set(U_Ux_con_divlist[i]) & set(U_Ux_dec_divlist[j])) /len(U_Ux_con_divlist[i]) * len(set(Ux_comb_con_divlist[i]) & set(Ux_comb_dec_divlist[j])) == 0:
                 continue
             print("进")
             latter += (len(set(U_comb_con_divlist[i])&set(U_comb_dec_divlist[j])) / (U_len + Ux_len)) * \
@@ -121,7 +123,7 @@ def U_Ux_SCE_Entropy(U_con_data,U_dec_data,Ux_con_data,Ux_dec_data):
             latter += (len(set(Ux_comb_con_divlist[i])&set(U_Ux_Ux_dec_divlist[l])) / (U_len + Ux_len)) * \
                       math.log10(len(Ux_comb_con_divlist[i]) / len(U_Ux_con_divlist[i]))
         print(latter, "latter")
-    print((U_len , SCE_Entropy(U_con_divlist,U_dec_divlist) , Ux_len , SCE_Entropy(Ux_con_divlist,Ux_dec_divlist)),(U_len + Ux_len) , latter,"last")
+    print((U_len * SCE_Entropy(U_con_divlist,U_dec_divlist) + Ux_len * SCE_Entropy(Ux_con_divlist,Ux_dec_divlist))/(U_len + Ux_len) , latter,"last")
     return (U_len * SCE_Entropy(U_con_divlist,U_dec_divlist) + Ux_len * SCE_Entropy(Ux_con_divlist,Ux_dec_divlist))/(U_len + Ux_len) - latter
 
 def merge_divlist(U_data,Ux_data,U_divlist,Ux_divlist):#      U/C + Ux/C
