@@ -130,9 +130,6 @@ def Add_Ux_dataShape(U_len,Ux_divlist):   #  调整增加的属性的对象序�
     return Ux_divlist
 
 def Red(red_list,U_dec_divlist,con_entropy):#约简
-    # if U_Ux_SCE_Entropy(div(red_data),U_dec_divlist) == con_entropy:
-    #     print("约简为",red_list)
-    #     return red_list
     print(con_entropy,"条件属性的熵")
     attr_data, attr_list = del_dup(U_con_data, red_list)  # C-C0
     B_entropy = -1

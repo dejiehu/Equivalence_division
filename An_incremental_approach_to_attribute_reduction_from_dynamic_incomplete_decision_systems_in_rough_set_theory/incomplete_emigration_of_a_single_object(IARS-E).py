@@ -87,6 +87,8 @@ def pos(dec_divlist,sp_divlist):  #子集  正域集合
 def new_pos(new_sp_matrix,red_list,dec_divlist,em_list):
     sp_divlist = div_base_matric(new_sp_matrix, red_list, [])
     list1 = []
+    print(em_list)
+    print(sp_divlist)
     for i in em_list:
         for j in sp_divlist[i]:
             if issubset_dec(dec_divlist,sp_divlist[j]) == 1:
@@ -102,12 +104,12 @@ def issubset_dec(dec_list,con_list):
 def red(Sp_matrix,con_list,dec_divlist,red_list,em_list):
     new_sp_matrix = get_new_matrix(Sp_matrix, em_list)
     pos_c = new_pos(new_sp_matrix, con_list, dec_divlist, em_list)
-    i = len(red_list) - 1
-    while i >= 0:
-        if pos_c  == new_pos(new_sp_matrix, set(red_list) - {red_list[i]}, dec_divlist, em_list):
-            del red_list[i]
-        i = i - 1
-    print(red_list)
+    # i = len(red_list) - 1
+    # while i >= 0:
+    #     if pos_c  == new_pos(new_sp_matrix, set(red_list) - {red_list[i]}, dec_divlist, em_list):
+    #         del red_list[i]
+    #     i = i - 1
+    # print(red_list)
 
 if __name__ == "__main__":
     start = time.perf_counter()
@@ -117,6 +119,7 @@ if __name__ == "__main__":
     con_data = deal_data(my_data, len(my_data[0]) - 1, len(my_data[0]) - 1)
     dec_data = deal_data(my_data, 0, len(my_data[0])  - 2)
     Sp_matrix = get_matrix(con_data)
+
     con_list = [i for i in range(len(con_data[0]))]
     dec_divlist = div(dec_data)
     red(Sp_matrix,con_list,dec_divlist,red_list,em_list)
