@@ -56,7 +56,7 @@ def get_matrix(my_data): #
     return U_sp_matrix
 
 def get_new_matrix(U_data,Ux_data,U_sp_matrix): #
-    U_list = {(i + len(U_data)) for i in range(len(Ux_data))}
+    U_list = {i for i in range(len(U_data + Ux_data))}
     Ux_U_sp_matrix = [[] for i in range(len(Ux_data))]
     for i in range(len(Ux_data)):
         for j in range(len(Ux_data[0])):
@@ -111,18 +111,12 @@ def get_changelist(U_Ux_sp_matrix,red_list,U_con_data):
 
 def new_pos(U_sp_matrix,Ux_sp_matrix,U_Ux_sp_matrix,dec_divlist,U_Ux_dec_divlist,red_list,U_con_data):
     list1 = []
-    # print(red_list,"red_list")
     U_Ux_sp_list = div_base_matric(U_Ux_sp_matrix, red_list, [])
-    # print(U_Ux_sp_list,"U_Ux_sp_list")
     change_set = get_changelist(U_Ux_sp_matrix,red_list,U_con_data)
     for i in change_set:
         if issubset_dec(U_Ux_dec_divlist,U_Ux_sp_list[i]) == 0:
             list1.append(i)
     Ux_poslist = pos(dec_divlist, div_base_matric(Ux_sp_matrix, red_list, []))
-    # print([i +len(U_sp_matrix)  for i in Ux_poslist])
-    # print(list1,"list1")
-    # print((set(pos(dec_divlist, div_base_matric(U_sp_matrix, red_list, []))) ,
-    #         set([i +len(U_sp_matrix)  for i in Ux_poslist]) , set(list1)))
     return ((set(pos(dec_divlist, div_base_matric(U_sp_matrix, red_list, []))) |
             set([i +len(U_sp_matrix)  for i in Ux_poslist])) - set(list1))
 

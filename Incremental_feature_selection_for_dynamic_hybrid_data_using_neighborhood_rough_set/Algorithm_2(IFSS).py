@@ -1,3 +1,4 @@
+import copy
 import math
 import time
 from itertools import chain
@@ -58,6 +59,32 @@ def get_matrix(con_data): #
                 U_sp_matrix[i].append(sp_set.copy())
     return U_sp_matrix
 
+def get_new_matrix(U_con_data,Ux_con_data,U_sp_matrix):  #根据新增数据，获取新的相容关系矩阵
+    Ux_list = {i for i in range(len(U_con_data + Ux_con_data))}
+    U_Ux_sp_matrix = [[] for i in range(len(Ux_con_data))]
+    for i in range(len(Ux_con_data)):
+        for j in range(len(Ux_con_data[0])):
+            sp_set = set()
+            if Ux_con_data[i][j] == '*':
+                U_Ux_sp_matrix[i].append(Ux_list)
+                continue
+            if j == 0 or j == 3:
+                for k in range(len(U_con_data + Ux_con_data)):
+                    if (U_con_data + Ux_con_data)[k][j] == '*' or abs(float(Ux_con_data[i][j]) - float((U_con_data + Ux_con_data)[k][j])) <= 0.2:
+                        sp_set.add(k)
+                U_Ux_sp_matrix[i].append(sp_set.copy())
+            if j == 1 or j == 2:
+                for k in range(len(U_con_data + Ux_con_data)):
+                    if Ux_con_data[i][j] == (U_con_data + Ux_con_data)[k][j] or (U_con_data + Ux_con_data)[k][j] == '*':
+                        sp_set.add(k)
+                U_Ux_sp_matrix[i].append(sp_set.copy())
+    U_Ux_sp_matrix = copy.deepcopy(U_sp_matrix) + U_Ux_sp_matrix
+    for i in range(len(U_con_data), len(U_con_data + Ux_con_data)):
+        for k in range(len(U_Ux_sp_matrix[i])):
+            for j in U_Ux_sp_matrix[i][k]:
+                U_Ux_sp_matrix[j][k].add(i)
+    return U_Ux_sp_matrix
+
 def div_base_matric(Sp_matrix,con_list):
     sp_list = []
     for j in range(len(Sp_matrix)):
@@ -68,7 +95,7 @@ def div_base_matric(Sp_matrix,con_list):
     return sp_list
 
 def NE_entropy(U_sp_matrix,con_list,dec_divlist):
-    con_divlist = div_base_matric(U_sp_matrix, con_list)
+    con_divlist = div_base_matric(U_sp_matrix,con_list)
     U_len = len(sum(dec_divlist, []))
     entropy = 0
     for j in con_divlist:
@@ -79,12 +106,17 @@ def NE_entropy(U_sp_matrix,con_list,dec_divlist):
                 entropy -= (intersect_set/U_len)*math.log(intersect_set/len(j))
     return entropy
 
-def core(U_sp_matrix,con_list,dec_divlist,ne_entropy):# 根据 属性重要度  求核
-    core_list = []
-    for i in con_list:
-        if NE_entropy(U_sp_matrix,list(set(con_list) - {i}).copy(),dec_divlist) - ne_entropy > 0:
-            core_list.append(i)
-    return core_list
+def U_Ux_NE_entropy(U_sp_matrix,U_Ux_sp_matrix,con_list,dec_divlist):
+    U_len = len(U_sp_matrix)
+    U_Ux_con_divlist = div_base_matric(U_Ux_sp_matrix, con_list)
+    mid = 0
+    print(U_Ux_con_divlist)
+    for i in (set(U_Ux_con_divlist[U_len]) - {U_len}):
+        print(i,"00")
+        for j in
+    # latter = 0
+
+    # return (U_len * NE_entropy(U_sp_matrix,con_list,dec_divlist) - mid - latter) / (U_len + 1)
 
 def red(U_sp_matrix,con_list,dec_divlist,core_list,ne_entropy):
     red_list = core_list.copy()
@@ -117,15 +149,25 @@ def red(U_sp_matrix,con_list,dec_divlist,core_list,ne_entropy):
 if __name__ == "__main__":
     start = time.perf_counter()
     U_data = readfile("table_1.txt")
+    Ux_data = readfile("add_single.txt")
     U_con_data = deal_data(U_data, len(U_data[0]) - 1, len(U_data[0]) - 1)
-    U_dec_data = deal_data(U_data, 0, len(U_data[0])  - 2)
+    U_dec_data = deal_data(U_data, 0, len(U_data[0]) - 2)
+    Ux_con_data = deal_data(Ux_data, len(Ux_data[0]) - 1, len(Ux_data[0]) - 1)
+    Ux_dec_data = deal_data(Ux_data, 0, len(Ux_data[0]) - 2)
     U_sp_matrix = get_matrix(U_con_data)
-    print(U_sp_matrix,"U")
+    U_Ux_sp_matrix = get_new_matrix(U_con_data, Ux_con_data, U_sp_matrix)
+    print(U_Ux_sp_matrix)
     con_list = [i for i in range(len(U_con_data[0]))]
+    con_divlist = div_base_matric(U_sp_matrix, con_list)
+    print(con_divlist)
+    con_divlist = div_base_matric(U_Ux_sp_matrix, con_list)
+    print(con_divlist)
     U_dec_divlist = div(U_dec_data)
-    ne_entropy = NE_entropy(U_sp_matrix,con_list, U_dec_divlist)
-    core_list = core(U_sp_matrix, con_list, U_dec_divlist,ne_entropy)
-    print(core_list,"core_list")
-    red(U_sp_matrix,con_list,U_dec_divlist,core_list,ne_entropy)
+    Ux_dec_divlist = div(U_dec_data + Ux_dec_data)
+    # ne_entropy = NE_entropy(U_sp_matrix, con_list, U_dec_divlist)
+    core_list = [0, 2, 3]
+    print(core_list, "core_list")
+    U_Ux_NE_entropy(U_sp_matrix, U_Ux_sp_matrix, con_list, U_dec_divlist)
+    # red(U_sp_matrix,con_list,U_dec_divlist,core_list,ne_entropy)
     # end = time.perf_counter()
     # print("time",end - start)
