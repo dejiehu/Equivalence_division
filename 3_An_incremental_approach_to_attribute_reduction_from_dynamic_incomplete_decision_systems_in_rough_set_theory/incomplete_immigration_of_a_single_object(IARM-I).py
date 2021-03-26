@@ -98,7 +98,7 @@ def pos(dec_divlist,sp_divlist):  #子集  正域集合
                 pos_list += [j]
     return pos_list
 
-def get_changelist(U_Ux_sp_matrix,red_list,U_con_data):
+def get_changelist(U_Ux_sp_matrix,red_list,U_con_data): #获得改变的相容类的下标
     U_Ux_sp_list = div_base_matric(U_Ux_sp_matrix,red_list,[])
     change_list = []
     for i in range(len(U_con_data)):
@@ -106,7 +106,6 @@ def get_changelist(U_Ux_sp_matrix,red_list,U_con_data):
             if j > len(U_con_data):
                 change_list.append(i)
                 change_list.append(j)
-    # print(set(change_list),"set(change_list)")
     return set(change_list)
 
 def new_pos(U_sp_matrix,Ux_sp_matrix,U_Ux_sp_matrix,dec_divlist,U_Ux_dec_divlist,red_list,U_con_data):

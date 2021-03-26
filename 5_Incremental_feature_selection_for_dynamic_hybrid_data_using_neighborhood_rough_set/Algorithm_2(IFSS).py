@@ -106,45 +106,71 @@ def NE_entropy(U_sp_matrix,con_list,dec_divlist):
                 entropy -= (intersect_set/U_len)*math.log(intersect_set/len(j))
     return entropy
 
-def U_Ux_NE_entropy(U_sp_matrix,U_Ux_sp_matrix,con_list,dec_divlist):
+def U_Ux_add_NE_entropy(U_sp_matrix,U_Ux_sp_matrix,con_list,U_dec_divlist,U_Ux_dec_divlist):
     U_len = len(U_sp_matrix)
     U_Ux_con_divlist = div_base_matric(U_Ux_sp_matrix, con_list)
     mid = 0
-    print(U_Ux_con_divlist)
-    for i in (set(U_Ux_con_divlist[U_len]) - {U_len}):
-        print(i,"00")
-        for j in
-    # latter = 0
+    for j in range(len(U_dec_divlist)):
+        if U_Ux_dec_divlist[j].__contains__(U_len):
+            for i in (set(U_Ux_con_divlist[U_len]) - {U_len}):
+                intersect_len = len(set(U_Ux_con_divlist[i]) & set(U_Ux_dec_divlist[j]))
+                if intersect_len != 0:
+                    mid += math.log(intersect_len / len(U_Ux_con_divlist[i]))
+            break
+    latter = 0
+    for i in U_dec_divlist:
+        intersect_len = len(set(i) & set(U_Ux_con_divlist[U_len]))
+        if intersect_len != 0:
+            latter += intersect_len * math.log(intersect_len / len(U_Ux_con_divlist[U_len]))
+    return (U_len * NE_entropy(U_sp_matrix,con_list,U_dec_divlist) - mid - latter) / (U_len + 1)
 
-    # return (U_len * NE_entropy(U_sp_matrix,con_list,dec_divlist) - mid - latter) / (U_len + 1)
+def U_Ux_del_NE_entropy(U_sp_matrix,con_list,U_dec_divlist,del_list):
+    U_len = len(U_sp_matrix)
+    U_con_divlist = div_base_matric(U_sp_matrix,con_list)
+    latter = 0
+    for i in U_dec_divlist:
+        intersect_len = len(set(U_con_divlist[del_list[0]]) & set(i))
+        if intersect_len != 0:
+            latter += intersect_len * math.log(intersect_len / len(U_con_divlist[del_list[0]]))
+    return (U_len * NE_entropy(U_sp_matrix,con_list,U_dec_divlist) - latter) / (U_len - 1)
 
-def red(U_sp_matrix,con_list,dec_divlist,core_list,ne_entropy):
+def red(U_sp_matrix,con_list,U_con_data,Ux_con_data,U_dec_divlist,U_Ux_dec_divlist,core_list,del_list):
     red_list = core_list.copy()
-    attr_list = list(set(con_list) - set(red_list))
-    while ne_entropy != NE_entropy(U_sp_matrix,red_list,dec_divlist):
+    if len(del_list) != 0:
+        i = len(red_list) - 1
+        while i >= 0:
+            if U_Ux_del_NE_entropy(U_sp_matrix,set(red_list) - {red_list[i]},U_dec_divlist,del_list) - U_Ux_del_NE_entropy(U_sp_matrix,con_list,U_dec_divlist,del_list) == 0:
+                del red_list[i]
+                i = 0
+                continue
+            i = i - 1
+    if len(Ux_con_data) != 0:
+        U_Ux_sp_matrix = get_new_matrix(U_con_data, Ux_con_data, U_sp_matrix)
+        U_Ux_con_divlist = div_base_matric(U_Ux_sp_matrix, con_list)
+        U_Ux_red_divlist = div_base_matric(U_Ux_sp_matrix, red_list)
+        U_len = len(U_sp_matrix)
+        if U_Ux_con_divlist[U_len] == U_Ux_red_divlist[U_len]:
+            print(red_list,"相容关系相等")
+            return
+        attr_list = list(set(con_list) - set(red_list))
         dict = {}
-        con_key = -1  # 字典key
-        con_value = -1  # 字典value
+        red_entropy = U_Ux_add_NE_entropy(U_sp_matrix, U_Ux_sp_matrix, red_list, U_dec_divlist, U_Ux_dec_divlist)
         for i in attr_list:
-            dict[i] = ne_entropy - NE_entropy(U_sp_matrix,red_list + [i],dec_divlist)
-        for key in dict:
-            if dict[key] > con_value:
-                con_value = dict[key]
-                con_key = key
-        red_list.append(attr_list[con_key])
-        del attr_list[con_key]
-    print(red_list)
-    # De_redundancy(U_sp_matrix,dec_divlist,red_list,ne_entropy)
-
-# def De_redundancy(U_sp_matrix,dec_divlist,red_list,ne_entropy):
-#     i =  len(red_list) - 1
-#     while i >= 0:
-#         if ne_entropy == NE_entropy(U_sp_matrix,set(red_list) - {i},dec_divlist):
-#             print(i,red_list[i])
-#             del red_list[i]
-#             i = 0
-#         i = i - 1
-#     print(red_list)
+            dict[i] = red_entropy - U_Ux_add_NE_entropy(U_sp_matrix, U_Ux_sp_matrix, red_list + [i], U_dec_divlist, U_Ux_dec_divlist)
+        dict = sorted(dict.items(), key=lambda d: d[1], reverse=True)
+        con_entropy = U_Ux_add_NE_entropy(U_sp_matrix, U_Ux_sp_matrix, con_list, U_dec_divlist, U_Ux_dec_divlist)
+        while con_entropy != red_entropy:
+            red_list = red_list + [attr_list[dict[0][0]]]
+            del dict[0]
+            red_entropy = U_Ux_add_NE_entropy(U_sp_matrix, U_Ux_sp_matrix, red_list, U_dec_divlist, U_Ux_dec_divlist)
+        i = len(red_list) - 1
+        while i >= 0:
+            if U_Ux_add_NE_entropy(U_sp_matrix, U_Ux_sp_matrix, set(red_list) - {red_list[i]}, U_dec_divlist, U_Ux_dec_divlist) - U_Ux_add_NE_entropy(U_sp_matrix, U_Ux_sp_matrix, red_list, U_dec_divlist, U_Ux_dec_divlist) == 0:
+                del red_list[i]
+                i = 0
+                continue
+            i = i - 1
+    print(red_list,"end")
 
 if __name__ == "__main__":
     start = time.perf_counter()
@@ -155,19 +181,13 @@ if __name__ == "__main__":
     Ux_con_data = deal_data(Ux_data, len(Ux_data[0]) - 1, len(Ux_data[0]) - 1)
     Ux_dec_data = deal_data(Ux_data, 0, len(Ux_data[0]) - 2)
     U_sp_matrix = get_matrix(U_con_data)
-    U_Ux_sp_matrix = get_new_matrix(U_con_data, Ux_con_data, U_sp_matrix)
-    print(U_Ux_sp_matrix)
     con_list = [i for i in range(len(U_con_data[0]))]
-    con_divlist = div_base_matric(U_sp_matrix, con_list)
-    print(con_divlist)
-    con_divlist = div_base_matric(U_Ux_sp_matrix, con_list)
-    print(con_divlist)
     U_dec_divlist = div(U_dec_data)
-    Ux_dec_divlist = div(U_dec_data + Ux_dec_data)
-    # ne_entropy = NE_entropy(U_sp_matrix, con_list, U_dec_divlist)
+    U_Ux_dec_divlist = div(U_dec_data + Ux_dec_data)
     core_list = [0, 2, 3]
     print(core_list, "core_list")
-    U_Ux_NE_entropy(U_sp_matrix, U_Ux_sp_matrix, con_list, U_dec_divlist)
-    # red(U_sp_matrix,con_list,U_dec_divlist,core_list,ne_entropy)
+    del_list = [5]
+
+    red(U_sp_matrix,con_list,U_con_data,Ux_con_data,U_dec_divlist,U_Ux_dec_divlist,core_list,del_list)
     # end = time.perf_counter()
     # print("time",end - start)

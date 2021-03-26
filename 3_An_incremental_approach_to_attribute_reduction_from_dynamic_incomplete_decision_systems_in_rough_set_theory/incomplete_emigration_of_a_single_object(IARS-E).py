@@ -104,12 +104,12 @@ def issubset_dec(dec_list,con_list):
 def red(Sp_matrix,con_list,dec_divlist,red_list,em_list):
     new_sp_matrix = get_new_matrix(Sp_matrix, em_list)
     pos_c = new_pos(new_sp_matrix, con_list, dec_divlist, em_list)
-    # i = len(red_list) - 1
-    # while i >= 0:
-    #     if pos_c  == new_pos(new_sp_matrix, set(red_list) - {red_list[i]}, dec_divlist, em_list):
-    #         del red_list[i]
-    #     i = i - 1
-    # print(red_list)
+    i = len(red_list) - 1
+    while i >= 0:
+        if pos_c  == new_pos(new_sp_matrix, set(red_list) - {red_list[i]}, dec_divlist, em_list):
+            del red_list[i]
+        i = i - 1
+    print(red_list)
 
 if __name__ == "__main__":
     start = time.perf_counter()
