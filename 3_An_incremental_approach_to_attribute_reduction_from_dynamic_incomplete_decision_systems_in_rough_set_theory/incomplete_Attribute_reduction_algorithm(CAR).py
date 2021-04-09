@@ -59,7 +59,7 @@ def div_base_matric(Sp_matrix,con_list,del_list):
     con_list = list(set(con_list) - set(del_list))
     sp_list = []
     for j in range(len(Sp_matrix)):
-        sp = set(k for k in range(len(dec_data)))
+        sp = sp & Sp_matrix[j][i]
         for i in con_list:
             sp = sp & Sp_matrix[j][i]
         sp_list.append(list(sp.copy()))
@@ -91,7 +91,6 @@ def red(Sp_matrix,con_list,dec_divlist,core_list):
     print(div_base_matric(Sp_matrix,red_list,[]))
     print(pos_c,pos(dec_divlist,div_base_matric(Sp_matrix,red_list,[])))
     while pos_c != pos(dec_divlist,div_base_matric(Sp_matrix,red_list,[])):
-        print("111111")
         dict = {}
         con_key = -1  # 字典key
         con_value = -1  # 字典value

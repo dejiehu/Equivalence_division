@@ -1,7 +1,13 @@
 from itertools import product
 
-from part2 import part2_1
+import numpy
 
+from part2 import part2_1
+def readfile():#读文件
+    my_data = numpy.loadtxt('../zz.txt')
+    print(my_data)
+    print("my_data.shape:",my_data.shape)
+    return my_data
 
 def logic_operation(diffItem_list):#析取，吸收
     DM_list = []
@@ -52,7 +58,7 @@ def Red(DM):#逻辑运算
 
 
 if __name__ == '__main__':
-    my_data = part2_1.readfile()
+    my_data = readfile()
     DM = part2_1.Matrix_construct(my_data) #差别矩阵
     Red(DM)
 

@@ -114,17 +114,17 @@ import numpy
 # print(dict)
 # dict = sorted(dict.items(), key=lambda d:d[1],reverse= True)
 # print(dict)
-a=[[1,2,3],[1,9]]
+# a=[[1,2,3],[1,9]]
 # sum(a,[])
 # print(sum(a,[]))
 # print(a)
-import copy
-b = copy.deepcopy(a)
-print(b)
-del a[0]
-del b[1]
-print(b)
-print(a)
+# import copy
+# b = copy.deepcopy(a)
+# print(b)
+# del a[0]
+# del b[1]
+# print(b)
+# print(a)
 # del dict[0]
 # print(dict)
 # print(dict[0][1])
@@ -163,3 +163,10 @@ print(a)
 # a = ((len(U_Ux_con_divlist) - 1) / len(U_Ux_con_divlist))
 # print(a)
 # print(math.log(a))
+
+loop_val = [[1,3],[2,4]]#将合取式差分为析取式     loop_val = [{1,2},{1,3}]
+
+DM_list = []
+for i in product(*loop_val):
+    DM_list.append(set(i))
+print(DM_list)

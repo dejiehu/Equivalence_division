@@ -8,8 +8,9 @@ import numpy
 
 def readfile(filename):#读文件
     my_data = numpy.loadtxt(filename)
-    print(my_data)
-    print("my_data.shape:",my_data.shape)
+    my_data = my_data.astype(int)
+    # print(my_data)
+    # print("my_data.shape:",my_data.shape)
     return my_data
 
 def deal_data(my_data,m,n):#处理数据表
@@ -20,6 +21,7 @@ def deal_data(my_data,m,n):#处理数据表
 
 def getCore_data(core_list,con_data):    #从所有数据中取出和属性数据
     core_data = numpy.empty(shape=(con_data.shape[0],0))
+    core_data = core_data.astype(int)
     for i in core_list:
         core_data = numpy.append(core_data,con_data[:,i,numpy.newaxis],axis=1)
     return core_data
@@ -37,6 +39,39 @@ def div(my_data): #1.数据表，2、3.删除元素下表   求划分集合
                 list1.append(j)
         div_list.append(list1.copy())
     return div_list
+
+# def Max_min(con_data,U_list):  #找出属性最大最小值
+#     Mm_list = []
+#     for i in range(con_data.shape[1]):
+#         min = 10000
+#         Max = 0
+#         for j in U_list:
+#             if con_data[j][i] > Max:
+#                 Max = con_data[j][i]
+#             if con_data[j][i] < min:
+#                 min = con_data[j][i]
+#         Mm_list.append([Max,min])
+#     return Mm_list
+#
+# def div(my_data):    #等价类的划分
+#     U_linkList = [i for i in range(len(my_data))]
+#     Mm_list = Max_min(my_data,U_linkList)
+#     for i in range(len(Mm_list)):
+#         queue_linkList = [[]]*(Mm_list[i][0] - Mm_list[i][1] + 1)
+#         for j in U_linkList:
+#             queue_linkList[my_data[j][i] - Mm_list[i][1]] = queue_linkList[my_data[j][i] - Mm_list[i][1]] + [j]
+#         U_linkList.clear()
+#         U_linkList = list(chain.from_iterable(queue_linkList))
+#     div_list = []
+#     temp_list = [U_linkList[0]]
+#     for i in range(1,len(U_linkList)):
+#         if((my_data[U_linkList[i]] == my_data[U_linkList[i-1]]).all()):
+#             temp_list.append(U_linkList[i])
+#             continue
+#         div_list.append(temp_list)
+#         temp_list = [U_linkList[i]]
+#     div_list.append(temp_list)
+#     return div_list
 
 def pos(dec_divlist,con_divlist):  #子集  正域集合
     pos_list=[]
@@ -73,9 +108,9 @@ def Red(con_data,dec_divlist,core_list,dep_num):#约简
     Red_dep = core_dep
     dict = {}#字典存放添加的依赖度
     num = 0
-    print(Red_dep, dep_num)
+    # print(Red_dep, dep_num)
     while Red_dep != dep_num:
-        print(Red_dep, dep_num)
+        # print(Red_dep, dep_num)
         num += 1
         dict.clear()
         con_key = -1#字典key
@@ -85,7 +120,7 @@ def Red(con_data,dec_divlist,core_list,dep_num):#约简
             temp_Red_data = numpy.append(temp_Red_data,att_data[:,k,numpy.newaxis],axis=1)
             Red_divlist = div(temp_Red_data)
             dict[k] = dependency(pos(dec_divlist,Red_divlist),con_data) - core_dep
-        print(dict)
+        # print(dict)
         for key in dict:
             if con_value < dict[key]:
                 con_value = dict[key]
@@ -117,16 +152,19 @@ def print_red(my_data,Red_data):
     print(red_set)
 
 if __name__ == "__main__":
-    start = time.perf_counter()
-    my_data = readfile("../zoo.txt")
+
+    my_data = readfile("../german.txt")
     con_data = deal_data(my_data, my_data.shape[1] - 1, my_data.shape[1] - 1)
     dec_data = deal_data(my_data, 0, my_data.shape[1] - 2)
+    start = time.perf_counter()
     con_divlist = div(con_data)
+    end = time.perf_counter()
+    print(end - start)
     dec_divlist = div(dec_data)
     pos_list = pos(dec_divlist,con_divlist)
     dep_num = dependency(pos_list,my_data)
     core_list = core(con_data, dec_divlist,dep_num)
     Red_data = Red(con_data,dec_divlist,core_list,dep_num)
-    print_red(my_data, De_redundancy(Red_data,dec_divlist,dep_num))
-    end = time.perf_counter()
+    # print_red(my_data, De_redundancy(Red_data,dec_divlist,dep_num))
+    # end = time.perf_counter()
     print(end - start)

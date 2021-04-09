@@ -1,0 +1,6 @@
+High High Full Low Good
+Low * Full Low Good
+* * Compact Low Poor
+High * Full High Good
+* * Full High Excellent
+Low High Full * Good

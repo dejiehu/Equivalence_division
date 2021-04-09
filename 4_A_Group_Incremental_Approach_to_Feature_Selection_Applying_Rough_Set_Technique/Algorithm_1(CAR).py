@@ -40,16 +40,16 @@ def Max_min(con_data,U_list):  #找出属性最大最小值
 
 def div(my_data):    #等价类的划分
     U_linkList = [i for i in range(len(my_data))]
-    Mm_list = Max_min(my_data,U_linkList)
+    Mm_list = Max_min(my_data,U_linkList)     #最大值最小值列表
     for i in range(len(Mm_list)):
-        queue_linkList = [[]]*(Mm_list[i][0] - Mm_list[i][1] + 1)
+        queue_linkList = [[]]*(Mm_list[i][0] - Mm_list[i][1] + 1)    #queue_linkList 链表
         for j in U_linkList:
             queue_linkList[my_data[j][i] - Mm_list[i][1]] = queue_linkList[my_data[j][i] - Mm_list[i][1]] + [j]
         U_linkList.clear()
-        U_linkList = list(chain.from_iterable(queue_linkList))
+        U_linkList = list(chain.from_iterable(queue_linkList))   #二维数组变一维
     div_list = []
-    temp_list = [U_linkList[0]]
-    for i in range(1,len(U_linkList)):
+    temp_list = [U_linkList[0]]    #U_linkList为对最后属性划分完的结果（链表）
+    for i in range(1,len(U_linkList)):     #   将最后的链表变成划分的集合
         if((my_data[U_linkList[i]] == my_data[U_linkList[i-1]]).all()):
             temp_list.append(U_linkList[i])
             continue

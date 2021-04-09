@@ -10,7 +10,7 @@ import numpy
 def readfile(file):     #读文件
     my_data = numpy.loadtxt(file)
     my_data = my_data.astype(int)
-    print(my_data)
+    # print(my_data)
     print("*******************************************************************")
     return my_data
 
@@ -111,8 +111,8 @@ def red(U_dec_data, U_con_data,Ux_dec_data,Ux_con_data,RED):# 求约简
     dict = sorted(dict.items(), key=lambda d: d[1], reverse=True)
     # print(dict)
     while U_Ux_dependency(U_dec_data,Ux_dec_data,U_red_data,Ux_red_data) != U_Ux_C_dep:
-        print(dict,dict[0])
-        print(attr_num)
+        # print(dict,dict[0])
+        # print(attr_num)
         U_red_data = numpy.append(U_red_data, U_attr_data[:, dict[0][0], numpy.newaxis], axis=1)
         Ux_red_data = numpy.append(Ux_red_data, Ux_attr_data[:, dict[0][0], numpy.newaxis], axis=1)
         RED += [attr_num[dict[0][0]]]
@@ -169,10 +169,11 @@ def merge_divlist(U_data,Ux_data,U_dec,Ux_dec):#      U/C + Ux/C
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    U_data = readfile('../zoo.txt')
+    U_data = readfile('../german.txt')
     # RED = [0, 3]
     RED = [5,12,3,7,2]
-    Ux_data = readfile('../zoo1.txt')
+    RED = [0,1,3,4,6,8,11,12]
+    Ux_data = readfile('../german_add.txt')
     U_Ux_data = numpy.append(U_data,Ux_data,axis=0)
 
     U_con_data = deal_data(U_data, U_data.shape[1] - 1, U_data.shape[1] - 1)

@@ -3,7 +3,7 @@ from itertools import chain
 import numpy
 
 def readfile():#读文件
-    my_data = numpy.loadtxt('../german.txt')
+    my_data = numpy.loadtxt('../zz.txt')
     my_data = my_data.astype(int)
     print(my_data)
     print("my_data.shape:",my_data.shape)
@@ -146,6 +146,8 @@ if __name__ == "__main__":
     U_list = [i for i in range(len(my_data))]
     con_divlist = div(con_data,U_list)
     dec_divlist = div(dec_data,U_list)
+    print(con_divlist)
+    print(dec_divlist)
     pos_list = pos(dec_divlist,con_divlist)
     dep_num = dependency(pos_list,my_data)
     core_data = core(con_data, dec_divlist,dep_num,U_list)
