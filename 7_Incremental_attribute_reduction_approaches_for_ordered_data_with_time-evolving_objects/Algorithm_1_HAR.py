@@ -84,7 +84,6 @@ def MDCE(U_con_data,U_dec_matrix):    #求基于优势矩阵的 熵
     U_matrix = matrix_intersection(U_con_matrix,U_dec_matrix)
     U_con_diagonal_matrix = dominance_diagonal_matrix(U_con_matrix)
     U_con_inverse_matrix = inverse_dominance_matrix(U_con_diagonal_matrix)
-
     U_diagonal_matrix = dominance_diagonal_matrix(U_matrix)
     sum = 1
     for i in range(len(U_con_inverse_matrix)):
@@ -97,11 +96,12 @@ def core(U_con_data,U_dec_matrix,U_con_entropy):
     red_data = copy.deepcopy(U_con_data)
     for i in range(len(U_con_data[0])-1,-1,-1):
         temp_U_data = deal_data(U_con_data,i,i)
-        print(MDCE(temp_U_data,U_dec_matrix) - U_con_entropy,"core")
-        if MDCE(temp_U_data,U_dec_matrix) != U_con_entropy:
+        print(MDCE(temp_U_data,U_dec_matrix) , U_con_entropy,"core")
+        if MDCE(temp_U_data,U_dec_matrix) - U_con_entropy > 0:
             red.append(i)
             continue
         red_data = deal_data(red_data,i,i)
+    print(red,"red")
     return red_data,list(set(red))
 
 def RED(U_con_data,U_dec_data):
@@ -125,13 +125,18 @@ def RED(U_con_data,U_dec_data):
             if con_value < dict[key]:
                 con_value = dict[key]
                 con_key = key
+        print(attr_list[con_key],"con_key")
+        print(red_data)
+
         red_data = elements_add(red_data,attr_data,con_key)
+        print(red_data)
         attr_data = deal_data(attr_data, con_key, con_key)
         red_list.append(attr_list[con_key])
         del attr_list[con_key]
         U_red_entropy = MDCE(red_data, U_dec_matrix)
         print(red_list)
     de_redundancy(U_dec_matrix, red_list, red_data, U_red_entropy)
+
 def de_redundancy(U_dec_matrix,red_list,red_data,U_red_entropy):
     for i in range(len(red_list)-1,-1,-1):
         temp_red_data = deal_data(red_data,i,i)
@@ -139,6 +144,7 @@ def de_redundancy(U_dec_matrix,red_list,red_data,U_red_entropy):
             red_data = deal_data(red_data, i, i)
             del red_list[i]
     print(red_list)
+
 if __name__ == '__main__':
     start = time.perf_counter()
     U_data = readfile("table.txt")
