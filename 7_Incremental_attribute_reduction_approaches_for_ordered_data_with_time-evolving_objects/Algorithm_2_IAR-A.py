@@ -60,6 +60,50 @@ def dominance_relation_matrix(U_con_data): # 求关系矩阵
         matrix.append(temp_matrix)
     return matrix
 
+def  right_increasing_preference(U_con_data,Ux_con_data,i,j):  #求关系矩阵时用于判断
+    for k in range(len(U_con_data[0])):
+        if U_con_data[i][k] > Ux_con_data[j][k]:
+            return False
+    return True
+
+def right_dominance_relation_matrix(U_con_data,Ux_con_data): # 增加时，求右侧关系矩阵
+    matrix = []
+    for i in range(len(U_con_data)):
+        temp_matrix = []
+        for j in range(len(Ux_con_data)):
+            if right_increasing_preference(U_con_data,Ux_con_data,i,j):   #用于判断
+                temp_matrix.append(1)
+            else:
+                temp_matrix.append(0)
+        matrix.append(temp_matrix)
+    print(matrix)
+    return matrix
+
+def  below_increasing_preference(U_con_data,Ux_con_data,i,j):  #求关系矩阵时用于判断
+    if i == j - len(U_con_data):
+        return True
+    for k in range(len(U_con_data[0])):
+        if j < len(U_con_data):
+            if Ux_con_data[i][k] > U_con_data[j][k]:
+                return False
+        if j >= len(U_con_data):
+            if Ux_con_data[i][k] > Ux_con_data[j - len(U_con_data)][k]:
+                return False
+    return True
+
+def below_dominance_relation_matrix(U_con_data,Ux_con_data): # 增加时，求下侧关系矩阵
+    matrix = []
+    for i in range(len(Ux_con_data)):
+        temp_matrix = []
+        for j in range(len(U_con_data) + len(Ux_con_data)):
+            if below_increasing_preference(U_con_data,Ux_con_data,i,j):   #用于判断
+                temp_matrix.append(1)
+            else:
+                temp_matrix.append(0)
+        matrix.append(temp_matrix)
+    print(matrix)
+    return matrix
+
 def matrix_intersection(matrix_1,matrix_2):#矩阵求交集
     matrix = copy.deepcopy(matrix_1)
     for i in range(len(matrix_1)):
@@ -90,52 +134,65 @@ def MDCE(U_con_data,U_dec_matrix):    #求基于优势矩阵的 熵
     U_d_matrix = matrix_intersection(U_con_matrix,U_dec_matrix)
     U_con_diagonal_matrix = dominance_diagonal_matrix(U_con_matrix)
     U_con_inverse_matrix = inverse_dominance_matrix(U_con_diagonal_matrix)
-    U_diagonal_matrix = dominance_diagonal_matrix(U_d_matrix)
+    U_d_diagonal_matrix = dominance_diagonal_matrix(U_d_matrix)
     sum = 1
     for i in range(len(U_con_inverse_matrix)):
-        sum *= U_diagonal_matrix[i] * U_con_inverse_matrix[i]
+        sum *= U_d_diagonal_matrix[i] * U_con_inverse_matrix[i]
     # print( - math.log2(sum) / len(U_diagonal_matrix))
-    return - math.log2(sum) / len(U_diagonal_matrix)
+    return - math.log2(sum) / len(U_d_diagonal_matrix)
 
-def new_MDCE(U_con_data,U_dec_matrix):
+def matrix_combina(original,right,below):
+    U_Ux_matrix = copy.deepcopy(original)
+    for i in range(len(original)):
+        U_Ux_matrix[i] += right[i]
+    U_Ux_matrix += below
+    print(U_Ux_matrix)
+    return U_Ux_matrix
+
+
+def new_MDCE(U_con_data,Ux_con_data,U_Ux_dec_matrix):
     U_con_matrix = dominance_relation_matrix(U_con_data)
-    Ux_right_matrix =
-    Ux_below_matrix =
+    Ux_right_matrix =right_dominance_relation_matrix(U_con_data, Ux_con_data)
+    Ux_below_matrix =below_dominance_relation_matrix(U_con_data, Ux_con_data)
+    U_Ux_matrix = matrix_combina(U_con_matrix,Ux_right_matrix,Ux_below_matrix)
+    U_Ux_d_matrix = matrix_intersection(U_Ux_matrix,U_Ux_dec_matrix)
 
 
 
-def RED(U_con_data,U_dec_data):
-    U_dec_matrix = dominance_relation_matrix(U_dec_data)
-    U_con_entropy = MDCE(U_con_data,U_dec_matrix)
-    red_data,red_list = core(U_con_data,U_dec_matrix,U_con_entropy)
-    attr_data, attr_list = del_dup(U_con_data,red_list)  # C-C0
-    dict = {}  # 字典存放添加的依赖度
-    U_red_entropy = MDCE(red_data,U_dec_matrix)
-    print(U_red_entropy,"U_red_entropy")
-    while U_con_entropy != U_red_entropy:
-        dict.clear()
-        con_value = -1000  # 字典value
-        for k in range(len(attr_list)):
-            temp_red_data = elements_add(red_data,attr_data,k)
-            print(MDCE(red_data,U_dec_matrix) , MDCE(temp_red_data,U_dec_matrix))
-            dict[k] = MDCE(red_data,U_dec_matrix) - MDCE(temp_red_data,U_dec_matrix)
-        print(dict)
-        print(attr_list)
-        for key in dict:
-            if con_value < dict[key]:
-                con_value = dict[key]
-                con_key = key
-        print(attr_list[con_key],"con_key")
-        print(red_data)
 
-        red_data = elements_add(red_data,attr_data,con_key)
-        print(red_data)
-        attr_data = deal_data(attr_data, con_key, con_key)
-        red_list.append(attr_list[con_key])
-        del attr_list[con_key]
-        U_red_entropy = MDCE(red_data, U_dec_matrix)
-        print(red_list)
-    de_redundancy(U_dec_matrix, red_list, red_data, U_red_entropy)
+#
+# def RED(U_con_data,U_dec_data,Ux_dec_data):
+#     U_Ux_dec_matrix = dominance_relation_matrix(U_dec_data + Ux_dec_data)
+#     U_con_entropy = MDCE(U_con_data,U_dec_matrix)
+#     red_data,red_list = core(U_con_data,U_dec_matrix,U_con_entropy)
+#     attr_data, attr_list = del_dup(U_con_data,red_list)  # C-C0
+#     dict = {}  # 字典存放添加的依赖度
+#     U_red_entropy = MDCE(red_data,U_dec_matrix)
+#     print(U_red_entropy,"U_red_entropy")
+#     while U_con_entropy != U_red_entropy:
+#         dict.clear()
+#         con_value = -1000  # 字典value
+#         for k in range(len(attr_list)):
+#             temp_red_data = elements_add(red_data,attr_data,k)
+#             print(MDCE(red_data,U_dec_matrix) , MDCE(temp_red_data,U_dec_matrix))
+#             dict[k] = MDCE(red_data,U_dec_matrix) - MDCE(temp_red_data,U_dec_matrix)
+#         print(dict)
+#         print(attr_list)
+#         for key in dict:
+#             if con_value < dict[key]:
+#                 con_value = dict[key]
+#                 con_key = key
+#         print(attr_list[con_key],"con_key")
+#         print(red_data)
+#
+#         red_data = elements_add(red_data,attr_data,con_key)
+#         print(red_data)
+#         attr_data = deal_data(attr_data, con_key, con_key)
+#         red_list.append(attr_list[con_key])
+#         del attr_list[con_key]
+#         U_red_entropy = MDCE(red_data, U_dec_matrix)
+#         print(red_list)
+#     de_redundancy(U_dec_matrix, red_list, red_data, U_red_entropy)
 
 def de_redundancy(U_dec_matrix,red_list,red_data,U_red_entropy):
     for i in range(len(red_list)-1,-1,-1):
