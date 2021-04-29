@@ -101,7 +101,6 @@ def below_dominance_relation_matrix(U_con_data,Ux_con_data): # 增加时，求�
             else:
                 temp_matrix.append(0)
         matrix.append(temp_matrix)
-    print(matrix)
     return matrix
 
 def matrix_intersection(matrix_1,matrix_2):#矩阵求交集
@@ -117,10 +116,12 @@ def dominance_diagonal_matrix(matrix): #求对角矩阵   结果用list表示
         diagonal_matrix.append(sum(i))
     return diagonal_matrix
 
-def new_dominance_diagonal_matrix(matrix): #求新的对角矩阵   结果用list表示
-    diagonal_matrix = []
-    for i in matrix:
-        diagonal_matrix.append(sum(i))
+def new_dominance_diagonal_matrix(original_matrix,right,below): #求新的对角矩阵   结果用list表示
+    diagonal_matrix = dominance_diagonal_matrix(original_matrix)
+    for i in range(len(diagonal_matrix)):
+        diagonal_matrix[i] += sum(right[i])
+    for j in range(len(below)):
+        diagonal_matrix.append(sum(below[j]))
     return diagonal_matrix
 
 def inverse_dominance_matrix(diagonal_matrix):   #求对角矩阵的逆矩阵
@@ -146,7 +147,6 @@ def matrix_combina(original,right,below):
     for i in range(len(original)):
         U_Ux_matrix[i] += right[i]
     U_Ux_matrix += below
-    print(U_Ux_matrix)
     return U_Ux_matrix
 
 
@@ -156,6 +156,18 @@ def new_MDCE(U_con_data,Ux_con_data,U_Ux_dec_matrix):
     Ux_below_matrix =below_dominance_relation_matrix(U_con_data, Ux_con_data)
     U_Ux_matrix = matrix_combina(U_con_matrix,Ux_right_matrix,Ux_below_matrix)
     U_Ux_d_matrix = matrix_intersection(U_Ux_matrix,U_Ux_dec_matrix)
+    U_Ux_diagonal_matrix = new_dominance_diagonal_matrix(U_con_matrix,Ux_right_matrix,Ux_below_matrix)
+    U_Ux_d_diagonal_matrix = dominance_diagonal_matrix(U_Ux_d_matrix)
+    U_Ux_con_inverse_matrix = inverse_dominance_matrix(U_Ux_diagonal_matrix)
+    sum = 1
+    for i in range(len(U_Ux_con_inverse_matrix)):
+        sum *= U_Ux_d_diagonal_matrix[i] * U_Ux_con_inverse_matrix[i]
+    # print( - math.log2(sum) / len(U_Ux_d_diagonal_matrix),"return")
+    return - math.log2(sum) / len(U_Ux_d_diagonal_matrix)
+
+
+
+
 
 
 
@@ -215,5 +227,6 @@ if __name__ == '__main__':
     U_dec_data = deal_data(U_data, 0, len(U_data[0])  - 2)
     Ux_con_data = deal_data(Ux_data, len(Ux_data[0]) - 1, len(Ux_data[0]) - 1)
     Ux_dec_data = deal_data(Ux_data, 0, len(Ux_data[0]) - 2)
-
+    U_Ux_dec_matrix = dominance_relation_matrix(U_dec_data + Ux_dec_data)
+    new_MDCE(U_con_data,Ux_con_data,U_Ux_dec_matrix)
     # RED(U_con_data,U_dec_data)
