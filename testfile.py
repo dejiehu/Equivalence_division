@@ -164,9 +164,22 @@ import numpy
 # print(a)
 # print(math.log(a))
 
-loop_val = [[1,3],[2,4]]#将合取式差分为析取式     loop_val = [{1,2},{1,3}]
+# loop_val = [[1,3],[2,4]]#将合取式差分为析取式     loop_val = [{1,2},{1,3}]
+#
+# DM_list = []
+# for i in product(*loop_val):
+#     DM_list.append(set(i))
+# print(DM_list)
 
-DM_list = []
-for i in product(*loop_val):
-    DM_list.append(set(i))
-print(DM_list)
+
+import numpy
+# x = numpy.array([[3,4],[5,6],[2,2],[8,4]])
+# xT = x.T
+# D = numpy.cov(xT)
+# invD = numpy.linalg.inv(D)
+tp = numpy.array([0.1,0,0.1,-0.2])
+invD = numpy.array([[0.9215,0,0,0],[0,6.6898,0,0],[0,0,4.1869,0],[0,0,0,12.566]])
+print(invD)
+print(tp)
+print(invD)
+print(numpy.sqrt(numpy.dot(numpy.dot(tp.T, invD), tp)))
