@@ -182,4 +182,4 @@ invD = numpy.array([[0.9215,0,0,0],[0,6.6898,0,0],[0,0,4.1869,0],[0,0,0,12.566]]
 print(invD)
 print(tp)
 print(invD)
-print(numpy.sqrt(numpy.dot(numpy.dot(tp.T, invD), tp)))
+
