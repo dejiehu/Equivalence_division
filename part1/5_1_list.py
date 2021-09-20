@@ -13,19 +13,21 @@ def readfileBylist(filename):
     return list_data
 
 
+
+
 if __name__ == '__main__':
-    readfileBylist("../data.txt")
+    list_data = readfileBylist("../data.txt")
+    con_data = list(map(lambda x: x[:(len(list_data[0])-1)],list_data))
+    dec_data = list(map(lambda x: x[(len(list_data[0])-1):],list_data))
+
+
 # def readfile():#读文件
 #     my_data = numpy.loadtxt('../zoo.txt')
 #     print(my_data)
 #     print("my_data.shape:",my_data.shape)
 #     return my_data
 #
-# def deal_data(my_data,m,n):#处理数据表
-#     if n + 1 > m:
-#         for d in range(n,m-1,-1):
-#             my_data= numpy.delete(my_data,d,1)#d为下标
-#     return my_data
+
 #
 # def getCore_data(core_list,con_data):    #从所有数据中取出和属性数据
 #     core_data = numpy.empty(shape=(con_data.shape[0],0))
