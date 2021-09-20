@@ -57,17 +57,20 @@ print("time2:",end2 - start2)
 
 def readfile(filename):
     file = open(filename,"r")
-    list_text = []
-    for line in file.readlines():
-        # print(line)
-        line = list(line.strip().split('\t'))
-        s= []
-        for i in line:
-            s.append(i)
-        list_text.append(s)
-    print(list_text)
-    return list_text
+    list_row = file.readlines()
+    list_data = []
+    for i in range(len(list_row)):
+        list_line = list_row[i].strip().split(' ')
+
+        list_data.append(list_line)
+    print(list_data)
+    if list_data[1] == list_data[1]:
+        print("===")
+    else:
+        print("***==")
+    return list_data
 readfile("../data.txt")
+
 end3 = time.perf_counter()
 print(end3-end2)
 def readfile1():
