@@ -55,24 +55,22 @@ for i in range((core_data.shape[0])):
 end2 = time.perf_counter()
 print("time2:",end2 - start2)
 
-def readfile(filename):
+def readfileBylist(filename):
     file = open(filename,"r")
-    list_text = []
-    for line in file.readlines():
-        # print(line)
-        line = list(line.strip().split('\t'))
-        s= []
-        for i in line:
-            s.append(i)
-        list_text.append(s)
-    print(list_text)
-    return list_text
-readfile("../data.txt")
+    list_row = file.readlines()
+    list_data = []
+    for i in range(len(list_row)):
+        list_line = list_row[i].strip().split(' ')
+        list_data.append(list_line)
+    print(list_data)
+    return list_data
+readfileBylist("../Car Evaluation.txt")
+
 end3 = time.perf_counter()
 print(end3-end2)
 def readfile1():
-    my_data = numpy.loadtxt('../data.txt')
-    print(my_data)
+    my_data = numpy.loadtxt('../Car Evaluation.txt')
+    # print(my_data)
     return my_data
 readfile1()
 end4 = time.perf_counter()
