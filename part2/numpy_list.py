@@ -59,6 +59,7 @@ def readfileBylist(filename):
     file = open(filename,"r")
     list_row = file.readlines()
     list_data = []
+    print()
     for i in range(len(list_row)):
         list_line = list_row[i].strip().split(' ')
         list_data.append(list_line)
