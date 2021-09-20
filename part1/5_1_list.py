@@ -1,3 +1,4 @@
+import itertools
 import time
 from itertools import chain
 import numpy
@@ -9,18 +10,75 @@ def readfileBylist(filename):
     for i in range(len(list_row)):
         list_line = list_row[i].strip().split(' ')
         list_data.append(list_line)
-    print(list_data)
     return list_data
 
+def deal_data(my_data,m):#处理数据表
+    for d in range(len(my_data)):
+        del my_data[d][m]
+    return my_data
 
+def div(my_data): #1.数据表，2、3.删除元素下表   求划分集合
+    div_list =[]#返回的划分集合
+    list1 = []
+    for i in range(len(my_data)):  #
+        list1.clear()
+        if list(chain.from_iterable(div_list)).__contains__(i):  # 展开
+            continue
+        list1.append(i)
+        for j in range(i + 1, len(my_data)):
+            if ((my_data[i] == my_data[j])):
+                list1.append(j)
+        div_list.append(list1.copy())
+    return div_list
+
+def core(con_data,dec_divlist,dep_num):# 根据 属性重要度  求核
+    core_list = []
+    con_data1 = con_data[:][:]
+    print(id(con_data),id(con_data1))
+    print(len(con_data[0]),con_data,"len")
+    for i in range(len(con_data[0])):
+        print(i,"i")
+        print(con_data)
+        print(con_data1)
+        temp_con_data = deal_data(con_data1,i)
+        temp_con_divlist = div(temp_con_data)
+        pos_list = pos(dec_divlist, temp_con_divlist)
+        if dep_num != dependency(pos_list,con_data):
+            print("第",i+1,"个属性为核属性")
+            core_list.append(i)
+    print(core_list)
+    return core_list
+
+def dependency(pos_list,my_data): #依赖度
+     dep_num =  (len(pos_list) / len(my_data))
+     # print("依赖度:",dep_num)
+     return dep_num
+
+def pos(dec_divlist,con_divlist):  #子集  正域集合
+    pos_list=[]
+    for i in dec_divlist:      #    for i in itertools.product(dec_divlist,con_divlist):--产生笛卡尔积
+         for j in con_divlist:
+            if set(j).issubset(i):
+                pos_list +=j
+                continue
+    return  pos_list
 
 
 if __name__ == '__main__':
+    start = time.perf_counter()
     list_data = readfileBylist("../data.txt")
     con_data = list(map(lambda x: x[:(len(list_data[0])-1)],list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0])-1):],list_data))
+    # print(con_data)
+    # print(deal_data(con_data,0))
+    con_divlist = div(con_data)
+    dec_divlist = div(dec_data)
+    dep_num = dependency(pos(dec_divlist,con_divlist),list_data)
+    core_list = core(con_data, dec_divlist, dep_num)
+    print(core_list)
 
-
+    end = time.perf_counter()
+    print("time:",end - start)
 # def readfile():#读文件
 #     my_data = numpy.loadtxt('../zoo.txt')
 #     print(my_data)

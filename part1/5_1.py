@@ -3,7 +3,7 @@ from itertools import chain
 import numpy
 
 def readfile():#读文件
-    my_data = numpy.loadtxt('../zoo.txt')
+    my_data = numpy.loadtxt('../data.txt')
     print(my_data)
     print("my_data.shape:",my_data.shape)
     return my_data
@@ -120,11 +120,12 @@ if __name__ == "__main__":
     con_data = deal_data(my_data, my_data.shape[1] - 1, my_data.shape[1] - 1)
     dec_data = deal_data(my_data, 0, my_data.shape[1] - 2)
     con_divlist = div(con_data)
+    end = time.perf_counter()
     dec_divlist = div(dec_data)
     pos_list = pos(dec_divlist,con_divlist)
     dep_num = dependency(pos_list,my_data)
     core_list = core(con_data, dec_divlist,dep_num)
     Red_data = Red(con_data,dec_divlist,core_list,dep_num)
     print_red(my_data, De_redundancy(Red_data,dec_divlist,dep_num))
-    end = time.perf_counter()
+
     print(end - start)
