@@ -7,7 +7,8 @@ def readfileBylist(filename):
     list_data = []
     for i in range(len(list_row)):
         list_line = list_row[i].strip().split('\t')
-        list_data.append(list_line)
+        s = [int(j) for j in list_line]
+        list_data.append(s)
     return list_data
 
 def deal_data(my_data,m):#处理数据表
@@ -16,25 +17,58 @@ def deal_data(my_data,m):#处理数据表
         del del_data[d][m]
     return del_data
 
-def div(my_data): #1.数据表，2、3.删除元素下表   求划分集合
-    div_list =[]#返回的划分集合
-    list1 = []
-    for i in range(len(my_data)):  #
-        list1.clear()
-        if list(chain.from_iterable(div_list)).__contains__(i):  # 展开
+def Max_min(con_data,U_list):  #找出属性最大最小值
+    Mm_list = []
+    for i in range(len(con_data[0])):
+        min = 10000
+        Max = 0
+        for j in U_list:
+            if con_data[j][i] > Max:
+                Max = con_data[j][i]
+                continue
+            if con_data[j][i] < min:
+                min = con_data[j][i]
+        Mm_list.append([Max,min])
+    return Mm_list
+
+def div(my_data,U_linkList):    #等价类的划分
+    Mm_list = Max_min(my_data,U_linkList)
+    for i in range(len(Mm_list)):
+        queue_linkList = [[]]*(Mm_list[i][0] - Mm_list[i][1] + 1)
+        for j in U_linkList:
+            queue_linkList[my_data[j][i] - Mm_list[i][1]] = queue_linkList[my_data[j][i] - Mm_list[i][1]] + [j]
+        U_linkList.clear()
+        U_linkList = list(chain.from_iterable(queue_linkList))
+    div_list = []
+    temp_list = [U_linkList[0]]
+    for i in range(1,len(U_linkList)):
+        if((my_data[U_linkList[i]] == my_data[U_linkList[i-1]])):
+            temp_list.append(U_linkList[i])
             continue
-        list1.append(i)
-        for j in range(i + 1, len(my_data)):
-            if ((my_data[i] == my_data[j])):
-                list1.append(j)
-        div_list.append(list1.copy())
+        div_list.append(temp_list)
+        temp_list = [U_linkList[i]]
+    div_list.append(temp_list)
     return div_list
 
-def core(con_data,dec_divlist,dep_num):# 根据 属性重要度  求核
+# def div(my_data): #1.数据表，2、3.删除元素下表   求划分集合
+#     div_list =[]#返回的划分集合
+#     list1 = []
+#     for i in range(len(my_data)):  #
+#         list1.clear()
+#         if list(chain.from_iterable(div_list)).__contains__(i):  # 展开
+#             continue
+#         list1.append(i)
+#         for j in range(i + 1, len(my_data)):
+#             if ((my_data[i] == my_data[j])):
+#                 list1.append(j)
+#         div_list.append(list1.copy())
+#     return div_list
+
+def core(con_data,dec_divlist,dep_num,U_linkList):# 根据 属性重要度  求核
     core_list = []
     for i in range(len(con_data[0])-1,-1,-1):
         temp_con_data = deal_data(con_data,i)
-        temp_con_divlist = div(temp_con_data)
+        temp_con_divlist = div(temp_con_data,U_linkList.copy())
         pos_list = pos(dec_divlist, temp_con_divlist)
         if dep_num != dependency(pos_list,con_data):
             print("第",i+1,"个属性为核属性")
@@ -66,7 +100,7 @@ def getCore_data(core_list,con_data):    #从所有数据中取出核属性数�
 def data_add(src_data,tag_data,col):  #添加一列
     tag_copy = [tag_data[i][:] for i in range(len(tag_data))]
     for i in range(len(tag_copy)):
-        tag_copy[i] += src_data[i][col]
+        tag_copy[i] += [src_data[i][col]]
     return tag_copy
 
 def del_dup(con_data,core_list):  #找出未被添加的属性
@@ -80,9 +114,9 @@ def del_dup(con_data,core_list):  #找出未被添加的属性
         j -= 1
     return att_data,attr_list
 
-def Red(con_data,dec_divlist,core_list,dep_num):  # 求约简
+def Red(con_data,dec_divlist,core_list,dep_num,U_linkList):  # 求约简
     core_data = getCore_data(core_list,con_data)
-    core_dep = dependency(pos(dec_divlist,div(core_data)),con_data)
+    core_dep = dependency(pos(dec_divlist,div(core_data,U_linkList.copy())),con_data)
     Red_data = [core_data[i][:] for i in range(len(core_data))]
     core_list = sorted(core_list,reverse=True)
     red_list = core_list.copy()
@@ -100,7 +134,7 @@ def Red(con_data,dec_divlist,core_list,dep_num):  # 求约简
         con_value = 0#字典value
         for k in range(len(att_data[0])):
             temp_Red_data = data_add(att_data,Red_data,k)
-            Red_divlist = div(temp_Red_data)
+            Red_divlist = div(temp_Red_data,U_linkList.copy())
             dict[k] = dependency(pos(dec_divlist,Red_divlist),con_data) - Red_dep
         # print(dict)
         for key in dict:
@@ -112,20 +146,21 @@ def Red(con_data,dec_divlist,core_list,dep_num):  # 求约简
         red_list.append(attr_list[con_key])
         del attr_list[con_key]
         att_data = deal_data(att_data,con_key)
-        Red_dep = dependency(pos(dec_divlist,div(Red_data)), con_data)#添加条件属性后的依赖度
+        Red_dep = dependency(pos(dec_divlist,div(Red_data,U_linkList.copy())), con_data)#添加条件属性后的依赖度
         # print(Red_dep)
     print(red_list,"red_list")
     return Red_data
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../german.txt")
+    list_data = readfileBylist("../letter.txt")
     con_data = list(map(lambda x: x[:(len(list_data[0])-1)],list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0])-1):],list_data))
-    con_divlist = div(con_data)
-    dec_divlist = div(dec_data)
+    U_linkList = [i for i in range(len(con_data))]
+    con_divlist = div(con_data,U_linkList.copy())
+    dec_divlist = div(dec_data,U_linkList.copy())
     dep_num = dependency(pos(dec_divlist,con_divlist),list_data)
-    core_list = core(con_data, dec_divlist, dep_num)
-    Red(con_data, dec_divlist, core_list, dep_num)
+    core_list = core(con_data, dec_divlist, dep_num,U_linkList.copy())
+    Red(con_data, dec_divlist, core_list, dep_num,U_linkList.copy())
     end = time.perf_counter()
     print("time:",end - start)

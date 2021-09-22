@@ -7,7 +7,8 @@ def readfileBylist(filename):
     list_data = []
     for i in range(len(list_row)):
         list_line = list_row[i].strip().split('\t')
-        list_data.append(list_line)
+        s = [int(j) for j in list_line]
+        list_data.append(s)
     return list_data
 
 def deal_data(my_data,m):#处理数据表
@@ -16,19 +17,53 @@ def deal_data(my_data,m):#处理数据表
         del del_data[d][m]
     return del_data
 
-def div(my_data): #1.数据表，2、3.删除元素下表   求划分集合
-    div_list =[]#返回的划分集合
-    list1 = []
-    for i in range(len(my_data)):  #
-        list1.clear()
-        if list(chain.from_iterable(div_list)).__contains__(i):  # 展开
+def Max_min(con_data,U_list):  #找出属性最大最小值
+    Mm_list = []
+    for i in range(len(con_data[0])):
+        min = 10000
+        Max = 0
+        for j in U_list:
+            if con_data[j][i] > Max:
+                Max = con_data[j][i]
+                continue
+            if con_data[j][i] < min:
+                min = con_data[j][i]
+        Mm_list.append([Max,min])
+    return Mm_list
+
+def div(my_data):    #等价类的划分
+    U_linkList =  [i for i in range(len(my_data))]
+    Mm_list = Max_min(my_data,U_linkList)
+    for i in range(len(Mm_list)):
+        queue_linkList = [[]]*(Mm_list[i][0] - Mm_list[i][1] + 1)
+        for j in U_linkList:
+            queue_linkList[my_data[j][i] - Mm_list[i][1]] = queue_linkList[my_data[j][i] - Mm_list[i][1]] + [j]
+        U_linkList.clear()
+        U_linkList = list(chain.from_iterable(queue_linkList))
+    div_list = []
+    temp_list = [U_linkList[0]]
+    for i in range(1,len(U_linkList)):
+        if((my_data[U_linkList[i]] == my_data[U_linkList[i-1]])):
+            temp_list.append(U_linkList[i])
             continue
-        list1.append(i)
-        for j in range(i + 1, len(my_data)):
-            if ((my_data[i] == my_data[j])):
-                list1.append(j)
-        div_list.append(list1.copy())
+        div_list.append(temp_list)
+        temp_list = [U_linkList[i]]
+    div_list.append(temp_list)
     return div_list
+
+# def div(my_data): #1.数据表，2、3.删除元素下表   求划分集合
+#     div_list =[]#返回的划分集合
+#     list1 = []
+#     for i in range(len(my_data)):  #
+#         list1.clear()
+#         if list(chain.from_iterable(div_list)).__contains__(i):  # 展开
+#             continue
+#         list1.append(i)
+#         for j in range(i + 1, len(my_data)):
+#             if ((my_data[i] == my_data[j])):
+#                 list1.append(j)
+#         div_list.append(list1.copy())
+#     return div_list
 
 def core(con_data,dec_divlist,dep_num):# 根据 属性重要度  求核
     core_list = []
@@ -66,7 +101,7 @@ def getCore_data(core_list,con_data):    #从所有数据中取出核属性数�
 def data_add(src_data,tag_data,col):  #添加一列
     tag_copy = [tag_data[i][:] for i in range(len(tag_data))]
     for i in range(len(tag_copy)):
-        tag_copy[i] += src_data[i][col]
+        tag_copy[i] += [src_data[i][col]]
     return tag_copy
 
 def del_dup(con_data,core_list):  #找出未被添加的属性

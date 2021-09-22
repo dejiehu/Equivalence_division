@@ -1,66 +1,8 @@
 import math
 import time
 from itertools import chain
-
 import numpy
-
-def readfile():
-    my_data = numpy.loadtxt('../zoo.txt')
-    my_data = my_data.astype(int)
-    print(my_data)
-    return my_data
-
-def deal_data(my_data,m,n):#处理数据表
-    if n + 1 > m:
-        for d in range(n,m-1,-1):
-            my_data= numpy.delete(my_data,d,1)#d为下标
-    return my_data
-
-def del_dup(con_data,core_data):#删除重复列
-    i = 0
-    while i < core_data.shape[1]:
-        j = 0
-        while j < con_data.shape[1]:
-            if (core_data[:, i] == con_data[:, j]).all():
-                con_data = deal_data(con_data, j, j)
-                continue
-            j += 1
-        i += 1
-    return con_data
-
-
-def Max_min(con_data,U_list):  #找出属性最大最小值
-    Mm_list = []
-    for i in range(con_data.shape[1]):
-        min = 10000
-        Max = 0
-        for j in U_list:
-            if con_data[j][i] > Max:
-                Max = con_data[j][i]
-            if con_data[j][i] < min:
-                min = con_data[j][i]
-        Mm_list.append([Max,min])
-    return Mm_list
-
-def div(my_data):    #等价类的划分
-    U_linkList = [i for i in range(len(my_data))]
-    Mm_list = Max_min(my_data,U_linkList)
-    for i in range(len(Mm_list)):
-        queue_linkList = [[]]*(Mm_list[i][0] - Mm_list[i][1] + 1)
-        for j in U_linkList:
-            queue_linkList[my_data[j][i] - Mm_list[i][1]] = queue_linkList[my_data[j][i] - Mm_list[i][1]] + [j]
-        U_linkList.clear()
-        U_linkList = list(chain.from_iterable(queue_linkList))
-    div_list = []
-    temp_list = [U_linkList[0]]
-    for i in range(1,len(U_linkList)):
-        if((my_data[U_linkList[i]] == my_data[U_linkList[i-1]]).all()):
-            temp_list.append(U_linkList[i])
-            continue
-        div_list.append(temp_list)
-        temp_list = [U_linkList[i]]
-    div_list.append(temp_list)
-    return div_list
+from part2.quote_file import readfile_Bylist_ToInt_Spa,readfile_Bylist_ToInt_Tab,div
 
 def Entropy(attr_divlist,j):#信息熵
     entropy = 0
@@ -129,17 +71,17 @@ def print_red(my_data,Red_data):
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    my_data = readfile()
-    con_data = deal_data(my_data, my_data.shape[1] - 1, my_data.shape[1] - 1)
-    dec_data = deal_data(my_data, 0, my_data.shape[1] - 2)
+    list_data = readfile_Bylist_ToInt_Spa("..\data.txt")
+    con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
+    dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
     con_divlist = div(con_data)
     dec_divlist = div(dec_data)
     print("con_divlist",con_divlist)
     print("dec_divlist", dec_divlist)
-    con_entropy = con_Entropy(con_divlist,dec_divlist)
-    print("条件熵：",con_entropy)
-    C0_data = core(con_data, dec_divlist,con_entropy)
-    attr_data = del_dup(con_data,C0_data) #C-C0
-    print_red(my_data, Red(C0_data,dec_divlist,con_entropy,attr_data))
-    end = time.perf_counter()
-    print(end - start)
+    # con_entropy = con_Entropy(con_divlist,dec_divlist)
+    # print("条件熵：",con_entropy)
+    # C0_data = core(con_data, dec_divlist,con_entropy)
+    # attr_data = del_dup(con_data,C0_data) #C-C0
+    # print_red(my_data, Red(C0_data,dec_divlist,con_entropy,attr_data))
+    # end = time.perf_counter()
+    # print(end - start)

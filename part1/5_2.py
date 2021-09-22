@@ -3,10 +3,10 @@ from itertools import chain
 import numpy
 
 def readfile():#读文件
-    my_data = numpy.loadtxt('../zz.txt')
+    my_data = numpy.loadtxt('../german.txt')
     my_data = my_data.astype(int)
-    print(my_data)
-    print("my_data.shape:",my_data.shape)
+    # print(my_data)
+    # print("my_data.shape:",my_data.shape)
     return my_data
 
 def deal_data(my_data, m, n):  # 处理数据表  找出条件属性和决策属性用
@@ -94,7 +94,7 @@ def Red(con_data,dec_divlist,core_data,dep_num,U_list):#约简
     Red_dep = core_dep
     dict = {}#字典存放添加的依赖度
     num = 0
-    print(Red_dep,dep_num)
+    # print(Red_dep,dep_num)
     while Red_dep != dep_num:
         num += 1
         dict.clear()
@@ -112,7 +112,7 @@ def Red(con_data,dec_divlist,core_data,dep_num,U_list):#约简
         Red_data = numpy.append(Red_data,con_data[:,con_key,numpy.newaxis],axis=1)
         con_data = deal_data(con_data,con_key,con_key)
         Red_dep = dependency(pos(dec_divlist, div(Red_data,U_list)), con_data)#添加条件属性后的依赖度
-        print(Red_dep,"Red_dep")
+        # print(Red_dep,"Red_dep")
     return Red_data
 
 def De_redundancy(Red_data,dec_divlist,dep_num,U_list):# 去冗余
@@ -140,14 +140,14 @@ def print_red(my_data,Red_data):
 if __name__ == "__main__":
     start = time.perf_counter()
     my_data = readfile()
-    print(type(my_data))
+    # print(type(my_data))
     con_data = deal_data(my_data, my_data.shape[1] - 1, my_data.shape[1] - 1)
     dec_data = deal_data(my_data, 0, my_data.shape[1] - 2)
     U_list = [i for i in range(len(my_data))]
     con_divlist = div(con_data,U_list)
     dec_divlist = div(dec_data,U_list)
-    print(con_divlist)
-    print(dec_divlist)
+    # print(con_divlist)
+    # print(dec_divlist)
     pos_list = pos(dec_divlist,con_divlist)
     dep_num = dependency(pos_list,my_data)
     core_data = core(con_data, dec_divlist,dep_num,U_list)

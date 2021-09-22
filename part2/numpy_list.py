@@ -3,6 +3,7 @@ import random
 import time
 from itertools import chain
 import numpy
+
 shape_0 = 1000
 shape_1 = 1000
 start1 = time.perf_counter()
