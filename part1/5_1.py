@@ -3,7 +3,7 @@ from itertools import chain
 import numpy
 
 def readfile():#读文件
-    my_data = numpy.loadtxt('../german.txt')
+    my_data = numpy.loadtxt('../german_add.txt')
     print(my_data)
     print("my_data.shape:",my_data.shape)
     return my_data
@@ -82,7 +82,7 @@ def Red(con_data,dec_divlist,core_list,dep_num):#约简
             temp_Red_data = Red_data
             temp_Red_data = numpy.append(temp_Red_data,att_data[:,k,numpy.newaxis],axis=1)
             Red_divlist = div(temp_Red_data)
-            dict[k] = dependency(pos(dec_divlist,Red_divlist),con_data) - Red_dep
+            dict[k] = dependency(pos(dec_divlist,Red_divlist),con_data) - core_dep
         print(dict)
         for key in dict:
             if con_value < dict[key]:
