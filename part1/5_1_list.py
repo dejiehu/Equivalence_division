@@ -33,20 +33,14 @@ def div(my_data): #1.数据表，2、3.删除元素下表   求划分集合
 
 def core(con_data,dec_divlist,dep_num):# 根据 属性重要度  求核
     core_list = []
-    con_data1 = con_data[:][:]
-    print(id(con_data),id(con_data1))
-    print(len(con_data[0]),con_data,"len")
-    for i in range(len(con_data[0])):
-        print(i,"i")
-        print(con_data)
-        print(con_data1)
-        temp_con_data = deal_data(con_data1,i)
+    for i in range(len(con_data[0])-1,-1,-1):
+        temp_con_data = deal_data([con_data[i][:] for i in range(len(con_data))],i)
         temp_con_divlist = div(temp_con_data)
         pos_list = pos(dec_divlist, temp_con_divlist)
         if dep_num != dependency(pos_list,con_data):
             print("第",i+1,"个属性为核属性")
             core_list.append(i)
-    print(core_list)
+    print(core_list,"core_list")
     return core_list
 
 def dependency(pos_list,my_data): #依赖度
@@ -61,24 +55,75 @@ def pos(dec_divlist,con_divlist):  #子集  正域集合
             if set(j).issubset(i):
                 pos_list +=j
                 continue
+    # print(pos_list,"pos_list")
     return  pos_list
 
+def getCore_data(core_list,con_data):    #从所有数据中取出核属性数据
+    core_data = []
+    for data_row in con_data:
+        core_data.append([data_row[i] for i in core_list])
+    print(core_data)
+    return core_data
+
+def data_add(src_data,tag_data,col):  #添加一列
+    for i in range(len(tag_data)):
+        tag_data[i] += src_data[i][col]
+    return tag_data
+
+def Red(con_data,dec_divlist,core_list,dep_num):  # 求约简
+    core_data = getCore_data(core_list,con_data)
+    core_dep = dependency(pos(dec_divlist,div(core_data)),con_data)
+    Red_data = [core_data[i][:] for i in range(len(core_data))]
+    core_list = sorted(core_list,reverse=True)
+    for i in core_list:
+        att_data = deal_data([con_data[i][:] for i in range(len(con_data))],i)
+    print()
+    Red_dep = core_dep
+    dict = {}#字典存放添加的依赖度
+    num = 0
+    print(Red_dep, dep_num)
+    while Red_dep != dep_num:
+        print(Red_dep, dep_num)
+        print("第",num,"次循环了")
+        num += 1
+        dict.clear()
+        con_key = -1#字典key
+        con_value = 0#字典value
+        for k in range(att_data.shape[1]):
+            temp_Red_data = Red_data
+            temp_Red_data = numpy.append(temp_Red_data,att_data[:,k,numpy.newaxis],axis=1)
+            Red_divlist = div(temp_Red_data)
+            dict[k] = dependency(pos(dec_divlist,Red_divlist),con_data) - core_dep
+        print(dict)
+        for key in dict:
+            if con_value < dict[key]:
+                con_value = dict[key]
+                con_key = key
+        Red_data = numpy.append(Red_data,att_data[:,con_key,numpy.newaxis],axis=1)
+        att_data = deal_data(att_data,con_key,con_key)
+        Red_dep = dependency(pos(dec_divlist,div(Red_data)), con_data)#添加条件属性后的依赖度
+        print(Red_dep)
+    return Red_data
 
 if __name__ == '__main__':
     start = time.perf_counter()
     list_data = readfileBylist("../data.txt")
     con_data = list(map(lambda x: x[:(len(list_data[0])-1)],list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0])-1):],list_data))
-    # print(con_data)
+    print(con_data)
     # print(deal_data(con_data,0))
     con_divlist = div(con_data)
     dec_divlist = div(dec_data)
     dep_num = dependency(pos(dec_divlist,con_divlist),list_data)
     core_list = core(con_data, dec_divlist, dep_num)
-    print(core_list)
-
+    # print(core_list)
+    # pos(dec_divlist,con_divlist)
+    getCore_data(core_list, con_data)
     end = time.perf_counter()
     print("time:",end - start)
+
+
+
 # def readfile():#读文件
 #     my_data = numpy.loadtxt('../zoo.txt')
 #     print(my_data)

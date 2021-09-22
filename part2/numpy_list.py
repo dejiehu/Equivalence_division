@@ -1,9 +1,10 @@
+import copy
 import random
 import time
 from itertools import chain
 import numpy
-shape_0 = 10
-shape_1 = 10
+shape_0 = 1000
+shape_1 = 1000
 start1 = time.perf_counter()
 list1 = []
 # print(len(list1))
@@ -20,13 +21,15 @@ a = 0
 #             print(i)
 #             a+=1
 
-for i in list1:
-    for j in i:
-        for k in list1:
-            for l in k:
-                if j == l:
-                    a += 1
-print(a)
+# for i in list1:
+#     for j in i:
+#         for k in list1:
+#             for l in k:
+#                 if j == l:
+#                     a += 1
+# print(a)
+con_data1 =[list1[i][:] for i in range(len(list1))]
+# con_data1 = copy.deepcopy(list1)
 end1 = time.perf_counter()
 print("time1:",end1 - start1)
 
@@ -64,10 +67,10 @@ def readfileBylist(filename):
         list_data.append(list_line)
     print(list_data)
     return list_data
-readfileBylist("../Car Evaluation.txt")
+list_data = readfileBylist("../Car Evaluation.txt")
 
 end3 = time.perf_counter()
-print(end3-end2)
+print(end3-end2,"time")
 def readfile1():
     my_data = numpy.loadtxt('../Car Evaluation.txt')
     # print(my_data)
