@@ -1,42 +1,22 @@
 import time
+from itertools import product
 
 import numpy
 '''
 正域保持约简
 '''
-# numpy.set_printoptions(suppress=True)
-numpy.set_printoptions(threshold=10000000000,linewidth =  8888)
-from itertools import product
-def readfile():
-    my_data = numpy.loadtxt('../zoo.txt')
-    # print(my_data)
-    return my_data
+from part2.quote_file import div,deal_data,getCore_data,del_dup,data_add
 
-def deal_data(my_data,m,n):#处理数据表
-    if n + 1 > m:
-        for d in range(n,m-1,-1):
-            my_data= numpy.delete(my_data,d,1)#d为下标
-    return my_data
+def readfileBylist(filename):
+    file = open(filename,"r")
+    list_row = file.readlines()
+    list_data = []
+    for i in range(len(list_row)):
+        list_line = list_row[i].strip().split('\t')
+        s = [int(j) for j in list_line]
+        list_data.append(s)
+    return list_data
 
-def div(my_data):  #划分等价类
-    div_list = []
-    jump = 1
-    list1= []
-    for i in range(len(my_data)):
-        list1.clear()
-        for l in range(len(div_list)):
-            if (div_list[l].__contains__(i)):
-                jump = 0
-                break
-        if jump == 0:
-            jump = 1
-            continue
-        list1.append(i)
-        for j in range(i+1,len(my_data)):
-            if((my_data[i] == my_data[j]).all()):
-                list1.append(j)
-        div_list.append(list1.copy())
-    return div_list
 
 def pos(dec_divlist,con_divlist):  #子集  正域
     pos_list=[]
@@ -44,32 +24,21 @@ def pos(dec_divlist,con_divlist):  #子集  正域
          for j in con_divlist:
             if set(j).issubset(i):
                 pos_list +=j
+                continue
     # print(pos_list,"pos_list")
     return pos_list
 
 def Matrix_construct(con_data,pos_list,con_divlist):  #构造基于正域的矩阵
     s = set()
-    DM = numpy.zeros(shape=(len(con_data), len(con_data)), dtype = tuple)
-    for i in range(len(DM)):
-        DM[i] = None
-    for i in range(con_data.shape[0]):
+    DM = [['None'] *len(con_data)  for _ in range(len(con_data))]
+    # print(DM)
+    # print(DM[0][0]  == 'None')
+    for i in range(len(con_data)):
         for j in range(i):
             s.clear()
-            # index = 0
-            # for m in range(len(con_divlist)):
-            #     if con_divlist[m].__contains__(i):
-            #         if set(con_divlist[m]).issubset(set(pos_list)):
-            #             # print(set(con_divlist[m]),set(pos_list),"子集")
-            #             break
-            #     if m == len(con_divlist) - 1:
-            #         index = len(con_divlist) - 1
-            # if index == len(con_divlist) - 1:
-            #     DM[i][j] = None
-            #     continue
-            # print(not set([i]).issubset(set(pos_list)))
-            if not(set([i]).issubset(set(pos_list)) or set([j]).issubset(set(pos_list))):
+            if not({i}.issubset(set(pos_list)) or {j}.issubset(set(pos_list))):
                 continue
-            for k in range(con_data.shape[1]):
+            for k in range(len(con_data[0])):
                 if(con_data[i][k] != con_data[j][k]):
                     s.add(k)
             DM[i][j] = s.copy()
@@ -105,9 +74,9 @@ def logic_operation(diffItem_list):#析取，吸收
 
 def Red(DM):#逻辑运算
     DM_list = []
-    for i in range(DM.shape[0]):   #矩阵差别项放到集合DM_list中
+    for i in range(len(DM)):   #矩阵差别项放到集合DM_list中
         for j in range(i):
-            if DM[i][j] == None:#把集合为空的丢掉
+            if DM[i][j] == 'None':#把集合为空的丢掉
                 continue
             if len(DM[i][j]) == 0:
                 continue
@@ -125,9 +94,9 @@ def Red(DM):#逻辑运算
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    my_data = readfile()
-    con_data = deal_data(my_data, my_data.shape[1] - 1, my_data.shape[1] - 1)
-    dec_data = deal_data(my_data, 0, my_data.shape[1] - 2)
+    list_data = readfileBylist("../zoo.txt")
+    con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
+    dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
     con_divlist = div(con_data)
     dec_divlist = div(dec_data)
 
