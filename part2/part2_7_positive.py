@@ -5,7 +5,7 @@ import time
 import numpy
 
 def readfile():#读文件
-    my_data = numpy.loadtxt('..\zoo.txt')
+    my_data = numpy.loadtxt('..\german.txt')
     print(my_data)
     print("my_data.shape:",my_data.shape)
     return my_data

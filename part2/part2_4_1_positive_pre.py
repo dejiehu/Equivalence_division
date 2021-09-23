@@ -75,7 +75,9 @@ def Matrix_construct(con_data,pos_list,con_divlist):  #构造基于正域的矩�
             DM[i][j] = s.copy()
     # print(DM)
     return DM
-
+'''
+耗时间
+'''
 def logic_operation(diffItem_list):#析取，吸收
     DM_list = []
     for i in diffItem_list:  #排序
@@ -104,6 +106,7 @@ def logic_operation(diffItem_list):#析取，吸收
     return DM_list
 
 def Red(DM):#逻辑运算
+
     DM_list = []
     for i in range(DM.shape[0]):   #矩阵差别项放到集合DM_list中
         for j in range(i):
@@ -113,6 +116,7 @@ def Red(DM):#逻辑运算
                 continue
             DM_list.append(DM[i][j])
     DM_list = logic_operation(DM_list)#集合析取逻辑操作（多余集合被吸收）
+    # start = time.perf_counter()
     print(DM_list,"多余集合被吸收")
     loop_val = []#将合取式差分为析取式     loop_val = [{1,2},{1,3}]
     for i in DM_list:
@@ -122,6 +126,8 @@ def Red(DM):#逻辑运算
         DM_list.append(set(i))
     DM_list = logic_operation(DM_list)
     print("约简的集合为：",len(DM_list), DM_list)
+    # end = time.perf_counter()
+    # print(end - start, "time")
 
 if __name__ == '__main__':
     start = time.perf_counter()
@@ -134,8 +140,8 @@ if __name__ == '__main__':
     # print("con_divlist", con_divlist)
     # print("dec_divlist", dec_divlist)
     pos_list = pos(dec_divlist,con_divlist)
-    end = time.perf_counter()
-    print(end - start, "time")
+
     DM = Matrix_construct(con_data,pos_list,con_divlist)
     Red(DM)
-
+    end = time.perf_counter()
+    print(end - start, "time")

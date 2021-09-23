@@ -64,17 +64,18 @@ def readfileBylist(filename):
     list_row = file.readlines()
     list_data = []
     for i in range(len(list_row)):
-        list_line = list_row[i].strip().split(' ')
-        list_data.append(list_line)
-    print(list_data)
+        list_line = list_row[i].strip().split('\t')
+        s = [int(j) for j in list_line]
+        list_data.append(s)
     return list_data
-list_data = readfileBylist("../Car Evaluation.txt")
+list_data = readfileBylist("../letter.txt")
 
 end3 = time.perf_counter()
 print(end3-end2,"time")
 def readfile1():
-    my_data = numpy.loadtxt('../Car Evaluation.txt')
+    my_data = numpy.loadtxt('../letter.txt')
     # print(my_data)
+    m = my_data.tolist()
     return my_data
 readfile1()
 end4 = time.perf_counter()
