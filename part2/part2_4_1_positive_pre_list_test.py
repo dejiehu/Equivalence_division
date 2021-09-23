@@ -49,18 +49,21 @@ def Matrix_construct(con_data,pos_list,con_divlist):  #构造基于正域的矩�
 '''
 def logic_operation(diffItem_list):#析取，吸收
     DM_list = []
-    for i in diffItem_list:  #排序
-        if len(DM_list) != 0:  # 列表不等0要找位置插入
-            k = 0
-            while k < len(DM_list):
-                if len(set(i)) <= len(set(DM_list[k])):
-                    DM_list.insert(k, i)
-                    break
-                k += 1
-            if k == len(DM_list):
-                DM_list.append(i)
-        else:  # 列表为空直接加入
-            DM_list.append(i)
+    # print(diffItem_list)
+    # for i in diffItem_list:  #排序
+    #     if len(DM_list) != 0:  # 列表不等0要找位置插入
+    #         k = 0
+    #         while k < len(DM_list):
+    #             if len(set(i)) <= len(set(DM_list[k])):
+    #                 DM_list.insert(k, i)
+    #                 break
+    #             k += 1
+    #         if k == len(DM_list):
+    #             DM_list.append(i)
+    #     else:  # 列表为空直接加入
+    #         DM_list.append(i)
+    DM_list = sorted(diffItem_list, key=lambda i: len(i), reverse=False)
+    print(DM_list,"paixushuchu ")
     m = len(DM_list) - 1# 吸收多余的集合
     while m > 0: #m从后往前
         n = 0  #从前往后
@@ -84,6 +87,9 @@ def Red(DM):#逻辑运算
             if len(DM[i][j]) == 0:
                 continue
             DM_list.append(DM[i][j])
+    # for i in DM:
+        # print(i)
+    # print(DM_list, "DM_list")
     DM_list = logic_operation(DM_list)#集合析取逻辑操作（多余集合被吸收）
 
     # start = time.perf_counter()
