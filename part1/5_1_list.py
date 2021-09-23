@@ -115,7 +115,20 @@ def Red(con_data,dec_divlist,core_list,dep_num):  # 求约简
         Red_dep = dependency(pos(dec_divlist,div(Red_data)), con_data)#添加条件属性后的依赖度
         # print(Red_dep)
     print(red_list,"red_list")
-    return Red_data
+    return Red_data,red_list
+
+def De_redundancy(Red_data,dec_divlist,dep_num,red_list):# 去冗余
+    i = 0
+    while i < len(Red_data[0]):
+        temp_Red_data = deal_data(Red_data,i)
+        dep = dependency(pos(dec_divlist, div(temp_Red_data)), Red_data)
+        if dep_num == dep:
+            Red_data = deal_data(Red_data,i)
+            del red_list[i]
+            i = 0
+            continue
+        i += 1
+    print(red_list,"去冗余red_list")
 
 if __name__ == '__main__':
     start = time.perf_counter()
@@ -126,6 +139,7 @@ if __name__ == '__main__':
     dec_divlist = div(dec_data)
     dep_num = dependency(pos(dec_divlist,con_divlist),list_data)
     core_list = core(con_data, dec_divlist, dep_num)
-    Red(con_data, dec_divlist, core_list, dep_num)
+    Red_data,red_list = Red(con_data, dec_divlist, core_list, dep_num)
+    De_redundancy(Red_data, dec_divlist, dep_num, red_list)
     end = time.perf_counter()
     print("time:",end - start)

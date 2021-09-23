@@ -51,20 +51,6 @@ def div(my_data):    #等价类的划分
     div_list.append(temp_list)
     return div_list
 
-# def div(my_data): #1.数据表，2、3.删除元素下表   求划分集合
-#     div_list =[]#返回的划分集合
-#     list1 = []
-#     for i in range(len(my_data)):  #
-#         list1.clear()
-#         if list(chain.from_iterable(div_list)).__contains__(i):  # 展开
-#             continue
-#         list1.append(i)
-#         for j in range(i + 1, len(my_data)):
-#             if ((my_data[i] == my_data[j])):
-#                 list1.append(j)
-#         div_list.append(list1.copy())
-#     return div_list
-
 def core(con_data,dec_divlist,dep_num):# 根据 属性重要度  求核
     core_list = []
     for i in range(len(con_data[0])-1,-1,-1):
@@ -150,17 +136,31 @@ def Red(con_data,dec_divlist,core_list,dep_num):  # 求约简
         Red_dep = dependency(pos(dec_divlist,div(Red_data)), con_data)#添加条件属性后的依赖度
         # print(Red_dep)
     print(red_list,"red_list")
-    return Red_data
+    return Red_data,red_list
+
+def De_redundancy(Red_data,dec_divlist,dep_num,red_list):# 去冗余
+    i = 0
+    while i < len(Red_data[0]):
+        temp_Red_data = deal_data(Red_data,i)
+        dep = dependency(pos(dec_divlist, div(temp_Red_data)), Red_data)
+        if dep_num == dep:
+            Red_data = deal_data(Red_data,i)
+            del red_list[i]
+            i = 0
+            continue
+        i += 1
+    print(red_list,"去冗余red_list")
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../german.txt")
+    list_data = readfileBylist("../heart-c.txt")
     con_data = list(map(lambda x: x[:(len(list_data[0])-1)],list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0])-1):],list_data))
     con_divlist = div(con_data)
     dec_divlist = div(dec_data)
     dep_num = dependency(pos(dec_divlist,con_divlist),list_data)
     core_list = core(con_data, dec_divlist, dep_num)
-    Red(con_data, dec_divlist, core_list, dep_num)
+    Red_data,red_list = Red(con_data, dec_divlist, core_list, dep_num)
+    De_redundancy(Red_data, dec_divlist, dep_num, red_list)
     end = time.perf_counter()
     print("time:",end - start)

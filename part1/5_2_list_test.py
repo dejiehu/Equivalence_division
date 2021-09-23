@@ -50,20 +50,6 @@ def div(my_data,U_linkList):    #等价类的划分
     div_list.append(temp_list)
     return div_list
 
-# def div(my_data): #1.数据表，2、3.删除元素下表   求划分集合
-#     div_list =[]#返回的划分集合
-#     list1 = []
-#     for i in range(len(my_data)):  #
-#         list1.clear()
-#         if list(chain.from_iterable(div_list)).__contains__(i):  # 展开
-#             continue
-#         list1.append(i)
-#         for j in range(i + 1, len(my_data)):
-#             if ((my_data[i] == my_data[j])):
-#                 list1.append(j)
-#         div_list.append(list1.copy())
-#     return div_list
-
 def core(con_data,dec_divlist,dep_num,U_linkList):# 根据 属性重要度  求核
     core_list = []
     for i in range(len(con_data[0])-1,-1,-1):

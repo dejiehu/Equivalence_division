@@ -5,9 +5,9 @@ from itertools import chain
 import numpy
 
 def readfile():
-    my_data = numpy.loadtxt('../zoo.txt')
+    my_data = numpy.loadtxt('../heart-c.txt')
     my_data = my_data.astype(int)
-    print(my_data)
+    # print(my_data)
     return my_data
 
 def deal_data(my_data,m,n):#处理数据表
@@ -70,7 +70,7 @@ def Entropy(attr_divlist,j):#信息熵
     return entropy
 
 def con_Entropy(con_divlist,dec_divlist):  #条件熵
-    U_num = len(sum(dec_divlist,[]))
+    U_num = len(sum(dec_divlist,[]))   # sum(dec_divlist,[])对dec_divlist进行展开
     con_entropy = 0
     for j in con_divlist:
         s = list()
@@ -125,7 +125,7 @@ def print_red(my_data,Red_data):
         for j in range( my_data.shape[1]):
             if (my_data[:, j] == Red_data[:, i]).all():
                 red_set.append(j)
-    print(red_set)
+    print(red_set,"red_list")
 
 if __name__ == '__main__':
     start = time.perf_counter()
@@ -142,4 +142,4 @@ if __name__ == '__main__':
     attr_data = del_dup(con_data,C0_data) #C-C0
     print_red(my_data, Red(C0_data,dec_divlist,con_entropy,attr_data))
     end = time.perf_counter()
-    print(end - start)
+    print(end - start,"time")

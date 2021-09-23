@@ -1,42 +1,5 @@
 from itertools import chain
 
-def readfile_Bylist_Tab(filename):
-    file = open(filename,"r")
-    list_row = file.readlines()
-    list_data = []
-    for i in range(len(list_row)):
-        list_line = list_row[i].strip().split('\t')
-        list_data.append(list_line)
-    return list_data
-
-def readfile_Bylist_ToInt_Tab(filename):
-    file = open(filename,"r")
-    list_row = file.readlines()
-    list_data = []
-    for i in range(len(list_row)):
-        list_line = list_row[i].strip().split('\t')
-        s = [int(j) for j in list_line]
-        list_data.append(s)
-    return list_data
-
-def readfile_Bylist_Spa(filename):
-    file = open(filename,"r")
-    list_row = file.readlines()
-    list_data = []
-    for i in range(len(list_row)):
-        list_line = list_row[i].strip().split(' ')
-        list_data.append(list_line)
-    return list_data
-
-def readfile_Bylist_ToInt_Spa(filename):
-    file = open(filename,"r")
-    list_row = file.readlines()
-    list_data = []
-    for i in range(len(list_row)):
-        list_line = list_row[i].strip().split(' ')
-        s = [int(j) for j in list_line]
-        list_data.append(s)
-    return list_data
 
 def deal_data(my_data,m):#处理数据表
     del_data = [my_data[i][:] for i in range(len(my_data))]
@@ -77,3 +40,26 @@ def div(my_data):    #等价类的划分
         temp_list = [U_linkList[i]]
     div_list.append(temp_list)
     return div_list
+
+def getCore_data(core_list,con_data):    #从所有数据中取出核属性数据
+    core_data = []
+    for data_row in con_data:
+        core_data.append([data_row[i] for i in core_list])
+    return core_data
+
+def del_dup(con_data,core_list):  #找出未被添加的属性
+    attr_list = [i for i in range(len(con_data[0]))]
+    att_data = [con_data[i][:] for i in range(len(con_data))]
+    j = len(con_data) - 1
+    while j >= 0:
+        if core_list.__contains__(j):
+            att_data = deal_data(att_data,j)
+            del attr_list[j]
+        j -= 1
+    return att_data,attr_list
+
+def data_add(src_data,tag_data,col):  #添加一列
+    tag_copy = [tag_data[i][:] for i in range(len(tag_data))]
+    for i in range(len(tag_copy)):
+        tag_copy[i] += [src_data[i][col]]
+    return tag_copy
