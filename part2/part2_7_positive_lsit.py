@@ -65,8 +65,8 @@ def Red(con_data,core_list,dec_divlist):
             if con_value < dict[key]:
                 con_value = dict[key]
                 con_key = key
-        temp_R = numpy.append(temp_R, attr_data[:, con_key, numpy.newaxis], axis=1)
-        red = numpy.append(red, temp_attr_data[:, con_key, numpy.newaxis], axis=1)
+        temp_R = numpy.append(temp_R,   attr_data[:, con_key, numpy.newaxis], axis=1  )
+        red = numpy.append(red,   temp_attr_data[:, con_key, numpy.newaxis], axis=1)
         attr_data = deal_data(attr_data,con_key,con_key)
         temp_attr_data = deal_data(temp_attr_data,con_key,con_key)
         P = div(temp_R)
