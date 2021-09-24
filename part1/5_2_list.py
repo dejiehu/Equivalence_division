@@ -153,7 +153,7 @@ def De_redundancy(Red_data,dec_divlist,dep_num,red_list):# 去冗余
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../zoo.txt")
+    list_data = readfileBylist("../german.txt")
     con_data = list(map(lambda x: x[:(len(list_data[0])-1)],list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0])-1):],list_data))
     con_divlist = div(con_data)
