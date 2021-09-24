@@ -10,7 +10,7 @@ def readfileBylist(filename):
     list_row = file.readlines()
     list_data = []
     for i in range(len(list_row)):
-        list_line = list_row[i].strip().split(' ')
+        list_line = list_row[i].strip().split('\t')
         s = [int(j) for j in list_line]
         list_data.append(s)
     return list_data
@@ -42,59 +42,62 @@ def core(con_data,dec_divlist,dep_num):# 根据 属性重要度  求核
 
 def Red(con_data,core_list,dec_divlist):
     red_data = getCore_data(core_list, con_data)  # core_data
+    red_list = core_list.copy()
     temp_red_data = [red_data[i][:] for i in range(len(red_data))]
     temp_con_data = [con_data[i][:] for i in range(len(con_data))]
     dict ={}
     attr_data,attr_list = del_dup(con_data,core_list)
+    temp_attr_data = [attr_data[i][:] for i in range(len(attr_data))]
     while dependency(pos(dec_divlist,div(temp_red_data)),temp_con_data) != dependency(pos(dec_divlist, div(temp_con_data)), temp_con_data):
         dict.clear()
         con_key = -1  # 字典key
         con_value = 0  # 字典value
         pos_list = pos(dec_divlist,div(red_data))
-        m = len(temp_con_data) - 1
+        m = len(con_data) - 1
+        temp_red_data = [red_data[i][:] for i in range(len(red_data))]
+        temp_con_data = [con_data[i][:] for i in range(len(con_data))]
+        temp_attr_data = [attr_data[i][:] for i in range(len(attr_data))]
         while m >= 0:
-            if set(pos_list).__contains__(m):  #删除对象
+            if set(pos_list).__contains__(m):  # 删除对象
                 del temp_con_data[m]
                 del temp_red_data[m]
-                del attr_data[m]
+                del temp_attr_data[m]
             m -= 1
+        # print(pos_list,"pos_list")
         for n in range(len(attr_data[0])):
-            temp_Red_data = data_add(attr_data,temp_red_data,n)
+            temp_Red_data = data_add(temp_attr_data,temp_red_data,n)
             dict[n] = dependency(pos(dec_divlist, div(temp_Red_data)), temp_con_data)
         for key in dict:
             if con_value < dict[key]:
                 con_value = dict[key]
                 con_key = key
-        temp_R = numpy.append(temp_R,   attr_data[:, con_key, numpy.newaxis], axis=1  )
-        red = numpy.append(red,   temp_attr_data[:, con_key, numpy.newaxis], axis=1)
-        attr_data = deal_data(attr_data,con_key,con_key)
-        temp_attr_data = deal_data(temp_attr_data,con_key,con_key)
-        P = div(temp_R)
-    print_red(con_data,red)
-
-def print_red(my_data,Red_data):
-    red_set =[]
-    for i in range(Red_data.shape[1]):
-        for j in range( my_data.shape[1]):
-            if (my_data[:, j] == Red_data[:, i]).all():
-                red_set.append(j)
-    print(red_set)
+        temp_red_data = data_add(temp_attr_data,temp_red_data,con_key)
+        # print(red_data,"red_data",con_key)
+        # print(attr_data,"attr_data")
+        # print(temp_red_data,"temp_red_data")
+        # print(temp_red_data,"temp_red_data")
+        red_data = data_add(attr_data,red_data,con_key)
+        attr_data = deal_data(attr_data,con_key)
+        temp_attr_data = deal_data(temp_attr_data,con_key)
+        red_list.append(attr_list[con_key])
+        del attr_list[con_key]
+    print(red_list)
 
 
 if __name__ == "__main__":
     start = time.perf_counter()
-    list_data = readfileBylist("../data.txt")
+    list_data = readfileBylist("../letter.txt")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
     con_divlist = div(con_data)
     dec_divlist = div(dec_data)
-    print("con_divlist", con_divlist)
-    print("dec_divlist", dec_divlist)
+    # print("con_divlist", con_divlist)
+    # print("dec_divlist", dec_divlist)
     pos_list = pos(dec_divlist,con_divlist)
-    print("pos_list",pos_list)
+    # print("pos_list",pos_list)
     dep_num = dependency(pos_list,list_data)
     print("dep_num",dep_num)
-    core_data = core(con_data, dec_divlist, dep_num)
-    Red(core_data,dec_divlist,con_data)
+    core_list = core(con_data, dec_divlist, dep_num)
+    Red(con_data,core_list,dec_divlist)
     end = time.perf_counter()
     print(end - start)
