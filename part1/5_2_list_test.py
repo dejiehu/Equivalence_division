@@ -118,6 +118,10 @@ def Red(con_data,dec_divlist,core_list,dep_num,U_linkList):  # 求约简
         dict.clear()
         con_key = -1#字典key
         con_value = 0#字典value
+        pos_list = pos(dec_divlist, div(Red_data,U_linkList.copy()))
+        print(pos_list,"pos_list")
+        print(len(pos_list),len(con_data))
+        print( red_list,"redlist")
         for k in range(len(att_data[0])):
             temp_Red_data = data_add(att_data,Red_data,k)
             Red_divlist = div(temp_Red_data,U_linkList.copy())
@@ -139,7 +143,7 @@ def Red(con_data,dec_divlist,core_list,dep_num,U_linkList):  # 求约简
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../letter.txt")
+    list_data = readfileBylist("../zoo.txt")
     con_data = list(map(lambda x: x[:(len(list_data[0])-1)],list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0])-1):],list_data))
     U_linkList = [i for i in range(len(con_data))]

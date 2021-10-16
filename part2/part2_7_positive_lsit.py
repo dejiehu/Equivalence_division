@@ -10,7 +10,7 @@ def readfileBylist(filename):
     list_row = file.readlines()
     list_data = []
     for i in range(len(list_row)):
-        list_line = list_row[i].strip().split('\t')
+        list_line = list_row[i].strip().split(' ')
         s = [int(j) for j in list_line]
         list_data.append(s)
     return list_data
@@ -47,8 +47,9 @@ def Red(con_data,core_list,dec_divlist):
     temp_con_data = [con_data[i][:] for i in range(len(con_data))]
     dict ={}
     attr_data,attr_list = del_dup(con_data,core_list)
-    temp_attr_data = [attr_data[i][:] for i in range(len(attr_data))]
+    # temp_attr_data = [attr_data[i][:] for i in range(len(attr_data))]
     while dependency(pos(dec_divlist,div(temp_red_data)),temp_con_data) != dependency(pos(dec_divlist, div(temp_con_data)), temp_con_data):
+        print(dependency(pos(dec_divlist,div(temp_red_data)),temp_con_data) , dependency(pos(dec_divlist, div(temp_con_data)), temp_con_data),red_list,"ceshi ")
         dict.clear()
         con_key = -1  # 字典key
         con_value = 0  # 字典value
@@ -57,20 +58,25 @@ def Red(con_data,core_list,dec_divlist):
         temp_red_data = [red_data[i][:] for i in range(len(red_data))]
         temp_con_data = [con_data[i][:] for i in range(len(con_data))]
         temp_attr_data = [attr_data[i][:] for i in range(len(attr_data))]
+        # print(pos_list,"pos_list")
+        # print(len(pos_list),m+1)
+        # print(red_list,"redlist")
         while m >= 0:
             if set(pos_list).__contains__(m):  # 删除对象
                 del temp_con_data[m]
                 del temp_red_data[m]
                 del temp_attr_data[m]
             m -= 1
-        # print(pos_list,"pos_list")
         for n in range(len(attr_data[0])):
-            temp_Red_data = data_add(temp_attr_data,temp_red_data,n)
-            dict[n] = dependency(pos(dec_divlist, div(temp_Red_data)), temp_con_data)
+            temp_red_data = data_add(temp_attr_data,temp_red_data,n)
+            dict[n] = dependency(pos(dec_divlist, div(temp_red_data)), temp_con_data)
+            print((dec_divlist, div(temp_red_data)), temp_con_data,"dict")
+        print(dict)
         for key in dict:
             if con_value < dict[key]:
                 con_value = dict[key]
                 con_key = key
+
         temp_red_data = data_add(temp_attr_data,temp_red_data,con_key)
         # print(red_data,"red_data",con_key)
         # print(attr_data,"attr_data")
@@ -81,12 +87,14 @@ def Red(con_data,core_list,dec_divlist):
         temp_attr_data = deal_data(temp_attr_data,con_key)
         red_list.append(attr_list[con_key])
         del attr_list[con_key]
+        print(dependency(pos(dec_divlist, div(temp_red_data)), temp_con_data),
+              dependency(pos(dec_divlist, div(temp_con_data)), temp_con_data), red_list, "ceshi ")
     print(red_list)
 
 
 if __name__ == "__main__":
     start = time.perf_counter()
-    list_data = readfileBylist("../letter.txt")
+    list_data = readfileBylist("../table_1.txt")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
     con_divlist = div(con_data)

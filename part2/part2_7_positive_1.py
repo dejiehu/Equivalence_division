@@ -5,7 +5,7 @@ import time
 import numpy
 
 def readfile():#读文件
-    my_data = numpy.loadtxt('..\german.txt')
+    my_data = numpy.loadtxt('..\zoo.txt')
     print(my_data)
     print("my_data.shape:",my_data.shape)
     return my_data
@@ -100,6 +100,7 @@ def Red(core_data,dec_divlist,con_data):
         k += 1
     # print("U",Ui)
     while dependency(pos(dec_divlist,divByUi(red,Ui)),Ui) != dependency(pos(dec_divlist, divByUi(con_data,Ui)), Ui):
+        print(dependency(pos(dec_divlist,divByUi(red,Ui)),Ui) , dependency(pos(dec_divlist, divByUi(con_data,Ui)), Ui))
         dict.clear()
         con_key = -1  # 字典key
         con_value = 0  # 字典value
