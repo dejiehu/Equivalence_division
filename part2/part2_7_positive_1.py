@@ -90,36 +90,28 @@ def Red(core_data,dec_divlist,con_data):
     dict ={}
     attr_data = con_data
     k = 0
-    j = 0
     while k < core_data.shape[1]:#C-red
+        j = 0
         while j < attr_data.shape[1]:
             if (core_data[:, k] == attr_data[:, j]).all():
                 attr_data = deal_data(attr_data, j, j)
-                continue
+                break
             j += 1
         k += 1
-    # print("U",Ui)
     while dependency(pos(dec_divlist,divByUi(red,Ui)),Ui) != dependency(pos(dec_divlist, divByUi(con_data,Ui)), Ui):
-        print(dependency(pos(dec_divlist,divByUi(red,Ui)),Ui) , dependency(pos(dec_divlist, divByUi(con_data,Ui)), Ui))
         dict.clear()
         con_key = -1  # 字典key
         con_value = 0  # 字典value
         pos_list = pos(dec_divlist,div(red))
-        # print("决策属性划分",dec_divlist)
-        # print("条件属性划分", div(red))
         m = len(Ui)-1
         while m >= 0:
             if set(pos_list).__contains__(Ui[m]):  #删除对象
                 del Ui[m]
             m -= 1
-        # print("正域",pos_list)
-        # print("Ui",Ui)
         for n in range(attr_data.shape[1]):
             temp_Red_data = red
             temp_Red_data = numpy.append(temp_Red_data, attr_data[:, n, numpy.newaxis], axis=1)
             dict[n] = dependency(pos(dec_divlist, divByUi(temp_Red_data,Ui)), Ui)
-            # print(dependency(pos(dec_divlist, divByUi(temp_Red_data,Ui)), Ui) , dependency(pos(dec_divlist, divByUi(red,Ui)), Ui))
-        # print(dict)
         for key in dict:
             if con_value < dict[key]:
                 con_value = dict[key]

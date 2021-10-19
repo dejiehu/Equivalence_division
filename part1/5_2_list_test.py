@@ -110,7 +110,7 @@ def Red(con_data,dec_divlist,core_list,dep_num,U_linkList):  # 求约简
     Red_dep = core_dep
     dict = {}#字典存放添加的依赖度
     num = 0
-    print(Red_dep, dep_num)
+    # print(Red_dep, dep_num)
     while Red_dep != dep_num:
         # print(Red_dep, dep_num)
         # print("第",num,"次循环了")
@@ -119,9 +119,9 @@ def Red(con_data,dec_divlist,core_list,dep_num,U_linkList):  # 求约简
         con_key = -1#字典key
         con_value = 0#字典value
         pos_list = pos(dec_divlist, div(Red_data,U_linkList.copy()))
-        print(pos_list,"pos_list")
-        print(len(pos_list),len(con_data))
-        print( red_list,"redlist")
+        # print(pos_list,"pos_list")
+        # print(len(pos_list),len(con_data))
+        # print( red_list,"redlist")
         for k in range(len(att_data[0])):
             temp_Red_data = data_add(att_data,Red_data,k)
             Red_divlist = div(temp_Red_data,U_linkList.copy())

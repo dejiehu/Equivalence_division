@@ -3,11 +3,11 @@
 '''
 import time
 import numpy
-
+numpy.set_printoptions(threshold = 1e6)
 def readfile():#读文件
-    my_data = numpy.loadtxt('../table_1.txt')
-    print(my_data)
-    print("my_data.shape:",my_data.shape)
+    my_data = numpy.loadtxt('../zoo.txt')
+    # print(my_data)
+    # print("my_data.shape:",my_data.shape)
     return my_data
 
 def deal_data(my_data,m,n):#处理数据表
@@ -73,18 +73,16 @@ def Red(core_data,dec_data,con_data):
     dict ={}
     attr_data = con_data
     k = 0
-    j = 0
     while k < core_data.shape[1]:#C-red
+        j = 0
         while j < attr_data.shape[1]:
             if (core_data[:, k] == attr_data[:, j]).all():
                 attr_data = deal_data(attr_data, j, j)
-                j=0
-                continue
+                break
             j += 1
         k += 1
     temp_attr_data = attr_data
     while dependency(pos(div(temp_dec_data),P),temp_R) != dependency(pos(div(temp_dec_data), div(temp_con_data)), temp_R):
-        print(dependency(pos(div(temp_dec_data),P),temp_R) , dependency(pos(div(temp_dec_data), div(temp_con_data)), temp_R))
         dict.clear()
         con_key = -1  # 字典key
         con_value = 0  # 字典value
@@ -92,7 +90,6 @@ def Red(core_data,dec_data,con_data):
         m = len(temp_con_data)-1
         while m >= 0:
             if set(pos_list).__contains__(m):  #删除对象
-                print( m+1,"包含，删除")
                 temp_con_data = numpy.delete(temp_con_data, m, axis=0)
                 temp_dec_data = numpy.delete(temp_dec_data, m, axis=0)
                 attr_data = numpy.delete(attr_data, m, axis=0)
@@ -103,10 +100,6 @@ def Red(core_data,dec_data,con_data):
             temp_Red_data = temp_R
             temp_Red_data = numpy.append(temp_Red_data, attr_data[:, n, numpy.newaxis], axis=1)
             dict[n] = dependency(pos(div(temp_dec_data), div(temp_Red_data)), temp_con_data)
-            # print("  fffffff",n,dependency(pos(div(dec_data), div(temp_Red_data)), temp_con_data))
-            print(temp_Red_data,"temp_Red_data")
-            print((div(temp_dec_data), div(temp_Red_data)), temp_con_data,"dict")
-        print(dict)
         for key in dict:
             if con_value < dict[key]:
                 con_value = dict[key]
@@ -134,12 +127,12 @@ if __name__ == "__main__":
     dec_data = deal_data(my_data, 0, my_data.shape[1]-2)
     con_divlist = div(con_data)
     dec_divlist = div(dec_data)
-    print("con_divlist", con_divlist)
+    # print("con_divlist", con_divlist)
     print("dec_divlist", dec_divlist)
     pos_list = pos(dec_divlist,con_divlist)
-    print("pos_list",pos_list)
+    # print("pos_list",pos_list)
     dep_num = dependency(pos_list,my_data)
-    print("dep_num",dep_num)
+    # print("dep_num",dep_num)
     core_data = core(con_data, dec_divlist,dep_num)
     # print(dependency(pos(dec_divlist,div(core_data)),con_data))
     Red(core_data,dec_data,con_data)

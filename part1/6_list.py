@@ -9,7 +9,7 @@ def readfileBylist(filename):
     list_row = file.readlines()
     list_data = []
     for i in range(len(list_row)):
-        list_line = list_row[i].strip().split('\t')
+        list_line = list_row[i].strip().split(' ')
         s = [int(j) for j in list_line]
         list_data.append(s)
     return list_data
@@ -64,6 +64,7 @@ def Red(dec_divlist,con_entropy,con_data):#约简
         con_value = 10000000  # 字典value
         for k in range(len(attr_data[0])):
             temp_Red_data = data_add(attr_data,Red_data,k)
+            print(temp_Red_data)
             dict[k] = con_Entropy(div(temp_Red_data),dec_divlist)
         for key in dict:
             if con_value > dict[key]:
@@ -79,7 +80,7 @@ def Red(dec_divlist,con_entropy,con_data):#约简
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("..\heart-c.txt")
+    list_data = readfileBylist("..\data.txt")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
     con_divlist = div(con_data)

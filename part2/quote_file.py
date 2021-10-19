@@ -9,14 +9,19 @@ def deal_data(my_data,m):#处理数据表
 
 def Max_min(con_data,U_list):  #找出属性最大最小值
     Mm_list = []
+    # print("1")
+    # print(len(con_data[0]))
     for i in range(len(con_data[0])):
         min = 10000
         Max = 0
+        # print("4")
         for j in U_list:
+            # print("2")
             if con_data[j][i] > Max:
                 Max = con_data[j][i]
                 continue
             if con_data[j][i] < min:
+                # print("3")
                 min = con_data[j][i]
         Mm_list.append([Max,min])
     return Mm_list
