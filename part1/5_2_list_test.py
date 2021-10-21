@@ -143,7 +143,7 @@ def Red(con_data,dec_divlist,core_list,dep_num,U_linkList):  # 求约简
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../zoo.txt")
+    list_data = readfileBylist("../letter.txt")
     con_data = list(map(lambda x: x[:(len(list_data[0])-1)],list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0])-1):],list_data))
     U_linkList = [i for i in range(len(con_data))]

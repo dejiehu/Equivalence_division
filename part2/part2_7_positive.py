@@ -5,9 +5,9 @@ import time
 import numpy
 numpy.set_printoptions(threshold = 1e6)
 def readfile():#读文件
-    my_data = numpy.loadtxt('../zoo.txt')
-    # print(my_data)
-    # print("my_data.shape:",my_data.shape)
+    my_data = numpy.loadtxt('../letter_recognition.txt',delimiter=',')
+    print(my_data)
+    print("my_data.shape:",my_data.shape)
     return my_data
 
 def deal_data(my_data,m,n):#处理数据表
@@ -126,9 +126,12 @@ if __name__ == "__main__":
     con_data = deal_data(my_data, my_data.shape[1]-1, my_data.shape[1]-1)
     dec_data = deal_data(my_data, 0, my_data.shape[1]-2)
     con_divlist = div(con_data)
+    print("con_divlist", con_divlist)
+    end = time.perf_counter()
+    print(end - start)
     dec_divlist = div(dec_data)
     # print("con_divlist", con_divlist)
-    print("dec_divlist", dec_divlist)
+    # print("dec_divlist", dec_divlist)
     pos_list = pos(dec_divlist,con_divlist)
     # print("pos_list",pos_list)
     dep_num = dependency(pos_list,my_data)

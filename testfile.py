@@ -170,16 +170,37 @@ import numpy
 # for i in product(*loop_val):
 #     DM_list.append(set(i))
 # print(DM_list)
+# from part2.quote_file import deal_data
+#
+#
+# def readfileBylist(filename):
+#     file = open(filename,"r")
+#     list_row = file.readlines()
+#     list_data = []
+#     for i in range(len(list_row)):
+#         list_line = list_row[i].strip().split('\t')
+#         s = [int(j) for j in list_line]
+#         list_data.append(s)
+#     return list_data
+# start = time.perf_counter()
+# list_data = readfileBylist("Connectionist Bench (Sonar, Mines vs. Rocks).txt")
+# for i in range(len(list_data[0]) - 1, -1, -1):
+#     temp_con_data = deal_data(list_data, i)
+#     # del list_data[i]
+# end = time.perf_counter()
+# print("time:",end - start)
 
 
-import numpy
-# x = numpy.array([[3,4],[5,6],[2,2],[8,4]])
-# xT = x.T
-# D = numpy.cov(xT)
-# invD = numpy.linalg.inv(D)
-tp = numpy.array([0.1,0,0.1,-0.2])
-invD = numpy.array([[0.9215,0,0,0],[0,6.6898,0,0],[0,0,4.1869,0],[0,0,0,12.566]])
-print(invD)
-print(tp)
-print(invD)
-
+# import numpy
+# # x = numpy.array([[3,4],[5,6],[2,2],[8,4]])
+# # xT = x.T
+# # D = numpy.cov(xT)
+# # invD = numpy.linalg.inv(D)
+# tp = numpy.array([0.1,0,0.1,-0.2])
+# invD = numpy.array([[0.9215,0,0,0],[0,6.6898,0,0],[0,0,4.1869,0],[0,0,0,12.566]])
+# print(invD)
+# print(tp)
+# print(invD)
+a=[[]]*4
+a[0]=  a[0]+ [3]
+print(a)
