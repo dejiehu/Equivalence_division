@@ -59,7 +59,7 @@ def div_base_matric(Sp_matrix,con_list,del_list):
     con_list = list(set(con_list) - set(del_list))
     sp_list = []
     for j in range(len(Sp_matrix)):
-        sp = sp & Sp_matrix[j][i]
+        sp = set(k for k in range(len(dec_data)))
         for i in con_list:
             sp = sp & Sp_matrix[j][i]
         sp_list.append(list(sp.copy()))
@@ -114,6 +114,7 @@ if __name__ == "__main__":
     Sp_matrix = get_matrix(con_data)
     con_list = [i for i in range(len(con_data[0]))]
     dec_divlist = div(dec_data)
+    print(con_list)
     core_list = core(Sp_matrix, con_list, dec_divlist)
     print(core_list,"core_list")
     red(Sp_matrix, con_list, dec_divlist, core_list)

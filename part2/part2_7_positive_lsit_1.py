@@ -135,7 +135,7 @@ def Red(con_data,core_list,dec_data):
                 del temp_con_data[m]
                 del temp_red_data[m]
                 del temp_attr_data[m]
-                del temp_dec_data[m]
+                del temp_dec_data[m]  #删掉后样本的序号会改变，所有决策也要删除
             m -= 1
         for n in range(len(attr_data[0])):
             dict[n] = dependency(pos(div(temp_dec_data), div(data_add(temp_attr_data,temp_red_data,n))), temp_con_data)
@@ -153,7 +153,7 @@ def Red(con_data,core_list,dec_data):
 
 if __name__ == "__main__":
     start = time.perf_counter()
-    list_data = readfileBylist("../zoo1.txt")
+    list_data = readfileBylist("../zoo.txt")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
     con_divlist = div(con_data)

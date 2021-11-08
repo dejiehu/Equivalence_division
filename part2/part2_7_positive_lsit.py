@@ -10,7 +10,7 @@ def readfileBylist(filename):
     list_row = file.readlines()
     list_data = []
     for i in range(len(list_row)):
-        list_line = list_row[i].strip().split(',')
+        list_line = list_row[i].strip().split('\t')
         s = [int(j) for j in list_line]
         list_data.append(s)
     return list_data
@@ -60,7 +60,6 @@ def Red(con_data,core_list,dec_data):
     attr_data,attr_list = del_dup(con_data,core_list)
     while dependency(pos(div(temp_dec_data),div(temp_red_data)),temp_con_data) != dependency(pos(div(temp_dec_data), div(temp_con_data)), temp_con_data):
         dict.clear()
-        print("1")
         con_key = -1  # 字典key
         con_value = -10000  # 字典value
         pos_list = pos(div(dec_data),div(red_data))
@@ -107,7 +106,7 @@ def Red(con_data,core_list,dec_data):
 
 if __name__ == "__main__":
     start = time.perf_counter()
-    list_data = readfileBylist("../letter_recognition.txt")
+    list_data = readfileBylist("../german_o.txt")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
     con_divlist = div(con_data)
