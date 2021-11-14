@@ -60,7 +60,7 @@ def pos(dec_divlist,con_divlist):  #子集  正域
     # print(pos_list,"pos_list")
     return pos_list
 
-def Matrix_construct(con_data,pos_list,con_divlist):  #构造基于正域的矩阵
+def Matrix_construct(con_data,pos_list):  #构造基于正域的矩阵
     s = set()
     DM = [['None'] *len(con_data)  for _ in range(len(con_data))]
     for i in range(len(con_data)):
@@ -141,7 +141,7 @@ if __name__ == '__main__':
     print("dec_divlist", dec_divlist)
     pos_list = pos(dec_divlist[0] + dec_divlist[1],con_divlist)
     print(pos_list)
-    DM = Matrix_construct(con_data,pos_list,con_divlist)
+    DM = Matrix_construct(con_data,pos_list)
     Red(DM)
     end = time.perf_counter()
     print(end - start, "time")
