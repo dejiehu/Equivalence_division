@@ -35,7 +35,6 @@ def get_matrix(my_data): #多个对象的相容类等于单个对象的交集
     for i in range(len(my_data)):
         for j in range(len(my_data[0])):
             sp_set = set()
-            index = 1
             for k in range(len(my_data)):
                 if len(eval(my_data[i][j]) & eval(my_data[k][j])) != 0:
                     sp_set.add(k)
