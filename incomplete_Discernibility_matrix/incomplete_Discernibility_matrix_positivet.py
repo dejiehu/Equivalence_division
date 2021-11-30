@@ -120,9 +120,11 @@ def Red(DM):#逻辑运算d
     loop_val = []#将合取式差分为析取式     loop_val = [{1,2},{1,3}]
     for i in DM_list:
         loop_val.append(i)
+
     DM_list = []
     for i in product(*loop_val):
         DM_list.append(set(i))
+    print("daozheer le ", len(DM_list))
     DM_list = logic_operation(DM_list)
     print("约简的集合为：",len(DM_list), DM_list,"约简个数")
     num = 0
@@ -132,7 +134,7 @@ def Red(DM):#逻辑运算d
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../incomplete_dataSet/Cardiotocography_incomplete.txt")
+    list_data = readfileBylist("../incomplete_dataSet/glass Identification_incomplete.txt")
     # list_data = readfileBylist("../Qualitative_Bankruptcy.txt")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")
