@@ -48,42 +48,27 @@ def div_base_matric(Sp_matrix):  #相容类下用交集求划分
         sp_list.append(list(sp.copy()))
     return sp_list
 
-def pos(dec_divlist,con_divlist):  #子集  正域
-    pos_list=[]
-    for i in dec_divlist:
-         for j in con_divlist:
-            if set(j).issubset(i):
-                pos_list +=j
-                continue
-    return pos_list
+def generalized_decision(con_divlist,dec_data):
+    gd_list=[]
+    for i in con_divlist:
+        gd_set = set()
+        for j in i:
+            gd_set.add(dec_data[j][0])
+        gd_list.append(list(gd_set))
+    # print(gd_list)
+    return gd_list
 
-def Matrix_construct(con_data,pos_list,dec_data):  #构造基于正域的矩阵
+def Matrix_construct(con_data,gd_list,dec_data):  #构造基于正域的矩阵
     s = set()
     DM = [['None'] *len(con_data)  for _ in range(len(con_data))]
     for i in range(len(con_data)):
         for j in range(i):
             s.clear()
-
-            #全决策1
-            if  not(({i}.issubset(set(pos_list)) or {j}.issubset(set(pos_list))) and dec_data[i][0] != dec_data[j][0]):
+            if  gd_list.__contains__(dec_data[j][0]):
                 continue
             for k in range(len(con_data[0])):
                 if (con_data[i][k] != con_data[j][k] and con_data[i][k] != '?' and con_data[j][k] != '?'):
                     s.add(k)
-
-            #全决策2
-            # if {i}.issubset(set(pos_list)) and {j}.issubset(set(pos_list)) and dec_data[i][0] != dec_data[j][0]:
-            #     for k in range(len(con_data[0])):
-            #         if(con_data[i][k] != con_data[j][k]):
-            #             s.add(k)
-            # if {i}.issubset(set(pos_list)) and not({j}.issubset(set(pos_list))) and dec_data[i][0] != dec_data[j][0]:
-            #     for k in range(len(con_data[0])):
-            #         if(con_data[i][k] != con_data[j][k]):
-            #             s.add(k)
-            # if {j}.issubset(set(pos_list)) and not({i}.issubset(set(pos_list))) and dec_data[i][0] != dec_data[j][0]:
-            #     for k in range(len(con_data[0])):
-            #         if(con_data[i][k] != con_data[j][k]):
-            #             s.add(k)
             if len(s)!=0:
                 DM[i][j] = s.copy()
     # for i in DM:
@@ -132,7 +117,7 @@ def Red(DM):#逻辑运算d
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../incomplete_dataSet/house_incomplete.txt")
+    list_data = readfileBylist("../incomplete_dataSet/zoo_incomplete.txt")
     # list_data = readfileBylist("../Qualitative_Bankruptcy.txt")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")
@@ -148,8 +133,8 @@ if __name__ == '__main__':
     dec_divlist = div_dec(dec_data)
     # print("con_divlist", con_divlist)
     # print("dec_divlist", dec_divlist)
-    pos_list = pos(dec_divlist,con_divlist)
-    DM = Matrix_construct(con_data,pos_list,dec_data)
+    gd_list = generalized_decision(con_divlist,dec_data)
+    DM = Matrix_construct(con_data,gd_list,dec_data)
     Red(DM)
     end = time.perf_counter()
     print(end - start, "time")

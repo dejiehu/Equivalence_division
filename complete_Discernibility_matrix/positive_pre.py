@@ -1,52 +1,22 @@
 import time
-from itertools import product, chain
+from itertools import product
 
+import numpy
 '''
-不完备正域保持约简
+正域保持约简
 '''
+from part2.quote_file import div
 
 def readfileBylist(filename):
     file = open(filename,"r")
     list_row = file.readlines()
     list_data = []
     for i in range(len(list_row)):
-        list_line = list_row[i].strip().split(',')
-        list_data.append(list_line)
+        list_line = list_row[i].strip().split(' ')
+        s = [int(j) for j in list_line]
+        list_data.append(s)
     return list_data
 
-def div_dec(my_data): #
-    div_list =[]#返回的划分集合
-    list1 = []
-    for i in range(len(my_data)):  #
-        list1.clear()
-        if list(chain.from_iterable(div_list)).__contains__(i):  # 展开
-            continue
-        list1.append(i)
-        for j in range(i + 1, len(my_data)):
-            if ((my_data[i] == my_data[j])):
-                list1.append(j)
-        div_list.append(list1.copy())
-    return div_list
-
-def get_matrix(my_data): #多个对象的相容类等于单个对象的交集
-    Sp_matrix = [[] for i in range(len(my_data))]
-    for i in range(len(my_data)):
-        for j in range(len(my_data[0])):
-            sp_set = set()
-            for k in range(len(my_data)):
-                if my_data[i][j] ==my_data[k][j] or my_data[i][j] == '?' or my_data[k][j] == '?':
-                    sp_set.add(k)
-            Sp_matrix[i].append(sp_set.copy())
-    return Sp_matrix
-
-def div_base_matric(Sp_matrix):  #相容类下用交集求划分
-    sp_list = []
-    for j in range(len(Sp_matrix)):
-        sp = set(k for k in range(len(Sp_matrix)))
-        for i in range(len(Sp_matrix[0])):
-            sp = sp & Sp_matrix[j][i]
-        sp_list.append(list(sp.copy()))
-    return sp_list
 
 def pos(dec_divlist,con_divlist):  #子集  正域
     pos_list=[]
@@ -64,11 +34,18 @@ def Matrix_construct(con_data,pos_list,dec_data):  #构造基于正域的矩阵
         for j in range(i):
             s.clear()
 
+            # if not({i}.issubset(set(pos_list)) or {j}.issubset(set(pos_list))):
+            #     continue
+            # if dec_data[i][0] == dec_data[j][0]:
+            #     continue
+            # for k in range(len(con_data[0])):
+            #     if (con_data[i][k] != con_data[j][k]):
+            #             s.add(k)
             #全决策1
             if  not(({i}.issubset(set(pos_list)) or {j}.issubset(set(pos_list))) and dec_data[i][0] != dec_data[j][0]):
                 continue
             for k in range(len(con_data[0])):
-                if (con_data[i][k] != con_data[j][k] and con_data[i][k] != '?' and con_data[j][k] != '?'):
+                if (con_data[i][k] != con_data[j][k]):
                     s.add(k)
 
             #全决策2
@@ -84,6 +61,21 @@ def Matrix_construct(con_data,pos_list,dec_data):  #构造基于正域的矩阵
             #     for k in range(len(con_data[0])):
             #         if(con_data[i][k] != con_data[j][k]):
             #             s.add(k)
+
+            #三种情况
+            # if {i}.issubset(set(pos_list)) and {j}.issubset(set(pos_list)) and dec_data[i][0] != dec_data[j][0]:
+            #     for k in range(len(con_data[0])):
+            #         if(con_data[i][k] != con_data[j][k]):
+            #             s.add(k)
+            # if {i}.issubset(set(pos_list)) and not({j}.issubset(set(pos_list))) :
+            #     for k in range(len(con_data[0])):
+            #         if(con_data[i][k] != con_data[j][k]):
+            #             s.add(k)
+            # if {j}.issubset(set(pos_list)) and not({i}.issubset(set(pos_list))) :
+            #     for k in range(len(con_data[0])):
+            #         if(con_data[i][k] != con_data[j][k]):
+            #             s.add(k)
+
             if len(s)!=0:
                 DM[i][j] = s.copy()
     # for i in DM:
@@ -93,6 +85,19 @@ def Matrix_construct(con_data,pos_list,dec_data):  #构造基于正域的矩阵
 耗时间
 '''
 def logic_operation(diffItem_list):#析取，吸收
+    # DM_list = []
+    # for i in diffItem_list:  #排序
+    #     if len(DM_list) != 0:  # 列表不等0要找位置插入
+    #         k = 0
+    #         while k < len(DM_list):
+    #             if len(set(i)) <= len(set(DM_list[k])):
+    #                 DM_list.insert(k, i)
+    #                 break
+    #             k += 1
+    #         if k == len(DM_list):
+    #             DM_list.append(i)
+    #     else:  # 列表为空直接加入
+    #         DM_list.append(i)
     DM_list = sorted(diffItem_list, key=lambda i: len(i), reverse=False)
     m = len(DM_list) - 1# 吸收多余的集合
     while m > 0: #m从后往前
@@ -132,8 +137,7 @@ def Red(DM):#逻辑运算d
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../incomplete_dataSet/house_incomplete.txt")
-    # list_data = readfileBylist("../Qualitative_Bankruptcy.txt")
+    list_data = readfileBylist("例子.txt")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
@@ -144,12 +148,15 @@ if __name__ == '__main__':
             continue
         num_list.append(i[0])
     print(num_list,len(num_list),"决策数")
-    con_divlist = div_base_matric(get_matrix(con_data))
-    dec_divlist = div_dec(dec_data)
+    con_divlist = div(con_data)
+    dec_divlist = div(dec_data)
+
     # print("con_divlist", con_divlist)
     # print("dec_divlist", dec_divlist)
     pos_list = pos(dec_divlist,con_divlist)
+
     DM = Matrix_construct(con_data,pos_list,dec_data)
     Red(DM)
+
     end = time.perf_counter()
     print(end - start, "time")
