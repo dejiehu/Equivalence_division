@@ -10,7 +10,7 @@ def readfileBylist(filename):
     list_row = file.readlines()
     list_data = []
     for i in range(len(list_row)):
-        list_line = list_row[i].strip().split(',')
+        list_line = list_row[i].strip().split('\t')
         list_data.append(list_line)
     return list_data
 
@@ -132,7 +132,7 @@ def Red(DM):#逻辑运算d
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../incomplete_dataSet/Cardiotocography_incomplete.txt")
+    list_data = readfileBylist("../Cardiotocography.txt")
     # list_data = readfileBylist("../Qualitative_Bankruptcy.txt")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")

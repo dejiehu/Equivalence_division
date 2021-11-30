@@ -16,7 +16,7 @@ if __name__ == '__main__':
     print(len(list_data[0])-1,"条件属性数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
-    ratio = int((len(list_data) * len(con_data[0])) * 0.05)
+    ratio = int((len(list_data) * len(con_data[0])) * 0.1)
     print(ratio,"ratio",len(list_data) * len(con_data[0]))
     for i in range(ratio):
         list_data[random.randint(0,len(list_data)-1)][random.randint(0,len(con_data[0])-1)] = '?'
