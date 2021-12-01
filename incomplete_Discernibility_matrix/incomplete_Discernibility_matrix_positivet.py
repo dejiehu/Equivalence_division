@@ -100,10 +100,10 @@ def logic_operation(diffItem_list):#析取，吸收
         while n < m:
             if set(DM_list[n]).issubset(DM_list[m]):
                 del DM_list[m]
-                m = len(DM_list)
                 break
             n += 1
         m -= 1
+    print(DM_list)
     return DM_list
 
 def Red(DM):#逻辑运算d
@@ -124,7 +124,6 @@ def Red(DM):#逻辑运算d
     DM_list = []
     for i in product(*loop_val):
         DM_list.append(set(i))
-    print("daozheer le ", len(DM_list))
     DM_list = logic_operation(DM_list)
     print("约简的集合为：",len(DM_list), DM_list,"约简个数")
     num = 0
@@ -134,7 +133,7 @@ def Red(DM):#逻辑运算d
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../incomplete_dataSet/glass Identification_incomplete.txt")
+    list_data = readfileBylist("../incomplete_dataSet/Cardiotocography_incomplete.txt")
     # list_data = readfileBylist("../Qualitative_Bankruptcy.txt")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")
