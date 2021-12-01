@@ -64,7 +64,7 @@ def Matrix_construct(con_data,gd_list,dec_data):  #构造基于正域的矩阵
     for i in range(len(con_data)):
         for j in range(i):
             s.clear()
-            if  gd_list.__contains__(dec_data[j][0]):
+            if  gd_list[i].__contains__(dec_data[j][0]):
                 continue
             for k in range(len(con_data[0])):
                 if (con_data[i][k] != con_data[j][k] and con_data[i][k] != '?' and con_data[j][k] != '?'):
@@ -85,7 +85,6 @@ def logic_operation(diffItem_list):#析取，吸收
         while n < m:
             if set(DM_list[n]).issubset(DM_list[m]):
                 del DM_list[m]
-                m = len(DM_list)
                 break
             n += 1
         m -= 1
@@ -117,7 +116,7 @@ def Red(DM):#逻辑运算d
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../incomplete_dataSet/Cardiotocography_incomplete.txt")
+    list_data = readfileBylist("../incomplete_dataSet/lymph_incomplete.txt")
     # list_data = readfileBylist("../Qualitative_Bankruptcy.txt")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")

@@ -12,7 +12,7 @@ def readfileBylist(filename):
     list_row = file.readlines()
     list_data = []
     for i in range(len(list_row)):
-        list_line = list_row[i].strip().split(' ')
+        list_line = list_row[i].strip().split('\t')
         s = [int(j) for j in list_line]
         list_data.append(s)
     return list_data
@@ -39,13 +39,11 @@ def Matrix_construct(con_data,gd_list,dec_data):  #构造基于正域的矩阵
         for j in range(len(con_data)):
             s.clear()
             #全决策1
-            if  gd_list.__contains__(dec_data[j][0]):
+            if  gd_list[i].__contains__(dec_data[j][0]):
                 continue
             for k in range(len(con_data[0])):
                 if (con_data[i][k] != con_data[j][k]):
                     s.add(k)
-
-
             if len(s)!=0:
                 DM[i][j] = s.copy()
     return DM
@@ -60,7 +58,6 @@ def logic_operation(diffItem_list):#析取，吸收
         while n < m:
             if set(DM_list[n]).issubset(DM_list[m]):
                 del DM_list[m]
-                m = len(DM_list)
                 break
             n += 1
         m -= 1
@@ -92,7 +89,7 @@ def Red(DM):#逻辑运算d
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("例子.txt")
+    list_data = readfileBylist("../Cardiotocography.txt")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))

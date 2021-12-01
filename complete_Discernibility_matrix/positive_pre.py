@@ -12,7 +12,7 @@ def readfileBylist(filename):
     list_row = file.readlines()
     list_data = []
     for i in range(len(list_row)):
-        list_line = list_row[i].strip().split(' ')
+        list_line = list_row[i].strip().split('\t')
         s = [int(j) for j in list_line]
         list_data.append(s)
     return list_data
@@ -105,7 +105,6 @@ def logic_operation(diffItem_list):#析取，吸收
         while n < m:
             if set(DM_list[n]).issubset(DM_list[m]):
                 del DM_list[m]
-                m = len(DM_list)
                 break
             n += 1
         m -= 1
@@ -137,7 +136,7 @@ def Red(DM):#逻辑运算d
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("例子.txt")
+    list_data = readfileBylist("../Fertility.txt")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
@@ -154,7 +153,7 @@ if __name__ == '__main__':
     # print("con_divlist", con_divlist)
     # print("dec_divlist", dec_divlist)
     pos_list = pos(dec_divlist,con_divlist)
-
+    print(pos_list.__len__())
     DM = Matrix_construct(con_data,pos_list,dec_data)
     Red(DM)
 
