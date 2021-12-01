@@ -93,7 +93,7 @@ def logic_operation(diffItem_list):#析取，吸收
 def Red(DM):#逻辑运算d
     DM_list = []
     for i in range(len(DM)):   #矩阵差别项放到集合DM_list中
-        for j in range(i):
+        for j in range(len(DM)):
             if DM[i][j] == 'None':#把集合为空的丢掉
                 continue
             if len(DM[i][j]) == 0:
