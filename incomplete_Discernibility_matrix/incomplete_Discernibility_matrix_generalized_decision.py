@@ -62,10 +62,12 @@ def Matrix_construct(con_data,gd_list,dec_data):  #构造基于正域的矩阵
     s = set()
     DM = [['None'] *len(con_data)  for _ in range(len(con_data))]
     for i in range(len(con_data)):
-        for j in range(i):
+        for j in range(len(con_data)):
             s.clear()
             if  gd_list[i].__contains__(dec_data[j][0]):
                 continue
+            # if gd_list[i] == gd_list[j] :
+            #     continue
             for k in range(len(con_data[0])):
                 if (con_data[i][k] != con_data[j][k] and con_data[i][k] != '?' and con_data[j][k] != '?'):
                     s.add(k)
@@ -116,7 +118,7 @@ def Red(DM):#逻辑运算d
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../incomplete_dataSet/lymph_incomplete.txt")
+    list_data = readfileBylist("my.txt")
     # list_data = readfileBylist("../Qualitative_Bankruptcy.txt")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")
