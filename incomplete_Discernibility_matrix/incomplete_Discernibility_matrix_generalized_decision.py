@@ -118,7 +118,7 @@ def Red(DM):#逻辑运算d
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../incomplete_dataSet/lymph_incomplete.txt")
+    list_data = readfileBylist("../incomplete_dataSet/Cardiotocography_incomplete.txt")
     # list_data = readfileBylist("../Qualitative_Bankruptcy.txt")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")
@@ -139,3 +139,4 @@ if __name__ == '__main__':
     Red(DM)
     end = time.perf_counter()
     print(end - start, "time")
+# 1 [{0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}] 约简个数20.0 平均长度
