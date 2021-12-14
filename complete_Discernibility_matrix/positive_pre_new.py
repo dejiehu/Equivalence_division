@@ -61,6 +61,15 @@ def logic_operation(diffItem_list):#析取，吸收
         m -= 1
     return DM_list
 
+def product(fix,dis):
+    result_list =[]
+    for i in dis:
+        for j in fix:
+            temp_j=j.copy()
+            temp_j.add(i)
+            result_list.append(temp_j)
+    return result_list
+
 def Red(DM):#逻辑运算d
     DM_list = []
     for i in range(len(DM)):   #矩阵差别项放到集合DM_list中
@@ -76,14 +85,12 @@ def Red(DM):#逻辑运算d
     for i in DM_list:
         loop_val.append(i)
     DM_list = []
+    if len(loop_val) > 1:
+        DM_list += [loop_val[0]]
+        for i in range(1,len(loop_val)):
+            DM_list = product(DM_list,loop_val[i])
+            DM_list = logic_operation(DM_list)
 
-    if len(loop_val) != 1:
-        for i in range(len(DM_list)-1):
-            
-
-
-
-    DM_list = logic_operation(DM_list)
     print("约简的集合为：",len(DM_list), DM_list,"约简个数")
     num = 0
     for i in DM_list:
@@ -92,7 +99,7 @@ def Red(DM):#逻辑运算d
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../Fertility.txt")
+    list_data = readfileBylist("../german.txt")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
