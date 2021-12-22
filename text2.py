@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 if __name__ == '__main__':
-    filename = 'data.txt'
+    filename = 'complete_dataSet_classication/data.txt'
     rsnp = np.loadtxt(filename)
     rspd = pd.DataFrame(rsnp, columns=list('abcde'))
     print(type(rsnp))

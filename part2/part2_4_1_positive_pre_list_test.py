@@ -84,7 +84,7 @@ def Red(DM):#逻辑运算
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../Teaching Assistant Evaluation.txt")
+    list_data = readfileBylist("../complete_dataSet_classication/Teaching Assistant Evaluation.txt")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
     con_divlist = div(con_data)

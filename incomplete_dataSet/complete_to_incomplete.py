@@ -11,7 +11,7 @@ def readfileBylist(filename):
     return list_data
 
 if __name__ == '__main__':
-    list_data = readfileBylist("../glass Identification.txt")
+    list_data = readfileBylist("../complete_dataSet_classication/glass Identification.txt")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))

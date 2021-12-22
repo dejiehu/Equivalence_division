@@ -106,7 +106,7 @@ def Red(con_data,core_list,dec_data):
 
 if __name__ == "__main__":
     start = time.perf_counter()
-    list_data = readfileBylist("../german_o.txt")
+    list_data = readfileBylist("../complete_dataSet_classication/german_o.txt")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
     con_divlist = div(con_data)

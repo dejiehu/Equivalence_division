@@ -68,7 +68,7 @@ def readfileBylist(filename):
         s = [int(j) for j in list_line]
         list_data.append(s)
     return list_data
-list_data = readfileBylist("../data.txt")
+list_data = readfileBylist("../complete_dataSet_classication/data.txt")
 print(list_data)
 del list_data[0][0]
 print(list_data)

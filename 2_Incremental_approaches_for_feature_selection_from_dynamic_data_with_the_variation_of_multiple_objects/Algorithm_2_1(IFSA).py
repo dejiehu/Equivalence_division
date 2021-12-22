@@ -169,11 +169,11 @@ def merge_divlist(U_data,Ux_data,U_dec,Ux_dec):#      U/C + Ux/C
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    U_data = readfile('../german.txt')
+    U_data = readfile('../complete_dataSet_classication/german.txt')
     # RED = [0, 3]
     RED = [5,12,3,7,2]
     RED = [0,1,3,4,6,8,11,12]
-    Ux_data = readfile('../german_add.txt')
+    Ux_data = readfile('../complete_dataSet_classication/german_add.txt')
     U_Ux_data = numpy.append(U_data,Ux_data,axis=0)
 
     U_con_data = deal_data(U_data, U_data.shape[1] - 1, U_data.shape[1] - 1)
