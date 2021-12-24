@@ -4,7 +4,7 @@ from sklearn.svm import SVC
 from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import cross_val_score
 
-context = np.loadtxt("")
+context = np.loadtxt("../Numerical_dataSet/seeds_dataset.txt")
 rows, cols = context.shape
 
 # attributes = [i for i in range(cols-1)]

@@ -6,7 +6,7 @@ def readfileBylist(filename):
     list_row = file.readlines()
     list_data = []
     for i in range(len(list_row)):
-        list_line = list_row[i].strip().split(' ')
+        list_line = list_row[i].strip().split('\t')
         s = [float(j) for j in list_line]
         list_data.append(s)
     return list_data
@@ -118,7 +118,10 @@ def red(dec_divlist,all_top_list):
             for j in range(i):
                 CD += CD_attr(dec_divlist[i], dec_divlist[j], attr_data)
                 DIS += DIS_attr(dec_divlist[i], dec_divlist[j], attr_data)
-        dict[k] = CD / DIS
+        if DIS == 0:
+            dict[k] = len(dec_divlist) * (len(dec_divlist) - 1) / 2
+        else:
+            dict[k] = CD / DIS
     dict = sorted(dict.items(), key=lambda x: x[1], reverse=True)  # 按字典集合中，每一个元组的第二个元素排列。
     sorted_list = []
     for i in dict:
@@ -128,6 +131,13 @@ def red(dec_divlist,all_top_list):
     dep_num = dependency(pos(red_top_list,dec_divlist),red_top_list)
     i = 0
     print(sorted_list)
+    temp_sorted_list = sorted_list.copy()
+    del temp_sorted_list[0:int(len(sorted_list) / 2)]
+    while dependency(pos(get_topList(temp_sorted_list,all_top_list),dec_divlist),get_topList(temp_sorted_list,all_top_list)) == dep_num:
+        sorted_list = temp_sorted_list.copy()
+        del temp_sorted_list[0:int(len(sorted_list) / 2)]
+    print(sorted_list,"sorted_list???")
+    red_list = sorted_list.copy()
     while i < len(sorted_list):
         del sorted_list[i]
         if dep_num == dependency(pos(get_topList(sorted_list,all_top_list),dec_divlist),get_topList(sorted_list,all_top_list)):
@@ -140,9 +150,12 @@ def red(dec_divlist,all_top_list):
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("data.txt")
+    list_data = readfileBylist("../Numerical_dataSet/sonar.txt")
+    print(len(list_data[0]))
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
     dec_divlist = div(dec_data)
-    all_top_list = get_top(con_data, 5)
+    all_top_list = get_top(con_data, int(0.25*len(con_data)))
     red(dec_divlist,all_top_list)
+    end = time.perf_counter()
+    print("time", end - start)
