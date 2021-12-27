@@ -3,7 +3,7 @@ import time
 import numpy
 
 def readfile():#读文件
-    my_data = numpy.loadtxt('../german.txt')
+    my_data = numpy.loadtxt("../complete_dataSet_classication/data.txt")
     print(my_data)
     print("my_data.shape:",my_data.shape)
     return my_data
@@ -129,6 +129,7 @@ def print_red(my_data,Red_data):
 if __name__ == "__main__":
     start = time.perf_counter()
     my_data = readfile()
+    print(my_data)
     con_data = deal_data(my_data, my_data.shape[1] - 1, my_data.shape[1] - 1)
     dec_data = deal_data(my_data, 0, my_data.shape[1] - 2)
     con_divlist = div(con_data)

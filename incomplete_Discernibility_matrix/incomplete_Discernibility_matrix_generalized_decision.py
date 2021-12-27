@@ -124,19 +124,22 @@ if __name__ == '__main__':
     print(len(list_data[0])-1,"条件属性数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
-    num_list = []
-    for i in dec_data:
-        if num_list.__contains__(i[0]):
-            continue
-        num_list.append(i[0])
-    print(num_list,len(num_list),"决策数")
-    con_divlist = div_base_matric(get_matrix(con_data))
-    dec_divlist = div_dec(dec_data)
-    # print("con_divlist", con_divlist)
-    # print("dec_divlist", dec_divlist)
-    gd_list = generalized_decision(con_divlist,dec_data)
-    DM = Matrix_construct(con_data,gd_list,dec_data)
-    Red(DM)
-    end = time.perf_counter()
-    print(end - start, "time")
-# 1 [{0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}] 约简个数20.0 平均长度
+    print(dec_data)
+
+
+
+    # num_list = []
+    # for i in dec_data:
+    #     if num_list.__contains__(i[0]):
+    #         continue
+    #     num_list.append(i[0])
+    # print(num_list,len(num_list),"决策数")
+    # con_divlist = div_base_matric(get_matrix(con_data))
+    # dec_divlist = div_dec(dec_data)
+    # # print("con_divlist", con_divlist)
+    # # print("dec_divlist", dec_divlist)
+    # gd_list = generalized_decision(con_divlist,dec_data)
+    # DM = Matrix_construct(con_data,gd_list,dec_data)
+    # Red(DM)
+    # end = time.perf_counter()
+    # print(end - start, "time")

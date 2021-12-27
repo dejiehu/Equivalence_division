@@ -37,15 +37,17 @@ from sklearn.neighbors import KNeighborsClassifier
 # warnings.filterwarnings("ignore")
 from sklearn.model_selection import cross_val_score
 
-data = load_iris("../Numerical_dataSet/")
+data = load_iris()
+# print(data)
 train = data.data
-print(train)
+print(train,"train",type(train))
 test = data.target
 print(test)
 knn = KNeighborsClassifier(3)
-# print (cross_val_score(knn, train, test, cv=10, scoring='accuracy').mean()
+print (cross_val_score(knn, train, test, cv=10, scoring='accuracy').mean())
 scores = cross_val_score(knn, train, test, cv=10, scoring='accuracy')
-# print(sum(scores))
+print(sum(scores))
+
 sum = 0
 for i in range(len(scores)):
     sum = sum + scores[i]
