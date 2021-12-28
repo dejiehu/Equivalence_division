@@ -11,7 +11,7 @@ def readfileBylist(filename):
     return list_data
 
 if __name__ == '__main__':
-    list_data = readfileBylist("../complete_dataSet_classication/Cardiotocography.txt")
+    list_data = readfileBylist("../complete_dataSet_classication/zoo.txt")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     for i in range(ratio):
         attr_num = random.randint(0,len(con_data[0])-1)
         list_data[random.randint(0,len(list_data)-1)][attr_num] = attr_all_set[attr_num]
-    with open('Cardiotocography_setValued.txt', 'w') as f:
+    with open('zoo_setValued.txt', 'w') as f:
         for i in range(len(list_data)):
             for j in range(len(list_data[0])):
                 if j != len(con_data[0]):
