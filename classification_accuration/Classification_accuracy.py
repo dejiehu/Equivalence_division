@@ -28,6 +28,7 @@ svc = SVC(kernel='rbf', probability=True)  # svm分类器
 knn = KNeighborsClassifier(classes)
 
 scores = cross_val_score(svc, train, test, cv=10, scoring='accuracy')
+# scores2 = cross_val_score(knn, train, test, cv=10, scoring='accuracy')
 print(scores)
 average_scores = sum(scores)/10
 print("average accuracy", average_scores * 100, "%")
