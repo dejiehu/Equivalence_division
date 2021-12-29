@@ -2,6 +2,8 @@
 基于正域 正域加速
 '''
 import time
+from itertools import chain
+
 from part2.quote_file import div,deal_data,getCore_data,del_dup,data_add
 
 def readfileBylist(filename):
@@ -9,49 +11,63 @@ def readfileBylist(filename):
     list_row = file.readlines()
     list_data = []
     for i in range(len(list_row)):
-        list_line = list_row[i].strip().split('\t')
-        s = [int(j) for j in list_line]
-        list_data.append(s)
+        list_line = list_row[i].strip().split(' ')
+        list_data.append(list_line)
+    print(list_data)
     return list_data
 
-def pos(dec_divlist,con_divlist):  #子集  正域集合
+def div_dec(my_data): #
+    div_list =[]#返回的划分集合
+    list1 = []
+    for i in range(len(my_data)):  #
+        list1.clear()
+        if list(chain.from_iterable(div_list)).__contains__(i):  # 展开
+            continue
+        list1.append(i)
+        for j in range(i + 1, len(my_data)):
+            if ((my_data[i] == my_data[j])):
+                list1.append(j)
+        div_list.append(list1.copy())
+    return div_list
+
+def get_matrix(my_data): #多个对象的相容类等于单个对象的交集
+    Sp_matrix = [[] for i in range(len(my_data))]
+    for i in range(len(my_data)):
+        for j in range(len(my_data[0])):
+            sp_set = set()
+            for k in range(len(my_data)):
+                if len(eval(my_data[i][j]) & eval(my_data[k][j])) != 0:
+                    sp_set.add(k)
+            Sp_matrix[i].append(sp_set.copy())
+    return Sp_matrix
+
+def div_base_matric(Sp_matrix):  #相容类下用交集求划分
+    sp_list = []
+    for j in range(len(Sp_matrix)):
+        sp = set(k for k in range(len(Sp_matrix)))
+        for i in range(len(Sp_matrix[0])):
+            sp = sp & Sp_matrix[j][i]
+        sp_list.append(list(sp.copy()))
+    return sp_list
+
+def pos(dec_divlist,con_divlist):  #子集  正域集合   会快一点
     pos_list=[]
     temp_con_divlist = [con_divlist[i][:] for i in range(len(con_divlist))]
-
     for j in range(len(temp_con_divlist)-1,-1,-1):
         for i in dec_divlist:
             if set(temp_con_divlist[j]).issubset(i):
-                pos_list += temp_con_divlist[j]
+                pos_list += [j]
                 del temp_con_divlist[j]
                 break
     return  pos_list
-
-# def pos(dec_divlist,con_divlist):  #子集  正域集合
-#     pos_list=[]
-#     for i in dec_divlist:
-#          for j in con_divlist:
-#             if set(j).issubset(i):
-#                 pos_list +=j
-#     return  pos_list
 
 def dependency(pos_list,my_data):#依赖度
      dep_num =  (len(pos_list) / len(my_data))
      # print("依赖度:",dep_num)
      return dep_num
 
-def core(con_data,dec_divlist,dep_num):# 根据 属性重要度  求核
+def Red(con_data,dec_data):
     core_list = []
-    for i in range(len(con_data[0])-1,-1,-1):
-        temp_con_data = deal_data(con_data,i)
-        temp_con_divlist = div(temp_con_data)
-        pos_list = pos(dec_divlist, temp_con_divlist)
-        if dep_num != dependency(pos_list,con_data):
-            print("第",i,"个属性为核属性")
-            core_list.append(i)
-    print(core_list,"core_list")
-    return core_list
-
-def Red(con_data,core_list,dec_data):
     red_data = getCore_data(core_list, con_data)  # core_data
     red_list = core_list.copy()
     temp_red_data = [red_data[i][:] for i in range(len(red_data))]
@@ -107,21 +123,18 @@ def Red(con_data,core_list,dec_data):
 
 if __name__ == "__main__":
     start = time.perf_counter()
-    list_data = readfileBylist("../complete_dataSet_classication/german_o.txt")
+    list_data = readfileBylist("set_value.txt")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
-    con_divlist = div(con_data)
-    dec_divlist = div(dec_data)
-    # print("con_divlist", con_divlist)
-    # print("dec_divlist", dec_divlist)
+    con_divlist = div_base_matric(get_matrix(con_data))
+    dec_divlist = div_dec(dec_data)
+    print("con_divlist", con_divlist)
+    print("dec_divlist", dec_divlist)
     pos_list = pos(dec_divlist,con_divlist)
-    # print(" pos_list",pos_list)
+    print("pos_list",pos_list)
     dep_num = dependency(pos_list,list_data)
     print("dep_num",dep_num)
-    end1 = time.perf_counter()
-    print(end1 - start)
-    core_list = core(con_data, dec_divlist, dep_num)
-    red_data,red_list =Red(con_data,core_list,dec_data)
-    # De_redundancy(red_data,dec_divlist,dep_num,red_list)
-    end = time.perf_counter()
-    print(end - start)
+    red_data,red_list =Red(con_data,dec_data)
+    # # De_redundancy(red_data,dec_divlist,dep_num,red_list)
+    # end = time.perf_counter()
+    # print(end - start)
