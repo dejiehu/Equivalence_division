@@ -34,48 +34,11 @@ def Matrix_construct(con_data,pos_list,dec_data):  #构造基于正域的矩阵
         for j in range(i):
             s.clear()
 
-            # if not({i}.issubset(set(pos_list)) or {j}.issubset(set(pos_list))):
-            #     continue
-            # if dec_data[i][0] == dec_data[j][0]:
-            #     continue
-            # for k in range(len(con_data[0])):
-            #     if (con_data[i][k] != con_data[j][k]):
-            #             s.add(k)
-            #全决策1
             if  not(({i}.issubset(set(pos_list)) or {j}.issubset(set(pos_list))) and dec_data[i][0] != dec_data[j][0]):
                 continue
             for k in range(len(con_data[0])):
                 if (con_data[i][k] != con_data[j][k]):
                     s.add(k)
-
-            #全决策2
-            # if {i}.issubset(set(pos_list)) and {j}.issubset(set(pos_list)) and dec_data[i][0] != dec_data[j][0]:
-            #     for k in range(len(con_data[0])):
-            #         if(con_data[i][k] != con_data[j][k]):
-            #             s.add(k)
-            # if {i}.issubset(set(pos_list)) and not({j}.issubset(set(pos_list))) and dec_data[i][0] != dec_data[j][0]:
-            #     for k in range(len(con_data[0])):
-            #         if(con_data[i][k] != con_data[j][k]):
-            #             s.add(k)
-            # if {j}.issubset(set(pos_list)) and not({i}.issubset(set(pos_list))) and dec_data[i][0] != dec_data[j][0]:
-            #     for k in range(len(con_data[0])):
-            #         if(con_data[i][k] != con_data[j][k]):
-            #             s.add(k)
-
-            #三种情况
-            # if {i}.issubset(set(pos_list)) and {j}.issubset(set(pos_list)) and dec_data[i][0] != dec_data[j][0]:
-            #     for k in range(len(con_data[0])):
-            #         if(con_data[i][k] != con_data[j][k]):
-            #             s.add(k)
-            # if {i}.issubset(set(pos_list)) and not({j}.issubset(set(pos_list))) :
-            #     for k in range(len(con_data[0])):
-            #         if(con_data[i][k] != con_data[j][k]):
-            #             s.add(k)
-            # if {j}.issubset(set(pos_list)) and not({i}.issubset(set(pos_list))) :
-            #     for k in range(len(con_data[0])):
-            #         if(con_data[i][k] != con_data[j][k]):
-            #             s.add(k)
-
             if len(s)!=0:
                 DM[i][j] = s.copy()
     # for i in DM:
@@ -85,19 +48,6 @@ def Matrix_construct(con_data,pos_list,dec_data):  #构造基于正域的矩阵
 耗时间
 '''
 def logic_operation(diffItem_list):#析取，吸收
-    # DM_list = []
-    # for i in diffItem_list:  #排序
-    #     if len(DM_list) != 0:  # 列表不等0要找位置插入
-    #         k = 0
-    #         while k < len(DM_list):
-    #             if len(set(i)) <= len(set(DM_list[k])):
-    #                 DM_list.insert(k, i)
-    #                 break
-    #             k += 1
-    #         if k == len(DM_list):
-    #             DM_list.append(i)
-    #     else:  # 列表为空直接加入
-    #         DM_list.append(i)
     DM_list = sorted(diffItem_list, key=lambda i: len(i), reverse=False)
     m = len(DM_list) - 1# 吸收多余的集合
     while m > 0: #m从后往前

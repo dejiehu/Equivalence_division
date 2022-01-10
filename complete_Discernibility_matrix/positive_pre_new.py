@@ -12,7 +12,7 @@ def readfileBylist(filename):
     list_row = file.readlines()
     list_data = []
     for i in range(len(list_row)):
-        list_line = list_row[i].strip().split('\t')
+        list_line = list_row[i].strip().split(' ')
         s = [int(j) for j in list_line]
         list_data.append(s)
     return list_data
@@ -99,7 +99,8 @@ def Red(DM):#逻辑运算d
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../complete_dataSet_classication/german.txt")
+    # list_data = readfileBylist("../complete_dataSet_classication/german.txt")
+    list_data = readfileBylist("例子.txt")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
