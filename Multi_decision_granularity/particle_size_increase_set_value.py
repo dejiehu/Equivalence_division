@@ -50,7 +50,7 @@ def div_base_matric(Sp_matrix):  #相容类下用交集求划分
         sp_list.append(list(sp.copy()))
     return sp_list
 
-def pos(dec_divlist,con_divlist):  #子集  正域
+def pos_specialDec(dec_divlist,con_divlist):  #子集  正域
     pos_list=[]
     for j in range(len(con_divlist)):
         if set(con_divlist[j]).issubset(dec_divlist):
