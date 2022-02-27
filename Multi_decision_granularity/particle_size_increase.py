@@ -100,6 +100,7 @@ def Red(DM):#逻辑运算
     print("约简的集合为：",len(DM_list), DM_list)
     # end = time.perf_counter()
     # print(end - start, "time")
+
 if __name__ == '__main__':
     start = time.perf_counter()
     list_data = readfileBylist("complete.txt")
