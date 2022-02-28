@@ -12,7 +12,7 @@ def readfileBylist(filename):
     list_row = file.readlines()
     list_data = []
     for i in range(len(list_row)):
-        list_line = list_row[i].strip().split('\t')
+        list_line = list_row[i].strip().split(' ')
         s = [int(j) for j in list_line]
         list_data.append(s)
     return list_data
@@ -30,20 +30,37 @@ def pos(dec_divlist,con_divlist):  #子集  正域
 def Matrix_construct(con_data,pos_list,dec_data):  #构造基于正域的矩阵
     s = set()
     DM = [['None'] *len(con_data)  for _ in range(len(con_data))]
+    core = []
+
     for i in range(len(con_data)):
         for j in range(i):
+            m = 0
             s.clear()
 
             if  not(({i}.issubset(set(pos_list)) or {j}.issubset(set(pos_list))) and dec_data[i][0] != dec_data[j][0]):
                 continue
-            for k in range(len(con_data[0])):
-                if (con_data[i][k] != con_data[j][k]):
-                    s.add(k)
+            if len(core) != 0:
+                for c in core:
+                    if con_data[i][c] != con_data[j][c]:
+                        break
+                    else:
+                        for k in range(len(con_data[0])):
+                            if (con_data[i][k] != con_data[j][k]):
+                                s.add(k)
+                                m += 1
+            else:
+                for k in range(len(con_data[0])):
+                    if (con_data[i][k] != con_data[j][k]):
+                        s.add(k)
+                        m += 1
+            if m == 1:
+                core += s
 
             if len(s)!=0:
                 DM[i][j] = s.copy()
-    # for i in DM:
-    #     print(i)
+    print(core,"core")
+    for i in DM:
+        print(i,"矩阵")
     return DM
 '''
 耗时间
@@ -99,7 +116,7 @@ def Red(DM):#逻辑运算d
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../complete_dataSet_classication/zoo.txt")
+    list_data = readfileBylist("../complete_dataSet_classication/data.txt")
     # list_data = readfileBylist("例子.txt")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")
