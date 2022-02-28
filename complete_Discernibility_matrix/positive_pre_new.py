@@ -42,8 +42,8 @@ def Matrix_construct(con_data,pos_list,dec_data):  #构造基于正域的矩阵
 
             if len(s)!=0:
                 DM[i][j] = s.copy()
-    for i in DM:
-        print(i,"矩阵")
+    # for i in DM:
+    #     print(i,"矩阵")
     return DM
 '''
 耗时间
@@ -99,7 +99,7 @@ def Red(DM):#逻辑运算d
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../complete_dataSet_classication/data.txt")
+    list_data = readfileBylist("../complete_dataSet_classication/house.txt")
     # list_data = readfileBylist("例子.txt")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")

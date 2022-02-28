@@ -112,7 +112,7 @@ def Red(DM):#逻辑运算d
 if __name__ == '__main__':
     # start = time.perf_counter()
     # list_data = readfileBylist("../complete_dataSet_classication/german.txt")
-    list_data = readfileBylist("../Numerical_decision_dataSet/Combined Cycle Power Plant.csv")
+    list_data = readfileBylist("../Numerical_decision_dataSet/servo.csv")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
@@ -147,11 +147,12 @@ if __name__ == '__main__':
         if class_len >= len(dec_divlist[i]):
             small_len = i
     print(len(dec_divlist[small_len]),"最小的类")
+
     for i in range(10):
         start1 = time.perf_counter()
         temp_con_data = con_data[0:int(len(con_data)*(i+1)/10)]
         con_divlist =div(temp_con_data)
-        pos_list = pos_specialDec(dec_divlist[small_len],con_divlist)
+        pos_list = pos_specialDec(dec_divlist[0],con_divlist)
         # print(len(dec_divlist[0]))
         DM = Matrix_construct(temp_con_data,pos_list,y_pred)
         Red(DM)
