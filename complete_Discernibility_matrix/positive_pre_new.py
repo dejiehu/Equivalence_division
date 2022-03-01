@@ -12,7 +12,7 @@ def readfileBylist(filename):
     list_row = file.readlines()
     list_data = []
     for i in range(len(list_row)):
-        list_line = list_row[i].strip().split(' ')
+        list_line = list_row[i].strip().split('\t')
         s = [int(j) for j in list_line]
         list_data.append(s)
     return list_data
@@ -90,16 +90,22 @@ def Red(DM):#逻辑运算d
         for i in range(1,len(loop_val)):
             DM_list = product(DM_list,loop_val[i])
             DM_list = logic_operation(DM_list)
+    ###############修改过
+    elif len(loop_val[0]) == 1:
+        DM_list = loop_val.copy()
+    elif len(loop_val[0]) > 1:
+        for i in loop_val[0]:
+            DM_list.append({i})
 
     print("约简的集合为：",len(DM_list), DM_list,"约简个数")
     num = 0
     for i in DM_list:
         num += len(i)
-    print(num/len(DM_list),"平均长度")
+    # print(num/len(DM_list),"平均长度")
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../complete_dataSet_classication/house.txt")
+    list_data = readfileBylist("../complete_dataSet_classication/zoo.txt")
     # list_data = readfileBylist("例子.txt")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")

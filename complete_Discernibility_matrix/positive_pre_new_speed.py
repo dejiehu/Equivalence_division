@@ -103,6 +103,11 @@ def Red(DM):#逻辑运算d
         for i in range(1,len(loop_val)):
             DM_list = product(DM_list,loop_val[i])
             DM_list = logic_operation(DM_list)
+    elif len(loop_val[0]) == 1:
+        DM_list = loop_val.copy()
+    elif len(loop_val[0]) > 1:
+        for i in loop_val[0]:
+            DM_list.append({i})
 
     print("约简的集合为：",len(DM_list), DM_list,"约简个数")
     num = 0

@@ -97,13 +97,21 @@ def Red(DM):#逻辑运算d
     for i in DM_list:
         loop_val.append(i)
     DM_list = []
+    print("测试",len(loop_val))
     if len(loop_val) > 1:
         DM_list += [loop_val[0]]
         for i in range(1,len(loop_val)):
             DM_list = product1(DM_list,loop_val[i])
             DM_list = logic_operation(DM_list)
+    elif len(loop_val) == 0:
+        DM_list = loop_val.copy()
+    elif len(loop_val[0]) == 1:
+        DM_list = loop_val.copy()
+    elif len(loop_val[0]) > 1:
+        for i in loop_val[0]:
+            DM_list.append({i})
 
-    # print("约简的集合为：",len(DM_list), DM_list,"约简个数")
+    print("约简的集合为：",len(DM_list), DM_list,"约简个数")
     # num = 0
     # for i in DM_list:
     #     num += len(i)
@@ -119,14 +127,14 @@ if __name__ == '__main__':
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
     # print(dec_data)
     # print(con_data)
-    K=3
-    y_pred = KMeans(n_clusters=K, max_iter=600).fit_predict(dec_data)
+    K=8
+    y_pred = KMeans(n_clusters=K, max_iter=60000).fit_predict(dec_data)
     print(y_pred, "划分结果",len(y_pred),(type(y_pred)))
     dec_divlist = [[]] * K
     for i in range(len(y_pred)):
         dec_divlist[y_pred[i]] = dec_divlist[y_pred[i]] + [i]
 
-    # print(dec_divlist)
+    print("dec_divlist",dec_divlist)
 
     time_list = []
     x = []
@@ -136,6 +144,7 @@ if __name__ == '__main__':
         temp_con_data = con_data[0:int(len(con_data)*(i+1)/10)]
         con_divlist = div(temp_con_data)
         pos_list = pos(dec_divlist,con_divlist)
+        # print("pos_list",pos_list)
         DM = Matrix_construct(temp_con_data,pos_list,y_pred)
         Red(DM)
         end = time.perf_counter()
@@ -152,7 +161,8 @@ if __name__ == '__main__':
         start1 = time.perf_counter()
         temp_con_data = con_data[0:int(len(con_data)*(i+1)/10)]
         con_divlist =div(temp_con_data)
-        pos_list = pos_specialDec(dec_divlist[0],con_divlist)
+        pos_list = pos_specialDec(dec_divlist[small_len],con_divlist)
+        print("pos_list",pos_list)
         # print(len(dec_divlist[0]))
         DM = Matrix_construct(temp_con_data,pos_list,y_pred)
         Red(DM)
