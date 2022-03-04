@@ -73,13 +73,6 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\Numerical_decision_dataSet\Yacht Hydrodynamics_1.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="&#9;" />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\Numerical_decision_dataSet\servo.csv">
           <value>
             <Attribute>
@@ -144,13 +137,6 @@
           </value>
         </entry>
         <entry key="\special_decision\multi_dataSet\Yacht Hydrodynamics.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="&#9;" />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\special_decision\multi_dataSet\aer.csv">
           <value>
             <Attribute>
               <option name="separator" value="&#9;" />
