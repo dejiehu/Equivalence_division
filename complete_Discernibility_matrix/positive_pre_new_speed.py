@@ -99,7 +99,8 @@ def Red(DM):#逻辑运算d
         loop_val.append(i)
     DM_list = []
     if len(loop_val) > 1:
-        DM_list += [loop_val[0]]
+        for i in loop_val[0]:
+            DM_list.append({i})
         for i in range(1,len(loop_val)):
             DM_list = product(DM_list,loop_val[i])
             DM_list = logic_operation(DM_list)

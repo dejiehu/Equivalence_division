@@ -81,14 +81,20 @@ def Red(DM):#逻辑运算d
             DM_list.append(DM[i][j])
     DM_list = logic_operation(DM_list)#集合析取逻辑操作（多余集合被吸收）
     print(DM_list,len(DM_list),"多余集合被吸收")
-    loop_val = []#将合取式差分为析取式     loop_val = [{1,2},{1,3}]
-    for i in DM_list:
-        loop_val.append(i)
+    loop_val = [{1, 4, 6, 7, 9}, {1, 3, 4, 7, 9}, {0, 1, 5, 7, 9}, {1, 4, 5, 7, 9}, {1, 3, 4, 6, 7, 8}]
+                # {2, 3, 5, 6, 8, 9}, {0, 2, 3, 4, 7, 8}, {2, 3, 4, 6, 7, 9}, {2, 4, 5, 6, 7, 9}, {0, 3, 4, 6, 7, 9},
+                # {0, 4, 6, 7, 8, 9}, {1, 3, 4, 6, 8, 9}, {1, 2, 4, 5, 6, 9}, {1, 2, 3, 4, 7, 8}, {2, 3, 4, 5, 7, 8, 9},
+                # {2, 3, 4, 5, 6, 7, 8}, {1, 2, 3, 5, 7, 8, 9}, {0, 2, 3, 4, 6, 8, 9}, {0, 1, 2, 4, 5, 6, 8}, {1, 2, 3, 4, 5, 6, 7},
+                # {0, 1, 2, 4, 7, 8, 9}, {3, 4, 5, 6, 7, 8, 9}, {0, 1, 2, 3, 6, 7, 8, 9}]#将合取式差分为析取式     loop_val = [{1,2},{1,3}]
+    # for i in DM_list:
+    #     loop_val.append(i)
     DM_list = []
     if len(loop_val) > 1:
-        DM_list += [loop_val[0]]
+        for i in loop_val[0]:
+            DM_list.append({i})
         for i in range(1,len(loop_val)):
             DM_list = product(DM_list,loop_val[i])
+
             DM_list = logic_operation(DM_list)
     ###############修改过
     elif len(loop_val[0]) == 1:

@@ -54,7 +54,7 @@ def pos_specialDec(dec_divlist,con_divlist):  #子集  正域
     pos_list=[]
     for j in range(len(con_divlist)):
         if set(con_divlist[j]).issubset(dec_divlist):
-            pos_list += [j]
+            pos_list += con_divlist[j]
             continue
     # print(pos_list,"pos_list")
     return pos_list
@@ -134,7 +134,7 @@ if __name__ == '__main__':
     dec_divlist = div_dec(dec_data)
     print("con_divlist", con_divlist)
     print("dec_divlist", dec_divlist)
-    pos_list = pos(dec_divlist[0] + dec_divlist[1],con_divlist)
+    pos_list = pos_specialDec(dec_divlist[0] + dec_divlist[1],con_divlist)
     print(pos_list)
     DM = Matrix_construct(con_data,pos_list)
     Red(DM)

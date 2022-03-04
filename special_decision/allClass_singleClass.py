@@ -35,9 +35,12 @@ def pos(dec_divlist,con_divlist):  #子集  正域
 
 def pos_specialDec(dec_divlist,con_divlist):  #子集  正域
     pos_list=[]
+    print("正域")
     for j in range(len(con_divlist)):
+        # print(con_divlist[j],dec_divlist)
         if set(con_divlist[j]).issubset(dec_divlist):
-            pos_list += [j]
+            print("自己")
+            pos_list += con_divlist[j]    ############修改过
             continue
     return pos_list
 
@@ -97,9 +100,9 @@ def Red(DM):#逻辑运算d
     for i in DM_list:
         loop_val.append(i)
     DM_list = []
-    print("测试",len(loop_val))
-    if len(loop_val) > 1:
-        DM_list += [loop_val[0]]
+    if len(loop_val) > 1: ###############################      修改过
+        for i in loop_val[0]:
+            DM_list.append({i})
         for i in range(1,len(loop_val)):
             DM_list = product1(DM_list,loop_val[i])
             DM_list = logic_operation(DM_list)
@@ -111,16 +114,17 @@ def Red(DM):#逻辑运算d
         for i in loop_val[0]:
             DM_list.append({i})
 
-    print("约简的集合为：",len(DM_list), DM_list,"约简个数")
-    # num = 0
-    # for i in DM_list:
-    #     num += len(i)
-    # print(num/len(DM_list),"平均长度")
+    print("约简的集合为：",len(DM_list),DM_list)
+    num = 0
+    if len(DM_list) != 0:
+        for i in DM_list:
+            num += len(i)
+        print(num/len(DM_list),"平均长度")
 
 if __name__ == '__main__':
     # start = time.perf_counter()
     # list_data = readfileBylist("../complete_dataSet_classication/german.txt")
-    list_data = readfileBylist("../Numerical_decision_dataSet/servo.csv")
+    list_data = readfileBylist("../Numerical_decision_dataSet/Yacht Hydrodynamics.csv")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
@@ -128,8 +132,8 @@ if __name__ == '__main__':
     # print(dec_data)
     # print(con_data)
     K=8
-    y_pred = KMeans(n_clusters=K, max_iter=60000).fit_predict(dec_data)
-    print(y_pred, "划分结果",len(y_pred),(type(y_pred)))
+    y_pred = KMeans(n_clusters=K, max_iter=300000).fit_predict(dec_data)
+    # print(y_pred, "划分结果",len(y_pred),(type(y_pred)))
     dec_divlist = [[]] * K
     for i in range(len(y_pred)):
         dec_divlist[y_pred[i]] = dec_divlist[y_pred[i]] + [i]
@@ -144,7 +148,7 @@ if __name__ == '__main__':
         temp_con_data = con_data[0:int(len(con_data)*(i+1)/10)]
         con_divlist = div(temp_con_data)
         pos_list = pos(dec_divlist,con_divlist)
-        # print("pos_list",pos_list)
+        # print("pos_list",pos_list,len(pos_list))
         DM = Matrix_construct(temp_con_data,pos_list,y_pred)
         Red(DM)
         end = time.perf_counter()
@@ -154,22 +158,22 @@ if __name__ == '__main__':
     class_len = len(dec_divlist[0])
     for i in range(len(dec_divlist)):
         if class_len >= len(dec_divlist[i]):
+            class_len = len(dec_divlist[i])
             small_len = i
-    print(len(dec_divlist[small_len]),"最小的类")
+    print(len(dec_divlist[small_len]),dec_divlist[small_len],"最小的类")
 
     for i in range(10):
+        print(i+1)
         start1 = time.perf_counter()
         temp_con_data = con_data[0:int(len(con_data)*(i+1)/10)]
         con_divlist =div(temp_con_data)
+        print("con_divlist",len(con_divlist),con_divlist)
         pos_list = pos_specialDec(dec_divlist[small_len],con_divlist)
-        print("pos_list",pos_list)
+        print("pos_list",pos_list,len(pos_list))
         # print(len(dec_divlist[0]))
         DM = Matrix_construct(temp_con_data,pos_list,y_pred)
         Red(DM)
         end1 = time.perf_counter()
         time_list1.append(end1 - start1)
-        # print(end - start, "time")
-print(time_list)
-print(time_list1)
-draw_Compare(x,time_list,time_list1)
+    draw_Compare(x,time_list,time_list1)
 
