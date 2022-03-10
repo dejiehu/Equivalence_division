@@ -123,7 +123,7 @@ def Red(DM):#逻辑运算d
         print(num/len(DM_list),"平均长度")
 
 
-def find_divlist(K,y_pred,old_dec_divlist):  #根据聚类结果找出ddec_divlist
+def find_divlist(K,y_pred,old_dec_divlist):  #根据聚类结果找出dec_divlist
     dec_divlist = [[]] * K
     for i in range(len(y_pred)):
         dec_divlist[y_pred[i]] = dec_divlist[y_pred[i]] + [old_dec_divlist[i]]
@@ -136,6 +136,7 @@ def dec_divTwice(dec_divlist,dec_data):   #将决策进行二划分
         if len(i) > 1:
             for j in i:
                 new_decSet.append(dec_data[j])
+            # print("new_decSet",new_decSet)
             y_pred = KMeans(n_clusters=2, max_iter=300000).fit_predict(new_decSet)
             new_dec_divlist += find_divlist(2, y_pred, i)
         else:
@@ -151,7 +152,7 @@ def add_newDec(con_data,dec_divlist):     #新决策添加到数据集
 if __name__ == '__main__':
     # start = time.perf_counter()
     # list_data = readfileBylist("../complete_dataSet_classication/german.txt")
-    filename = "Yacht Hydrodynamics.csv"
+    filename = "segmentation.csv"
     list_data = readfileBylist("../Numerical_decision_dataSet/" + filename)
 
     print(len(list_data),"对象数")
@@ -179,7 +180,7 @@ if __name__ == '__main__':
     # print("dec_divlist", dec_divlist)
     # print(con_data)
     add_newDec(con_data, dec_divlist)
-    print(con_data)
+    # print(con_data)
     array = numpy.array(con_data)
     save = pd.DataFrame(array)
     save.to_csv('multi_dataSet/' + filename, index=False, header=False, sep="\t")

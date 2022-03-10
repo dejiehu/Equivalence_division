@@ -93,7 +93,7 @@ def Red(DM):#逻辑运算d
                 continue
             DM_list.append(DM[i][j])
     DM_list = logic_operation(DM_list)#集合析取逻辑操作（多余集合被吸收）
-    # print(DM_list,len(DM_list),"多余集合被吸收")
+    print(DM_list,len(DM_list),"多余集合被吸收")
     loop_val = []#将合取式差分为析取式     loop_val = [{1,2},{1,3}]
     for i in DM_list:
         loop_val.append(i)
@@ -131,18 +131,35 @@ if __name__ == '__main__':
     T1 = time.perf_counter()
     # start = time.perf_counter()
     # list_data = readfileBylist("../complete_dataSet_classication/german.txt")
-    list_data = readfileBylist("multi_dataSet/imports-85.csv")
+    list_data = readfileBylist("multi_dataSet/Automobile.csv")
     print(len(list_data),"对象数")
-    print(len(list_data[0])-1,"条件属性数")
+    print(len(list_data[0])-1 ,"条件属性数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 3)], list_data))
     dec_data_1 = list(map(lambda x: x[(len(list_data[0]) - 3):(len(list_data[0]) - 2)], list_data))
     dec_data_2 = list(map(lambda x: x[(len(list_data[0]) - 2):(len(list_data[0]) -1)], list_data))
     dec_data_3 = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
     dec_divlist_1 = div(dec_data_1)
-    for i in dec_divlist_1:
-        print(len(i))
     dec_divlist_2 = div(dec_data_2)
     dec_divlist_3 = div(dec_data_3)
+
+    #####找最小
+    print(dec_divlist_3)
+    class_len_3 = len(dec_divlist_3[0])
+    for i in range(len(dec_divlist_3)):
+        if class_len_3 > len(dec_divlist_3[i]):
+            class_len_3 = len(dec_divlist_3[i])
+            class_num_3 = i
+
+    for i in range(len(dec_divlist_2)):
+        if set(dec_divlist_3[class_num_3]).issubset(dec_divlist_2[i]):
+            class_num_2 = i
+            break
+
+    for i in range(len(dec_divlist_1)):
+        if set(dec_divlist_2[class_num_2]).issubset(dec_divlist_1[i]):
+            class_num_1 = i
+            break
+
     #####    全类
     time_list = []
     for i in range(10):
@@ -151,45 +168,39 @@ if __name__ == '__main__':
         con_divlist = div(temp_con_data)
         # pos_list = pos(dec_divlist_1,con_divlist)
         pos_list = pos(dec_divlist_1, con_divlist)
-        # print("pos_list",pos_list,len(pos_list))
+        # print("决策划分",dec_divlist_1)
+        # print("条件划分", con_divlist)
+        # print("pos_list",sorted(pos_list),len(pos_list))
         DM = Matrix_construct(temp_con_data, pos_list, dec_data_1)
         reduct_list = Red(DM)
         end = time.perf_counter()
         time_list.append(end - start)
     red_avgLength(reduct_list)
-    T2 = time.perf_counter()
-    print(T2-T1)
+    print("全类结果",reduct_list)
 
-
+    print()
     #####    单类K=4
     time_list_1 = []
     x = []
     ############################
-    class_num_1 =3
+    print("第一列选了：",len(dec_divlist_1[class_num_1]),(dec_divlist_1[class_num_1]))
     for i in range(10):
         x.append(i+1)
         start = time.perf_counter()
         temp_con_data = con_data[0:int(len(con_data)*(i+1)/10)]
         con_divlist = div(temp_con_data)
-        # pos_list = pos(dec_divlist_1,con_divlist)
         pos_list = pos_specialDec(dec_divlist_1[class_num_1], con_divlist)
-        # print("pos_list",pos_list,len(pos_list))
         DM = Matrix_construct(temp_con_data,pos_list,dec_data_1)
         reduct_list = Red(DM)
         end = time.perf_counter()
         time_list_1.append(end - start)
     red_avgLength(reduct_list)
-
+    # print("k=4", reduct_list)
     ######    单类K=8
-    class_num_2 = -1
-    for i in range(len(dec_divlist_2)):
-        if set(dec_divlist_2[i]).issubset(dec_divlist_1[class_num_1]):
-            class_num_2 =i
-            break
-    if class_num_2 == -1:
-        print("无子集")
+
+    print()
     time_list_2 = []
-    print(len(dec_divlist_2[class_num_2]),"dec_divlist_2[class_num_2]")
+    print("第二列选了：",len(dec_divlist_2[class_num_2]),(dec_divlist_2[class_num_2]))
     for i in range(10):
         start = time.perf_counter()
         temp_con_data = con_data[0:int(len(con_data)*(i+1)/10)]
@@ -201,15 +212,10 @@ if __name__ == '__main__':
         end = time.perf_counter()
         time_list_2.append(end - start)
     red_avgLength(reduct_list)
+    # print("k=8", reduct_list)
+    print()
     ######    单类K=16
-    class_num_3 = -1
-    for i in range(len(dec_divlist_3)):
-        if set(dec_divlist_3[i]).issubset(dec_divlist_2[class_num_2]):
-            class_num_3 = i
-            break
-    if class_num_3 == -1:
-        print("无子集")
-    print(len(dec_divlist_3[class_num_3]), "dec_divlist_3[class_num_3]")
+    print("第三列选了：",(dec_divlist_3[class_num_3]))
     time_list_3 = []
     for i in range(10):
         start = time.perf_counter()
@@ -222,5 +228,6 @@ if __name__ == '__main__':
         end = time.perf_counter()
         time_list_3.append(end - start)
     red_avgLength(reduct_list)
+    # print("k=16", reduct_list)
     draw_four(x,time_list_1,time_list_2,time_list_3,time_list)
 
