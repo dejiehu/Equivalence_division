@@ -229,5 +229,7 @@ if __name__ == '__main__':
         time_list_3.append(end - start)
     red_avgLength(reduct_list)
     # print("k=16", reduct_list)
+
+
     draw_four(x,time_list_1,time_list_2,time_list_3,time_list)
 
