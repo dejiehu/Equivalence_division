@@ -37,7 +37,6 @@ def Matrix_construct(con_data,pos_list,dec_data):  #构造基于正域的矩阵
     s = set()
     DM = [['None'] *len(con_data)  for _ in range(len(con_data))]
     core = []
-
     for i in range(len(con_data)):
         for j in range(i):
             s.clear()

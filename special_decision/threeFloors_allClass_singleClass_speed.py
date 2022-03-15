@@ -42,18 +42,30 @@ def pos_specialDec(dec_divlist,con_divlist):  #子集  正域
             continue
     return pos_list
 
+def is_existence(i,j,core): #判断其他对象在核属性上的属性值是否相等
+    for c in core:
+        if con_data[i][c] != con_data[j][c]:
+            return True
+    return False
+
 def Matrix_construct(con_data,pos_list,dec_data):  #构造基于正域的矩阵
     s = set()
     DM = [['None'] *len(con_data)  for _ in range(len(con_data))]
+    core = []
     for i in range(len(con_data)):
         for j in range(i):
             s.clear()
             if  not(({i}.issubset(set(pos_list)) or {j}.issubset(set(pos_list))) and dec_data[i] != dec_data[j]):
                 continue
-            for k in range(len(con_data[0])):
-                if (con_data[i][k] != con_data[j][k]):
-                    s.add(k)
-            if len(s)!=0:
+            if len(core) != 0 and is_existence(i, j, core):
+                continue
+            else:
+                for k in range(len(con_data[0])):
+                    if (con_data[i][k] != con_data[j][k]):
+                        s.add(k)
+                if len(s) == 1:
+                    core += s
+            if len(s) != 0:
                 DM[i][j] = s.copy()
     # for i in DM:
     #     print(i)
@@ -131,7 +143,7 @@ if __name__ == '__main__':
     T1 = time.perf_counter()
     # start = time.perf_counter()
     # list_data = readfileBylist("../complete_dataSet_classication/german.txt")
-    list_data = readfileBylist("multi_dataSet/SkillCraft1_Dataset.csv")
+    list_data = readfileBylist("multi_dataSet/Automobile.csv")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1 ,"条件属性数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 3)], list_data))
