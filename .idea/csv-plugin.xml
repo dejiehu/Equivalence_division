@@ -3,6 +3,41 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
+        <entry key="C:\Users\Administrator\Desktop\决策连续2\决策连续2\处理\决策连续 处理\Concrete Slump Test_2.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Administrator\Desktop\决策连续2\决策连续2\处理\决策连续 处理\Concrete Slump Test_3.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Administrator\Desktop\决策连续2\决策连续2\处理\决策连续 处理\Parkinsons Telemonitoring_1.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Administrator\Desktop\决策连续2\决策连续2\处理\决策连续 处理\Parkinsons Telemonitoring_2.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Numerical_decision_dataSet\Airfoil Self-Noise.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\Numerical_decision_dataSet\Automobile.csv">
           <value>
             <Attribute>
@@ -45,14 +80,21 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\Numerical_decision_dataSet\Concrete Slump Test.csv">
+        <entry key="\Numerical_decision_dataSet\Concrete Slump Test_1.csv">
           <value>
             <Attribute>
               <option name="separator" value="&#9;" />
             </Attribute>
           </value>
         </entry>
-        <entry key="\Numerical_decision_dataSet\Concrete Slump Test_20.csv">
+        <entry key="\Numerical_decision_dataSet\Concrete Slump Test_2.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Numerical_decision_dataSet\Concrete Slump Test_3.csv">
           <value>
             <Attribute>
               <option name="separator" value="&#9;" />
@@ -66,6 +108,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\Numerical_decision_dataSet\Energy efficiency_1.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Numerical_decision_dataSet\Energy efficiency_2.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\Numerical_decision_dataSet\Forest Fires.csv">
           <value>
             <Attribute>
@@ -73,7 +129,49 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\Numerical_decision_dataSet\Parkinsons Telemonitoring_1.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Numerical_decision_dataSet\Parkinsons Telemonitoring_2.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Numerical_decision_dataSet\QSAR Bioconcentration classes.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Numerical_decision_dataSet\Real estate valuation.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\Numerical_decision_dataSet\SkillCraft1_Dataset.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Numerical_decision_dataSet\Wine Quality-red.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Numerical_decision_dataSet\Wine Quality-white.csv">
           <value>
             <Attribute>
               <option name="separator" value="&#9;" />
@@ -94,7 +192,7 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\Numerical_decision_dataSet\imports-85.csv">
+        <entry key="\Numerical_decision_dataSet\garments_worker_productivity.csv">
           <value>
             <Attribute>
               <option name="separator" value="&#9;" />
@@ -136,6 +234,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\Numerical_decision_dataSet\student-por.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\Numerical_decision_dataSet\test2.csv">
           <value>
             <Attribute>
@@ -164,108 +269,66 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\special_decision\multi_dataSet\Automobile.csv">
+        <entry key="\special_decision\multi_dataSet_Numerical\abalone.csv">
           <value>
             <Attribute>
               <option name="separator" value="&#9;" />
             </Attribute>
           </value>
         </entry>
-        <entry key="\special_decision\multi_dataSet\Average Localization Error.csv">
+        <entry key="\special_decision\multi_dataSet_Numerical\qsar_fish_toxicit.csv">
           <value>
             <Attribute>
               <option name="separator" value="&#9;" />
             </Attribute>
           </value>
         </entry>
-        <entry key="\special_decision\multi_dataSet\Combined Cycle Power Plant.csv">
+        <entry key="\special_decision\multi_dataSet_artificial\Anuran Calls.csv">
           <value>
             <Attribute>
-              <option name="separator" value="&#9;" />
+              <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\special_decision\multi_dataSet\Communities and Crime.csv">
+        <entry key="\special_decision\multi_dataSet_artificial\Dry Bean.csv">
           <value>
             <Attribute>
-              <option name="separator" value="&#9;" />
+              <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\special_decision\multi_dataSet\Concrete Slump Test.csv">
+        <entry key="\special_decision\multi_dataSet_artificial\Estimation of obesity levels based on eating habits and physical condition.csv">
           <value>
             <Attribute>
-              <option name="separator" value="&#9;" />
+              <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\special_decision\multi_dataSet\Concrete_Data.csv">
+        <entry key="\special_decision\multi_dataSet_artificial\HCV.csv">
           <value>
             <Attribute>
-              <option name="separator" value="&#9;" />
+              <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\special_decision\multi_dataSet\Real estate valuation.csv">
+        <entry key="\special_decision\multi_dataSet_artificial\Statlog (Image Segmentation).csv">
           <value>
             <Attribute>
-              <option name="separator" value="&#9;" />
+              <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\special_decision\multi_dataSet\SkillCraft1_Dataset.csv">
+        <entry key="\special_decision\multi_dataSet_artificial\Wine Quality-red.csv">
           <value>
             <Attribute>
-              <option name="separator" value="&#9;" />
+              <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\special_decision\multi_dataSet\Yacht Hydrodynamics.csv">
+        <entry key="\special_decision\multi_dataSet_artificial\Wine Quality-white.csv">
           <value>
             <Attribute>
-              <option name="separator" value="&#9;" />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\special_decision\multi_dataSet\imports-85.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="&#9;" />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\special_decision\multi_dataSet\machine.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="&#9;" />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\special_decision\multi_dataSet\qsar_aquatic_toxicity.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="&#9;" />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\special_decision\multi_dataSet\qsar_fish_toxicit.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="&#9;" />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\special_decision\multi_dataSet\servo.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="&#9;" />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\special_decision\multi_dataSet\test2.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="&#9;" />
+              <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>

@@ -62,18 +62,17 @@ def Matrix_construct(con_data,pos_list,dec_data):  #构造基于正域的矩阵
 '''
 def logic_operation(diffItem_list):#析取，吸收
     DM_list = sorted(diffItem_list, key=lambda i: len(i), reverse=False)
-    m = len(DM_list) - 1# 吸收多余的集合
-    while m > 0: #m从后往前
-        n = 0  #从前往后
+    n = 0  # 从前往后
+    while n < len(DM_list) - 1: #m从后往前
+        m = len(DM_list) - 1
         while n < m:
             if set(DM_list[n]).issubset(DM_list[m]):
                 del DM_list[m]
-                break
-            n += 1
-        m -= 1
+            m -= 1
+        n += 1
     return DM_list
 
-def product(fix,dis):
+def product1(fix,dis):
     result_list =[]
     for i in dis:
         for j in fix:
@@ -83,25 +82,22 @@ def product(fix,dis):
     return result_list
 
 def Red(DM):#逻辑运算d
-    DM_list = []
+    loop_val = []
     for i in range(len(DM)):   #矩阵差别项放到集合DM_list中
         for j in range(i):
             if DM[i][j] == 'None':#把集合为空的丢掉
                 continue
             if len(DM[i][j]) == 0:
                 continue
-            DM_list.append(DM[i][j])
-    DM_list = logic_operation(DM_list)#集合析取逻辑操作（多余集合被吸收）
-    print(DM_list,len(DM_list),"多余集合被吸收")
-    loop_val = []#将合取式差分为析取式     loop_val = [{1,2},{1,3}]
-    for i in DM_list:
-        loop_val.append(i)
+            loop_val.append(DM[i][j])
+    loop_val = logic_operation(loop_val)#集合析取逻辑操作（多余集合被吸收）
+    # print(loop_val,len(loop_val),"多余集合被吸收")
     DM_list = []
     if len(loop_val) > 1:
         for i in loop_val[0]:
             DM_list.append({i})
         for i in range(1,len(loop_val)):
-            DM_list = product(DM_list,loop_val[i])
+            DM_list = product1(DM_list,loop_val[i])
             DM_list = logic_operation(DM_list)
     elif len(loop_val[0]) == 1:
         DM_list = loop_val.copy()

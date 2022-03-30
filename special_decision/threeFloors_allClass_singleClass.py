@@ -131,7 +131,7 @@ if __name__ == '__main__':
     T1 = time.perf_counter()
     # start = time.perf_counter()
     # list_data = readfileBylist("../complete_dataSet_classication/german.txt")
-    list_data = readfileBylist("multi_dataSet/imports-85.csv")
+    list_data = readfileBylist("multi_dataSet_Numerical/imports-85.csv")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 3)], list_data))
