@@ -6,7 +6,7 @@ from itertools import chain
 import numpy
 
 def readfile():
-    my_data = numpy.loadtxt('../zoo.txt')
+    my_data = numpy.loadtxt('../complete_dataSet_classication/lung_cancer.txt')
     print(my_data)
     return my_data
 
@@ -114,7 +114,6 @@ def Red(C0_data,dec_divlist,con_data,attr_data,c_entropy):#约简
         print("约简为",C0_data)
     else:
         while  C_Entropy(divByUi(con_data,Ui),dec_divlist) != C_Entropy(divByUi(B,Ui),dec_divlist):
-            # print(C_Entropy(divByUi(con_data,Ui),dec_divlist))
             dict.clear()
             con_key = -1  # 字典key
             con_value = 10000000  # 字典value
@@ -135,6 +134,8 @@ def Red(C0_data,dec_divlist,con_data,attr_data,c_entropy):#约简
                     con_key = key
             B = numpy.append(B,attr_data[:,con_key,numpy.newaxis],axis=1)
             attr_data = deal_data(attr_data,con_key,con_key)
+            print(len(B[0]),"B")
+            print(C_Entropy(divByUi(B, Ui), dec_divlist), "B熵")
     return  B
 
 def print_red(my_data,Red_data):

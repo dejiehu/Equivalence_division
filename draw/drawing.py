@@ -55,3 +55,25 @@ def draw_four(x,y,y1,y2,y3):
     plt.ylabel("Time consumption(s)") #Y轴标签
     # plt.title("A simple plot") #标题
     plt.show()
+
+def Histogram(tick_label,y,y1,y2,y3):   #并列柱状图
+    x =  np.arange(len(tick_label))
+    bar_width = 0.2
+    plt.bar(x, y, bar_width, align="center", color="c", label="all classes(K=4)", alpha=0.5)
+    x = x + bar_width
+    plt.bar(x, y1, bar_width, color="b", align="center", label="single class(K=4)", alpha=0.5)
+    x = x + bar_width
+    plt.bar(x , y2, bar_width, color="g", align="center", label="single class(K=8)", alpha=0.5)
+    x = x + bar_width
+    plt.bar(x, y3, bar_width, color="r", align="center", label="single class(K=16)", alpha=0.5)
+    plt.xlabel("Size of universe")
+    plt.ylabel("差别项个数")
+    plt.xticks(x + bar_width / 2, tick_label)
+    plt.legend()
+    plt.show()
+
+if __name__ == '__main__':
+    tick_label = ["A", "B", "C", "D", "E"]
+    y = [6, 10, 4, 5, 1]
+    y1 = [2, 6, 3, 8, 5]
+    Histogram(tick_label, y, y1)

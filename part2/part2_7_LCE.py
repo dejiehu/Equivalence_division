@@ -6,7 +6,7 @@ from itertools import chain
 import numpy
 
 def readfile():
-    my_data = numpy.loadtxt('../data.txt')
+    my_data = numpy.loadtxt('../complete_dataSet_classication/zoo.txt')
     print(my_data)
     return my_data
 
@@ -129,7 +129,7 @@ def Red(C0_data,dec_divlist,con_data,attr_data,L_Entropy):    #约简
                 temp_C0_data = B
                 temp_C0_data = numpy.append(temp_C0_data,attr_data[:,i,numpy.newaxis],axis=1)
                 dict[i] = L_Entropy(divByUi(temp_C0_data,Ui),dec_divlist)
-            print(dict)
+            # print(dict)
             for key in dict:
                 if dict[key] < con_value:
                     con_value = dict[key]

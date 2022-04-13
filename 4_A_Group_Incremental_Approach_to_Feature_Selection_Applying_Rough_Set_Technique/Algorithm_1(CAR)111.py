@@ -110,20 +110,20 @@ def core(U_con_data, U_dec_divlist,con_entropy):  #基于条件熵求核
     for i in range(U_con_data.shape[1]):
         temp_U_con_data = deal_data(U_con_data,i,i)
         temp_con_divlist = div(temp_U_con_data)
-        if con_entropy != (CCE_Entropy(temp_con_divlist, U_dec_divlist)):
+        if con_entropy != (LCE_Entropy(temp_con_divlist, U_dec_divlist)):
             core_data = numpy.append(core_data, U_con_data[:, i,numpy.newaxis], axis=1)
             core_list.append(i)
     return core_list,core_data
 
 def Red(core_data,red_list,U_dec_divlist,con_entropy):#约简
     B_data = core_data
-    if CCE_Entropy(div(core_data),U_dec_divlist) == con_entropy:
+    if LCE_Entropy(div(core_data),U_dec_divlist) == con_entropy:
         print("约简为",red_list)
         return core_data,red_list
     print(red_list)
     print(con_entropy,"条件属性的熵")
     attr_data, attr_list = del_dup(U_con_data, red_list)  # C-C0
-    B_entropy =CCE_Entropy(div(B_data),U_dec_divlist)
+    B_entropy =LCE_Entropy(div(B_data),U_dec_divlist)
     print(con_entropy, B_entropy, "f")
     dict = {}
     while con_entropy != B_entropy :
@@ -134,17 +134,17 @@ def Red(core_data,red_list,U_dec_divlist,con_entropy):#约简
         for i in range(attr_data.shape[1]):
             temp_core_data = B_data
             temp_core_data = numpy.append(temp_core_data,attr_data[:,i,numpy.newaxis],axis=1)
-            dict[i] = B_entropy - CCE_Entropy(div(temp_core_data),U_dec_divlist)
-            # print(CCE_Entropy(div(temp_core_data),U_dec_divlist) , B_entropy,"CCE_Entropy(div(temp_core_data),U_dec_divlist) - B_entropy")
+            dict[i] = B_entropy - LCE_Entropy(div(temp_core_data),U_dec_divlist)
         # print(dict,attr_list)
         for key in dict:
             if dict[key] > con_value:
                 con_value = dict[key]
                 con_key = key
         B_data = numpy.append(B_data,attr_data[:,con_key,numpy.newaxis],axis=1)
-        B_entropy =CCE_Entropy(div(B_data),U_dec_divlist)
+        B_entropy =LCE_Entropy(div(B_data),U_dec_divlist)
         attr_data = deal_data(attr_data,con_key,con_key)
         red_list.append(attr_list[con_key])
+        # print(red_list,"redlist")
         del attr_list[con_key]
         print(B_entropy,"fffff")
     # print(attr_list)
@@ -156,7 +156,7 @@ def De_redundancy(red_data,red_list,U_dec_divlist,con_entropy):# 去冗余
     i = 0
     while i < red_data.shape[1]:
         temp_Red_data = deal_data(red_data,i,i)
-        red_entropy = CCE_Entropy(div(temp_Red_data),U_dec_divlist)
+        red_entropy = LCE_Entropy(div(temp_Red_data),U_dec_divlist)
         if con_entropy == red_entropy:
             red_data = deal_data(red_data,i,i)
             del core_list[i]
@@ -167,13 +167,13 @@ def De_redundancy(red_data,red_list,U_dec_divlist,con_entropy):# 去冗余
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    my_data = readfile("../complete_dataSet_classication/german.txt")
+    my_data = readfile("../complete_dataSet_classication/house.txt")
     U_con_data = deal_data(my_data, my_data.shape[1] - 1, my_data.shape[1] - 1)
     U_dec_data = deal_data(my_data, 0, my_data.shape[1] - 2)
     U_con_divlist = div(U_con_data)
     U_dec_divlist = div(U_dec_data)
     print(U_con_divlist,U_dec_divlist)
-    con_entropy = CCE_Entropy(U_con_divlist,U_dec_divlist)
+    con_entropy = LCE_Entropy(U_con_divlist,U_dec_divlist)
     # print(con_entropy,"con_entropy")
     core_list,core_data = core(U_con_data, U_dec_divlist,con_entropy)
     red_data,red_list = Red(core_data,core_list,U_dec_divlist,con_entropy)

@@ -41,17 +41,29 @@ def pos_specialDec(dec_divlist,con_divlist):  #子集  正域
             continue
     return pos_list
 
+def is_existence(i,j,core): #判断其他对象在核属性上的属性值是否相等
+    for c in core:
+        if con_data[i][c] != con_data[j][c]:
+            return True
+    return False
+
 def Matrix_construct(con_data,pos_list,dec_data):  #构造基于正域的矩阵
     s = set()
     DM = [['None'] *len(con_data)  for _ in range(len(con_data))]
+    core = []
     for i in range(len(con_data)):
         for j in range(i):
             s.clear()
             if  not(({i}.issubset(set(pos_list)) or {j}.issubset(set(pos_list))) and dec_data[i] != dec_data[j]):
                 continue
-            for k in range(len(con_data[0])):
-                if (con_data[i][k] != con_data[j][k]):
-                    s.add(k)
+            if len(core) != 0 and is_existence(i, j, core):
+                continue
+            else:
+                for k in range(len(con_data[0])):
+                    if (con_data[i][k] != con_data[j][k]):
+                        s.add(k)
+                if len(s) == 1:
+                    core += s
             if len(s)!=0:
                 DM[i][j] = s.copy()
     # for i in DM:
@@ -75,15 +87,17 @@ def logic_operation(diffItem_list):#析取，吸收
 
 def product1(fix,dis):
     result_list =[]
-    for i in dis:
-        for j in fix:
+    for j in fix:
+        if j.issubset(dis):
+            result_list.append(j)
+            continue
+        for i in dis:
             temp_j=j.copy()
             temp_j.add(i)
             result_list.append(temp_j)
     return result_list
 
 def Red(DM):#逻辑运算d
-
     DM_list = []
     for i in range(len(DM)):   #矩阵差别项放到集合DM_list中
         for j in range(i):
@@ -104,7 +118,6 @@ def Red(DM):#逻辑运算d
         for i in range(1,len(loop_val)):
             DM_list = product1(DM_list,loop_val[i])
             DM_list = logic_operation(DM_list)
-
     elif len(loop_val) == 0:
         DM_list = loop_val.copy()
     elif len(loop_val[0]) == 1:
@@ -115,7 +128,7 @@ def Red(DM):#逻辑运算d
     return DM_list
 
 def red_avgLength(red):
-    print("约简的集合为：", len(red),red)
+    print("约简的集合为：", len(red))
     num = 0
     if len(red) != 0:
         for i in red:
@@ -126,11 +139,11 @@ if __name__ == '__main__':
     T1 = time.perf_counter()
     # start = time.perf_counter()
     # list_data = readfileBylist("../complete_dataSet_classication/german.txt")
-    list_data = readfileBylist("multi_dataSet_Numerical/segmentation.csv")   #  连续处理
-    # list_data = readfileBylist("multi_dataSet_artificial/student-mat.csv")    #离散处理
+    list_data = readfileBylist("multi_dataSet_Numerical/Forest Fires.csv")   #  连续处理
+    # list_data = readfileBylist("multi_dataSet_artificial/")    #离散处理
     print(len(list_data),"对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 3)], list_data))
-    print(len(con_data[0]) , "条件属性数")
+    print(len(con_data[0]), "条件属性数")
     dec_data_1 = list(map(lambda x: x[(len(list_data[0]) - 3):(len(list_data[0]) - 2)], list_data))
     dec_data_2 = list(map(lambda x: x[(len(list_data[0]) - 2):(len(list_data[0]) -1)], list_data))
     dec_data_3 = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
@@ -159,7 +172,7 @@ if __name__ == '__main__':
     #####    全类
     time_list = []
     for i in range(10):
-        print(i)
+        # print(i)
         start = time.perf_counter()
         temp_con_data = con_data[0:int(len(con_data) * (i + 1) / 10)]
         con_divlist = div(temp_con_data)
@@ -171,14 +184,15 @@ if __name__ == '__main__':
         time_list.append(end - start)
     red_avgLength(reduct_list)
     # T2 = time.perf_counter()
-    # print(T2 - T1)
+    # print(T2-T1)
+    # print("全类结果",reduct_list)
 
     print()
     ####    单类K=4
     time_list_1 = []
     x = []
     ############################
-    print("第一列选了：",len(dec_divlist_1[class_num_1]),(dec_divlist_1[class_num_1]))
+    print("第一列选了：",(dec_divlist_1[class_num_1]))
     for i in range(10):
         x.append(i+1)
         start = time.perf_counter()
@@ -195,7 +209,7 @@ if __name__ == '__main__':
 
     print()
     time_list_2 = []
-    print("第二列选了：",len(dec_divlist_2[class_num_2]),(dec_divlist_2[class_num_2]))
+    print("第二列选了：",(dec_divlist_2[class_num_2]))
     for i in range(10):
         start = time.perf_counter()
         temp_con_data = con_data[0:int(len(con_data)*(i+1)/10)]

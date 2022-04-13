@@ -19,7 +19,6 @@ def readfileBylist(filename):
         s=[]
         for j in range(len(list_line) ):
             s.append(int(list_line[j]))
-
         list_data.append(s)
     return list_data
 
@@ -123,14 +122,8 @@ def Red(DM):#逻辑运算d
     elif len(loop_val[0]) > 1:
         for i in loop_val[0]:
             DM_list.append({i})
-
     return DM_list
-    # print("约简的集合为：",len(DM_list),DM_list)
-    # num = 0
-    # if len(DM_list) != 0:
-    #     for i in DM_list:
-    #         num += len(i)
-    #     print(num/len(DM_list),"平均长度")
+
 def red_avgLength(red):
     print("约简的集合为：", len(red))
     num = 0
@@ -145,8 +138,8 @@ if __name__ == '__main__':
     # list_data = readfileBylist("../complete_dataSet_classication/german.txt")
     list_data = readfileBylist("multi_dataSet_Numerical/Automobile.csv")
     print(len(list_data),"对象数")
-    print(len(list_data[0])-1 ,"条件属性数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 3)], list_data))
+    print(len(con_data[0]), "条件属性数")
     dec_data_1 = list(map(lambda x: x[(len(list_data[0]) - 3):(len(list_data[0]) - 2)], list_data))
     dec_data_2 = list(map(lambda x: x[(len(list_data[0]) - 2):(len(list_data[0]) -1)], list_data))
     dec_data_3 = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
@@ -180,9 +173,6 @@ if __name__ == '__main__':
         con_divlist = div(temp_con_data)
         # pos_list = pos(dec_divlist_1,con_divlist)
         pos_list = pos(dec_divlist_1, con_divlist)
-        # print("决策划分",dec_divlist_1)
-        # print("条件划分", con_divlist)
-        # print("pos_list",sorted(pos_list),len(pos_list))
         DM = Matrix_construct(temp_con_data, pos_list, dec_data_1)
         reduct_list = Red(DM)
         end = time.perf_counter()

@@ -14,7 +14,6 @@ def readfileBylist(filename):
     for i in range(len(list_row)):
         list_line = list_row[i].strip().split('\t')
         list_data.append(list_line)
-    print(list_data)
     return list_data
 
 def div_dec(my_data): #
@@ -40,7 +39,6 @@ def get_matrix(my_data): #多个对象的相容类等于单个对象的交集
                 if len(eval(my_data[i][j]) & eval(my_data[k][j])) != 0:
                     sp_set.add(k)
             Sp_matrix[i].append(sp_set.copy())
-    print(Sp_matrix)
     return Sp_matrix
 
 def div_base_matric(Sp_matrix):  #相容类下用交集求划分
@@ -82,7 +80,6 @@ def Matrix_construct(con_data,pos_list,dec_data):  #构造基于正域的矩阵
                 if len(eval(con_data[i][k]) & eval(con_data[j][k])) == 0:
                     s.add(k)
             DM[i][j] = s.copy()
-    print(DM)
     return DM
 '''
 耗时间
@@ -149,17 +146,16 @@ def red_avgLength(red):
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("set_value_dataSet/test2.txt")
-    con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
-    dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
-    print(dec_data)
+    list_data = readfileBylist("../set_value_dataSet/Average Localization Error.csv")
+    con_data = list(map(lambda x: x[:(len(list_data[0]) - 3)], list_data))
+    dec_data = list(map(lambda x: x[(len(list_data[0]) -3):], list_data))
+    print(len(con_data),"对象数")
     con_divlist = div_base_matric(get_matrix(con_data))
     dec_divlist = div_dec(dec_data)
-    print("con_divlist", con_divlist)
-    print("dec_divlist", dec_divlist)
+    print("con_divlist",con_divlist)
     # pos_list = pos_specialDec(dec_divlist[0] + dec_divlist[1],con_divlist)
     pos_list = pos(dec_divlist,con_divlist)
-    print(pos_list)
+    print("pos_list",pos_list)
     DM = Matrix_construct(con_data,pos_list,dec_data)
 
     red_avgLength(Red(DM))

@@ -65,7 +65,7 @@ def add_newDec(con_data,dec_divlist):     #新决策添加到数据集
 if __name__ == '__main__':
     # start = time.perf_counter()
     # list_data = readfileBylist("../complete_dataSet_classication/german.txt")
-    filename = "segmentation.csv"
+    filename = "servo.csv"
     list_data = readfileBylist("../Numerical_decision_dataSet/" + filename)
 
     print(len(list_data),"对象数")
