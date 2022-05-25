@@ -165,7 +165,7 @@ def red_avgLength(red):
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../set_value_dataSet/Average Localization Error.csv")
+    list_data = readfileBylist("../set_value_dataSet(1%)/Average Localization Error.csv")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 3)], list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 3):], list_data))
     print(len(con_data),"对象数")

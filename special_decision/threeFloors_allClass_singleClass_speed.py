@@ -85,7 +85,7 @@ def logic_operation(diffItem_list):#析取，吸收
         m -= 1
     return DM_list
 
-def product1(fix,dis):
+def product1(fix,dis):   #   采用
     result_list =[]
     for i in dis:
         for j in fix:

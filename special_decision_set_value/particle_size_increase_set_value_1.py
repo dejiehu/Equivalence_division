@@ -149,7 +149,7 @@ def red_avgLength(red):
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("set_value_dataSet/Concrete Slump Test_2.csv")
+    list_data = readfileBylist("set_value_dataSet(1%)/Concrete Slump Test_2.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 3)], list_data))
     print(len(con_data[0]), "条件属性数")

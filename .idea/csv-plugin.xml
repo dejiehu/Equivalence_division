@@ -3,34 +3,6 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
-        <entry key="C:\Users\Administrator\Desktop\决策连续2\决策连续2\处理\决策连续 处理\Concrete Slump Test_2.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="&#9;" />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="C:\Users\Administrator\Desktop\决策连续2\决策连续2\处理\决策连续 处理\Concrete Slump Test_3.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="&#9;" />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="C:\Users\Administrator\Desktop\决策连续2\决策连续2\处理\决策连续 处理\Parkinsons Telemonitoring_1.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="&#9;" />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="C:\Users\Administrator\Desktop\决策连续2\决策连续2\处理\决策连续 处理\Parkinsons Telemonitoring_2.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="&#9;" />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\Numerical_decision_dataSet\Airfoil Self-Noise.csv">
           <value>
             <Attribute>
@@ -325,13 +297,6 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\special_decision\multi_dataSet_Numerical\segmentation.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="&#9;" />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\special_decision\multi_dataSet_Numerical\servo.csv">
           <value>
             <Attribute>
@@ -388,52 +353,73 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\special_decision_set_value\set_value_dataSet\Average Localization Error.csv">
+        <entry key="\special_decision_set_value\garments_worker_productivity(5%).csv">
           <value>
             <Attribute>
               <option name="separator" value="&#9;" />
             </Attribute>
           </value>
         </entry>
-        <entry key="\special_decision_set_value\set_value_dataSet\Concrete_Data.csv">
+        <entry key="\special_decision_set_value\set_value_dataSet(10%)在修改\Airfoil Self-Noise.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\special_decision_set_value\set_value_dataSet(10%)在修改\Automobile.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\special_decision_set_value\set_value_dataSet(10%)在修改\Average Localization Error.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\special_decision_set_value\set_value_dataSet(10%)在修改\abalone.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\special_decision_set_value\set_value_dataSet(10%)在修改\servo.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\special_decision_set_value\set_value_dataSet(5%)在修改\Computer_Hardware.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\special_decision_set_value\set_value_dataSet\Forest Fires.csv">
+        <entry key="\special_decision_set_value\set_value_dataSet(5%)在修改\Real estate valuation.csv">
           <value>
             <Attribute>
               <option name="separator" value="&#9;" />
             </Attribute>
           </value>
         </entry>
-        <entry key="\special_decision_set_value\set_value_dataSet\Image_Segmentation(210).csv">
+        <entry key="\special_decision_set_value\set_value_dataSet(5%)在修改\garments_worker_productivity.csv">
           <value>
             <Attribute>
               <option name="separator" value="&#9;" />
             </Attribute>
           </value>
         </entry>
-        <entry key="\special_decision_set_value\set_value_dataSet\Image_Segmentation(2100).csv">
+        <entry key="\special_decision_set_value\set_value_dataSet(5%)在修改\servo.csv">
           <value>
             <Attribute>
               <option name="separator" value="&#9;" />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\special_decision_set_value\set_value_dataSet\servo.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="&#9;" />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\special_decision_set_value\set_value_dataSet\test2.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>

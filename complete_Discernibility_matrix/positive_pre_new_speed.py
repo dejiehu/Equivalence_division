@@ -73,7 +73,7 @@ def logic_operation(diffItem_list):#析取，吸收
         m -= 1
     return DM_list
 
-def product(fix,dis):
+def product1(fix,dis):
     result_list =[]
     for i in dis:
         for j in fix:
@@ -83,6 +83,7 @@ def product(fix,dis):
     return result_list
 
 def Red(DM):#逻辑运算d
+    start0 = time.perf_counter()
     DM_list = []
     for i in range(len(DM)):   #矩阵差别项放到集合DM_list中
         for j in range(i):
@@ -92,7 +93,8 @@ def Red(DM):#逻辑运算d
                 continue
             DM_list.append(DM[i][j])
     DM_list = logic_operation(DM_list)#集合析取逻辑操作（多余集合被吸收）
-    print(DM_list,len(DM_list),"多余集合被吸收")
+    # print(DM_list,len(DM_list),"多余集合被吸收")
+    print(time.perf_counter()-start0)
     loop_val = []#将合取式差分为析取式     loop_val = [{1,2},{1,3}]
     for i in DM_list:
         loop_val.append(i)
@@ -101,7 +103,7 @@ def Red(DM):#逻辑运算d
         for i in loop_val[0]:
             DM_list.append({i})
         for i in range(1,len(loop_val)):
-            DM_list = product(DM_list,loop_val[i])
+            DM_list = product1(DM_list,loop_val[i])
             DM_list = logic_operation(DM_list)
     elif len(loop_val[0]) == 1:
         DM_list = loop_val.copy()
@@ -117,7 +119,7 @@ def Red(DM):#逻辑运算d
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../complete_dataSet_classication/german.txt")
+    list_data = readfileBylist("../complete_dataSet_classication/Teaching Assistant Evaluation.txt")
     # list_data = readfileBylist("例子.txt")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")

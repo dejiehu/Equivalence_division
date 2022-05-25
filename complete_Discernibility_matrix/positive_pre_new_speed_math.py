@@ -2,6 +2,7 @@ import time
 from itertools import product
 
 import numpy
+import sympy as sy
 '''
 正域保持约简
 '''
@@ -62,14 +63,15 @@ def Matrix_construct(con_data,pos_list,dec_data):  #构造基于正域的矩阵
 '''
 def logic_operation(diffItem_list):#析取，吸收
     DM_list = sorted(diffItem_list, key=lambda i: len(i), reverse=False)
-    n = 0  # 从前往后
-    while n < len(DM_list) - 1: #m从后往前
-        m = len(DM_list) - 1
+    m = len(DM_list) - 1# 吸收多余的集合
+    while m > 0: #m从后往前
+        n = 0  #从前往后
         while n < m:
             if set(DM_list[n]).issubset(DM_list[m]):
                 del DM_list[m]
-            m -= 1
-        n += 1
+                break
+            n += 1
+        m -= 1
     return DM_list
 
 def product1(fix,dis):
@@ -82,28 +84,53 @@ def product1(fix,dis):
     return result_list
 
 def Red(DM):#逻辑运算d
-    loop_val = []
+    DM_list = []
+    start0= time.perf_counter()
     for i in range(len(DM)):   #矩阵差别项放到集合DM_list中
         for j in range(i):
             if DM[i][j] == 'None':#把集合为空的丢掉
                 continue
             if len(DM[i][j]) == 0:
                 continue
-            loop_val.append(DM[i][j])
-    loop_val = logic_operation(loop_val)#集合析取逻辑操作（多余集合被吸收）
-    print(loop_val,len(loop_val),"多余集合被吸收")
+            DM_list.append(DM[i][j])
+    DM_list = logic_operation(DM_list)#集合析取逻辑操作（多余集合被吸收）
+    print(DM_list,len(DM_list),"多余集合被吸收")
+    letter_list = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+                   'u', 'v', 'w', 'x', 'y', 'z']
+    formula = ""
+
+    for i in range(len(DM_list)):
+        formula += ("(")
+        for j in range(len(DM_list[i])):
+            formula += (letter_list[list(DM_list[i])[j]])
+            if j < len(DM_list[i]) - 1:
+                formula += ("|")
+            else:
+                formula += (")")
+        if i < len(DM_list) - 1:
+            formula += ("&")
+    print(time.perf_counter() - start0)
+    disjunctive_normal = sy.to_dnf(formula, True,True)
+    print(disjunctive_normal)
+    disjunctive_normal = str(disjunctive_normal)
+    disjunctive_normal = disjunctive_normal.replace('(', '')
+    disjunctive_normal = disjunctive_normal.replace(')', '')
+    disjunctive_normal = disjunctive_normal.replace('&', '')
+    disjunctive_normal = disjunctive_normal.replace(' ', '')
     DM_list = []
-    if len(loop_val) > 1:
-        for i in loop_val[0]:
-            DM_list.append({i})
-        for i in range(1,len(loop_val)):
-            DM_list = product1(DM_list,loop_val[i])
-            DM_list = logic_operation(DM_list)
-    elif len(loop_val[0]) == 1:
-        DM_list = loop_val.copy()
-    elif len(loop_val[0]) > 1:
-        for i in loop_val[0]:
-            DM_list.append({i})
+    red = []
+    for i in disjunctive_normal:
+        if i == '|':
+            DM_list.append(red)
+            red = []
+            continue
+        red.append(letter_list.index(i))
+    DM_list.append(red)
+
+
+
+
+
 
     print("约简的集合为：",len(DM_list), DM_list,"约简个数")
     num = 0
