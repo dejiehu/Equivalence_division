@@ -1,6 +1,6 @@
 import time
 from itertools import product, chain
-
+from draw.drawing import draw_four
 '''
 不完备正域保持约简
 '''
@@ -10,7 +10,7 @@ def readfileBylist(filename):
     list_row = file.readlines()
     list_data = []
     for i in range(len(list_row)):
-        list_line = list_row[i].strip().split(',')
+        list_line = list_row[i].strip().split('\t')
         list_data.append(list_line)
     return list_data
 
@@ -28,25 +28,24 @@ def div_dec(my_data): #
         div_list.append(list1.copy())
     return div_list
 
-def get_matrix(my_data): #多个对象的相容类等于单个对象的交集
-    Sp_matrix = [[] for i in range(len(my_data))]
-    for i in range(len(my_data)):
-        for j in range(len(my_data[0])):
-            sp_set = set()
-            for k in range(len(my_data)):
-                if my_data[i][j] ==my_data[k][j] or my_data[i][j] == '?' or my_data[k][j] == '?':
-                    sp_set.add(k)
-            Sp_matrix[i].append(sp_set.copy())
-    return Sp_matrix
-
-def div_base_matric(Sp_matrix):  #相容类下用交集求划分
+def div_byCompare(my_data):
     sp_list = []
-    for j in range(len(Sp_matrix)):
-        sp = set(k for k in range(len(Sp_matrix)))
-        for i in range(len(Sp_matrix[0])):
-            sp = sp & Sp_matrix[j][i]
-        sp_list.append(list(sp.copy()))
+    for i in range(len(my_data)):
+        sp = []
+        for j in range(len(my_data)):
+            if insection_isEmpty(i,j,my_data):
+                sp.append(j)
+        sp_list.append(sp)
+
     return sp_list
+
+def insection_isEmpty(i,j,my_data):
+    if i == j :
+        return True
+    for k in range(len(my_data[0])):
+        if len(eval(my_data[i][k]) & eval(my_data[j][k])) == 0:
+            return None
+    return True
 
 def generalized_decision(con_divlist,dec_data):
     gd_list=[]
@@ -69,12 +68,31 @@ def Matrix_construct(con_data,gd_list,dec_data):  #构造基于正域的矩阵
             # if gd_list[i] == gd_list[j] :
             #     continue
             for k in range(len(con_data[0])):
-                if (con_data[i][k] != con_data[j][k] and con_data[i][k] != '?' and con_data[j][k] != '?'):
-                    s.add(k)
-            if len(s)!=0:
+                if len(eval(con_data[i][k]) & eval(con_data[j][k])) == 0:
+                    s.add(k+1)
+            if not not s:  #空返回False   非空True
                 DM[i][j] = s.copy()
     for i in DM:
         print(i)
+    return DM
+
+def Matrix_construct_partical(con_data,gd_list,con_divlist,dec_divlist,dec_data):  #构造基于正域的矩阵
+    s = set()
+    DM = [['None'] *len(con_data)  for _ in range(len(con_data))]
+    for i in range(len(con_data)):
+        for j in range(len(con_data)):
+            s.clear()
+            if set(dec_divlist).isdisjoint(con_divlist[i]):
+                continue
+            if gd_list[i].__contains__(dec_data[j][0]):
+                continue
+            for k in range(len(con_data[0])):
+                if len(eval(con_data[i][k]) & eval(con_data[j][k])) == 0:
+                    s.add(k+1)
+            if not not s:  # 空返回False   非空True
+                DM[i][j] = s.copy()
+    # for i in DM:
+    #     print(i)
     return DM
 '''
 耗时间
@@ -137,7 +155,7 @@ def Red(DM):#逻辑运算d
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("my2.txt")
+    list_data = readfileBylist("../set_value_dataSet(1%)/set_speed.csv")
     # list_data = readfileBylist("../Qualitative_Bankruptcy.txt")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")
@@ -150,14 +168,15 @@ if __name__ == '__main__':
             continue
         num_list.append(i[0])
     print(num_list,len(num_list),"决策数")
-    con_divlist = div_base_matric(get_matrix(con_data))
+    con_divlist = div_byCompare(con_data)
     dec_divlist = div_dec(dec_data)
     print("con_divlist", con_divlist)
     print("dec_divlist", dec_divlist)
     gd_list = generalized_decision(con_divlist,dec_data)
     print(gd_list)
-    DM = Matrix_construct(con_data,gd_list,dec_data)
-
+    DM = Matrix_construct_partical(con_data,gd_list,con_divlist,dec_divlist[0],dec_data)
+    # DM = Matrix_construct(con_data, gd_list, dec_data)
     Red(DM)
     end = time.perf_counter()
     print(end - start, "time")
+    #024   dec_divlist [[0], [1], [2], [3], [4], [5], [6], [7]]

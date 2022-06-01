@@ -1,6 +1,6 @@
 import time
 from itertools import product, chain
-
+from draw.drawing import draw_four
 '''
 不完备正域保持约简
 '''
@@ -10,7 +10,7 @@ def readfileBylist(filename):
     list_row = file.readlines()
     list_data = []
     for i in range(len(list_row)):
-        list_line = list_row[i].strip().split(',')
+        list_line = list_row[i].strip().split('\t')
         list_data.append(list_line)
     return list_data
 
@@ -28,25 +28,24 @@ def div_dec(my_data): #
         div_list.append(list1.copy())
     return div_list
 
-def get_matrix(my_data): #多个对象的相容类等于单个对象的交集
-    Sp_matrix = [[] for i in range(len(my_data))]
-    for i in range(len(my_data)):
-        for j in range(len(my_data[0])):
-            sp_set = set()
-            for k in range(len(my_data)):
-                if my_data[i][j] ==my_data[k][j] or my_data[i][j] == '?' or my_data[k][j] == '?':
-                    sp_set.add(k)
-            Sp_matrix[i].append(sp_set.copy())
-    return Sp_matrix
-
-def div_base_matric(Sp_matrix):  #相容类下用交集求划分
+def div_byCompare(my_data):
     sp_list = []
-    for j in range(len(Sp_matrix)):
-        sp = set(k for k in range(len(Sp_matrix)))
-        for i in range(len(Sp_matrix[0])):
-            sp = sp & Sp_matrix[j][i]
-        sp_list.append(list(sp.copy()))
+    for i in range(len(my_data)):
+        sp = []
+        for j in range(len(my_data)):
+            if insection_isEmpty(i,j,my_data):
+                sp.append(j)
+        sp_list.append(sp)
+
     return sp_list
+
+def insection_isEmpty(i,j,my_data):
+    if i == j :
+        return True
+    for k in range(len(my_data[0])):
+        if len(eval(my_data[i][k]) & eval(my_data[j][k])) == 0:
+            return None
+    return True
 
 def generalized_decision(con_divlist,dec_data):
     gd_list=[]
@@ -69,9 +68,28 @@ def Matrix_construct(con_data,gd_list,dec_data):  #构造基于正域的矩阵
             # if gd_list[i] == gd_list[j] :
             #     continue
             for k in range(len(con_data[0])):
-                if (con_data[i][k] != con_data[j][k] and con_data[i][k] != '?' and con_data[j][k] != '?'):
-                    s.add(k)
-            if len(s)!=0:
+                if len(eval(con_data[i][k]) & eval(con_data[j][k])) == 0:
+                    s.add(k+1)
+            if not not s:  #空返回False   非空True
+                DM[i][j] = s.copy()
+    for i in DM:
+        print(i)
+    return DM
+
+def Matrix_construct_partical(con_data,gd_list,con_divlist,dec_divlist,dec_data):  #构造基于正域的矩阵
+    s = set()
+    DM = [['None'] *len(con_data)  for _ in range(len(con_data))]
+    for i in range(len(con_data)):
+        for j in range(len(con_data)):
+            s.clear()
+            if set(dec_divlist).isdisjoint(con_divlist[i]):
+                continue
+            if gd_list[i].__contains__(dec_data[j][0]):
+                continue
+            for k in range(len(con_data[0])):
+                if len(eval(con_data[i][k]) & eval(con_data[j][k])) == 0:
+                    s.add(k+1)
+            if not not s:  # 空返回False   非空True
                 DM[i][j] = s.copy()
     for i in DM:
         print(i)
@@ -137,27 +155,42 @@ def Red(DM):#逻辑运算d
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("my2.txt")
-    # list_data = readfileBylist("../Qualitative_Bankruptcy.txt")
-    print(len(list_data),"对象数")
-    print(len(list_data[0])-1,"条件属性数")
-    con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
-    dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
-    print(dec_data)
-    num_list = []
-    for i in dec_data:
-        if num_list.__contains__(i[0]):
-            continue
-        num_list.append(i[0])
-    print(num_list,len(num_list),"决策数")
-    con_divlist = div_base_matric(get_matrix(con_data))
-    dec_divlist = div_dec(dec_data)
-    print("con_divlist", con_divlist)
-    print("dec_divlist", dec_divlist)
-    gd_list = generalized_decision(con_divlist,dec_data)
-    print(gd_list)
-    DM = Matrix_construct(con_data,gd_list,dec_data)
+    list_data = readfileBylist("../set_value_dataSet(5%)在修改/Computer_Hardware.csv")
+    # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
+    print(len(list_data), "对象数")
+    con_data = list(map(lambda x: x[:(len(list_data[0]) - 3)], list_data))
+    print(len(con_data[0]), "条件属性数")
+    dec_data_1 = list(map(lambda x: x[(len(list_data[0]) - 3):(len(list_data[0]) - 2)], list_data))
+    dec_data_2 = list(map(lambda x: x[(len(list_data[0]) - 2):(len(list_data[0]) - 1)], list_data))
+    dec_data_3 = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
+    dec_divlist_1 = div_dec(dec_data_1)
+    dec_divlist_2 = div_dec(dec_data_2)
+    dec_divlist_3 = div_dec(dec_data_3)
 
-    Red(DM)
+    #####找最小
+    class_len_3 = len(dec_divlist_3[0])
+    class_num_3 = 0
+    for i in range(len(dec_divlist_3)):
+        if class_len_3 > len(dec_divlist_3[i]):
+            class_len_3 = len(dec_divlist_3[i])
+            class_num_3 = i
+    for i in range(len(dec_divlist_2)):
+        if set(dec_divlist_3[class_num_3]).issubset(dec_divlist_2[i]):
+            class_num_2 = i
+            break
+    for i in range(len(dec_divlist_1)):
+        if set(dec_divlist_2[class_num_2]).issubset(dec_divlist_1[i]):
+            class_num_1 = i
+            break
+    print("第一，", len(dec_divlist_1[class_num_1]), dec_divlist_1[class_num_1])
+    print("第二，", len(dec_divlist_2[class_num_2]), dec_divlist_2[class_num_2])
+    print("第三，", len(dec_divlist_3[class_num_3]), dec_divlist_3[class_num_3])
+
+    # gd_list = generalized_decision(con_divlist,dec_data)
+    # print(gd_list)
+    # DM = Matrix_construct_partical(con_data,gd_list,con_divlist,dec_divlist[3],dec_data)
+    # # DM = Matrix_construct(con_data, gd_list, dec_data)
+    # Red(DM)
     end = time.perf_counter()
     print(end - start, "time")
+

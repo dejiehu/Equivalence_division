@@ -3,7 +3,7 @@ from itertools import product, chain
 
 import numpy
 
-from draw.drawing import draw_four
+from draw.drawing import draw_four, Histogram
 
 '''
 正域保持约简
@@ -118,10 +118,11 @@ def Red(DM):#逻辑运算
             if len(DM[i][j]) == 0:
                 continue
             DM_list.append(DM[i][j])
-    print((len(DM_list)/(len(DM)**2)*200))
+    # print((len(DM_list)/(len(DM)**2)*200))
+    return (len(DM_list)/(len(DM)**2)*200)
     # DM_list = logic_operation(DM_list)#集合析取逻辑操作（多余集合被吸收）
     # print(DM_list,len(DM_list),"多余集合被吸收")
-    return DM_list
+    # return DM_list
 
 def red_avgLength(red):
     print("约简的集合为：", len(red),red)
@@ -134,7 +135,7 @@ def red_avgLength(red):
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("set_value_dataSet(5%)在修改/Image_Segmentation(2100).csv")
+    list_data = readfileBylist("../set_value_dataSet(5%)在修改/Forest Fires.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 3)], list_data))
     print(len(con_data[0]), "条件属性数")
@@ -162,26 +163,66 @@ if __name__ == '__main__':
         if set(dec_divlist_2[class_num_2]).issubset(dec_divlist_1[i]):
             class_num_1 = i
             break
-
+    x = []
+    for i in range(10):
+        x.append(i + 1)
+        temp_con_data = con_data[0:int(len(con_data) * (i + 1) / 10)]
+    #
     ####    全类
-    print("全类，K=4：")
+    # print("全类，K=4：")
     con_divlist = div_byCompare(con_data)
     pos_list = pos(dec_divlist_1, con_divlist)
     DM = Matrix_construct(con_data, pos_list, dec_data_1)
     reduct_list = Red(DM)
     ###    单类K=4
-    print("\n单类，K=4：")
+    # print("\n单类，K=4：")
     pos_list_1 = pos_specialDec(dec_divlist_1[class_num_1], con_divlist)
     DM_1 = Matrix_construct(con_data, pos_list_1, dec_data_1)
     reduct_list_1 = Red(DM_1)
     ######    单类K=8
-    print("\n单类，K=8：")
+    # print("\n单类，K=8：")
     pos_list_2 = pos_specialDec(dec_divlist_2[class_num_2], con_divlist)
     # print("pos_list",pos_list,len(pos_list))
     DM_2 = Matrix_construct(con_data, pos_list_2, dec_data_2)
     reduct_list_2 = Red(DM_2)
     ######    单类K=16
-    print("\n单类，K=16：")
+    # print("\n单类，K=16：")
     pos_list_3 = pos_specialDec(dec_divlist_3[class_num_3], con_divlist)
     DM_3 = Matrix_construct(con_data, pos_list_3, dec_data_3)
     reduct_list_3 = Red(DM_3)
+    Histogram(reduct_list, reduct_list_1, reduct_list_2, reduct_list_3)
+
+    # x = []
+    # time_list = []
+    # time_list_1 = []
+    # time_list_2 = []
+    # time_list_3 = []
+    # for i in range(10):
+    #     x.append(i + 1)
+    #     temp_con_data = con_data[0:int(len(con_data) * (i + 1) / 10)]
+    #     con_divlist = div_byCompare(temp_con_data)
+    #     start = time.perf_counter()
+    #     pos_list = pos(dec_divlist_1, con_divlist)
+    #     DM = Matrix_construct(temp_con_data, pos_list, dec_data_1)
+    #     reduct_list = Red(DM)
+    #     time_list.append(reduct_list)
+    #     ###    单类K=4
+    #     start_1 = time.perf_counter()
+    #     pos_list_1 = pos_specialDec(dec_divlist_1[class_num_1], con_divlist)
+    #     DM_1 = Matrix_construct(temp_con_data, pos_list_1, dec_data_1)
+    #     reduct_list_1 = Red(DM_1)
+    #     time_list_1.append(reduct_list_1)
+    #     ######    单类K=8
+    #     start_2 = time.perf_counter()
+    #     pos_list_2 = pos_specialDec(dec_divlist_2[class_num_2], con_divlist)
+    #     # print("pos_list",pos_list,len(pos_list))
+    #     DM_2 = Matrix_construct(temp_con_data, pos_list_2, dec_data_2)
+    #     reduct_list_2 = Red(DM_2)
+    #     time_list_2.append(reduct_list_2)
+    #     ######    单类K=16
+    #     start_3 = time.perf_counter()
+    #     pos_list_3 = pos_specialDec(dec_divlist_3[class_num_3], con_divlist)
+    #     DM_3 = Matrix_construct(temp_con_data, pos_list_3, dec_data_3)
+    #     reduct_list_3 = Red(DM_3)
+    #     time_list_3.append(reduct_list_3)
+    Histogram(x, time_list, time_list_1, time_list_2, time_list_3)

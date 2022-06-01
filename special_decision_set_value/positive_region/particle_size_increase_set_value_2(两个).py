@@ -1,14 +1,10 @@
 import time
 from itertools import product, chain
-
-import numpy
-
 from draw.drawing import draw_four
-
 '''
 正域保持约简
 '''
-from part2.quote_file import div
+
 def readfileBylist(filename):
     file = open(filename,"r")
     list_row = file.readlines()
@@ -16,7 +12,6 @@ def readfileBylist(filename):
     for i in range(len(list_row)):
         list_line = list_row[i].strip().split('\t')
         list_data.append(list_line)
-    # print(list_data)
     return list_data
 
 def div_dec(my_data): #
@@ -140,17 +135,18 @@ def Red(DM):#逻辑运算
     return DM_list
 
 def red_avgLength(red):
-    print("约简的集合为：", len(red),red)
+    print("约简的集合为：",red)
     num = 0
     if len(red) != 0:
         for i in red:
             num += len(i)
-        print(num/len(red),"平均长度")
+        print(len(red),"   ",num/len(red),"平均长度")
     print()
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("set_value_dataSet(5%)在修改/Image_Segmentation(2100).csv")
+    list_data = readfileBylist("../set_value_dataSet(5%)在修改/garments_worker_productivity.csv")
+    # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 3)], list_data))
     print(len(con_data[0]), "条件属性数")
@@ -179,15 +175,20 @@ if __name__ == '__main__':
             class_num_1 = i
             break
 
+    print("第一，",len(dec_divlist_1[class_num_1]),dec_divlist_1[class_num_1])
+    print("第二，",len(dec_divlist_2[class_num_2]),dec_divlist_2[class_num_2])
+    print("第三，",len(dec_divlist_3[class_num_3]),dec_divlist_3[class_num_3])
+
+
     ####    全类
     x = []
     time_list = []
     time_list_1 = []
     time_list_2 = []
     time_list_3 = []
-    for i in range(len(con_data[0])):
+    for i in range(10):
         x.append(i + 1)
-        temp_con_data = list(map(lambda x: x[:i+1], con_data))
+        temp_con_data = con_data[0:int(len(con_data) * (i + 1) / 10)]
         con_divlist = div_byCompare(temp_con_data)
         start = time.perf_counter()
         pos_list = pos(dec_divlist_1, con_divlist)

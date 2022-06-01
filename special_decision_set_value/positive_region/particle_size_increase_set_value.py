@@ -1,10 +1,8 @@
+import random
 import time
 from itertools import product, chain
 
 import numpy
-
-from draw.drawing import draw_four
-
 '''
 正域保持约简
 '''
@@ -16,7 +14,7 @@ def readfileBylist(filename):
     for i in range(len(list_row)):
         list_line = list_row[i].strip().split('\t')
         list_data.append(list_line)
-    # print(list_data)
+    print(list_data)
     return list_data
 
 def div_dec(my_data): #
@@ -33,24 +31,26 @@ def div_dec(my_data): #
         div_list.append(list1.copy())
     return div_list
 
-def div_byCompare(my_data):
-    sp_list = []
+def get_matrix(my_data): #多个对象的相容类等于单个对象的交集
+    Sp_matrix = [[] for i in range(len(my_data))]
     for i in range(len(my_data)):
-        sp = []
-        for j in range(len(my_data)):
-            if insection_isEmpty(i,j,my_data):
-                sp.append(j)
-        sp_list.append(sp)
+        for j in range(len(my_data[0])):
+            sp_set = set()
+            for k in range(len(my_data)):
+                if len(eval(my_data[i][j]) & eval(my_data[k][j])) != 0:
+                    sp_set.add(k)
+            Sp_matrix[i].append(sp_set.copy())
+    print(Sp_matrix)
+    return Sp_matrix
 
+def div_base_matric(Sp_matrix):  #相容类下用交集求划分
+    sp_list = []
+    for j in range(len(Sp_matrix)):
+        sp = set(k for k in range(len(Sp_matrix)))
+        for i in range(len(Sp_matrix[0])):
+            sp = sp & Sp_matrix[j][i]
+        sp_list.append(list(sp.copy()))
     return sp_list
-
-def insection_isEmpty(i,j,my_data):
-    if i == j :
-        return True
-    for k in range(len(my_data[0])):
-        if len(eval(my_data[i][k]) & eval(my_data[j][k])) == 0:
-            return None
-    return True
 
 def pos(dec_divlist,con_divlist):  #子集  正域
     pos_list=[]
@@ -82,7 +82,8 @@ def Matrix_construct(con_data,pos_list,dec_data):  #构造基于正域的矩阵
                 if len(eval(con_data[i][k]) & eval(con_data[j][k])) == 0:
                     s.add(k)
             DM[i][j] = s.copy()
-    # print(DM)
+    for i in DM:
+        print(i)
     return DM
 '''
 耗时间
@@ -140,92 +141,28 @@ def Red(DM):#逻辑运算
     return DM_list
 
 def red_avgLength(red):
-    print("约简的集合为：",red)
+    print("约简的集合为：", len(red),red)
     num = 0
     if len(red) != 0:
         for i in red:
             num += len(i)
-        print(len(red),"   ",num/len(red),"平均长度")
-    print()
+        print(num/len(red),"平均长度")
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("set_value_dataSet(5%)在修改/garments_worker_productivity.csv")
-    # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
-    print(len(list_data), "对象数")
-    con_data = list(map(lambda x: x[:(len(list_data[0]) - 3)], list_data))
-    print(len(con_data[0]), "条件属性数")
-    dec_data_1 = list(map(lambda x: x[(len(list_data[0]) - 3):(len(list_data[0]) - 2)], list_data))
-    dec_data_2 = list(map(lambda x: x[(len(list_data[0]) - 2):(len(list_data[0]) - 1)], list_data))
-    dec_data_3 = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
-    dec_divlist_1 = div_dec(dec_data_1)
-    dec_divlist_2 = div_dec(dec_data_2)
-    dec_divlist_3 = div_dec(dec_data_3)
+    list_data = readfileBylist("../set_value_dataSet(1%)/set_speed1.csv")
+    con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
+    dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
+    print(dec_data)
+    con_divlist = div_base_matric(get_matrix(con_data))
+    dec_divlist = div_dec(dec_data)
+    print("con_divlist", con_divlist)
+    print("dec_divlist", dec_divlist)
+    pos_list = pos_specialDec(dec_divlist[0],con_divlist) # 0 0
+    # pos_list = pos(dec_divlist,con_divlist)
+    print(pos_list)
+    DM = Matrix_construct(con_data,pos_list,dec_data)
 
-    #####找最小
-    class_len_3 = len(dec_divlist_3[0])
-    class_num_3 = 0
-    for i in range(len(dec_divlist_3)):
-        if class_len_3 > len(dec_divlist_3[i]):
-            class_len_3 = len(dec_divlist_3[i])
-            class_num_3 = i
-
-    for i in range(len(dec_divlist_2)):
-        if set(dec_divlist_3[class_num_3]).issubset(dec_divlist_2[i]):
-            class_num_2 = i
-            break
-
-    for i in range(len(dec_divlist_1)):
-        if set(dec_divlist_2[class_num_2]).issubset(dec_divlist_1[i]):
-            class_num_1 = i
-            break
-
-    print("第一，",len(dec_divlist_1[class_num_1]),dec_divlist_1[class_num_1])
-    print("第二，",len(dec_divlist_2[class_num_2]),dec_divlist_2[class_num_2])
-    print("第三，",len(dec_divlist_3[class_num_3]),dec_divlist_3[class_num_3])
-
-
-    ####    全类
-    x = []
-    time_list = []
-    time_list_1 = []
-    time_list_2 = []
-    time_list_3 = []
-    for i in range(10):
-        x.append(i + 1)
-        temp_con_data = con_data[0:int(len(con_data) * (i + 1) / 10)]
-        con_divlist = div_byCompare(temp_con_data)
-        start = time.perf_counter()
-        pos_list = pos(dec_divlist_1, con_divlist)
-        DM = Matrix_construct(temp_con_data, pos_list, dec_data_1)
-        reduct_list = Red(DM)
-        time_list.append(time.perf_counter() - start)
-        ###    单类K=4
-        start_1 = time.perf_counter()
-        pos_list_1 = pos_specialDec(dec_divlist_1[class_num_1], con_divlist)
-        DM_1 = Matrix_construct(temp_con_data, pos_list_1, dec_data_1)
-        reduct_list_1 = Red(DM_1)
-        time_list_1.append(time.perf_counter() - start_1)
-        ######    单类K=8
-        start_2 = time.perf_counter()
-        pos_list_2 = pos_specialDec(dec_divlist_2[class_num_2], con_divlist)
-        # print("pos_list",pos_list,len(pos_list))
-        DM_2 = Matrix_construct(temp_con_data, pos_list_2, dec_data_2)
-        reduct_list_2 = Red(DM_2)
-        time_list_2.append(time.perf_counter() - start_2)
-        ######    单类K=16
-        start_3 = time.perf_counter()
-        pos_list_3 = pos_specialDec(dec_divlist_3[class_num_3], con_divlist)
-        DM_3 = Matrix_construct(temp_con_data, pos_list_3, dec_data_3)
-        reduct_list_3 = Red(DM_3)
-        time_list_3.append(time.perf_counter() - start_3)
-    print("K=4:")
-    red_avgLength(reduct_list)
-    print("K=4:")
-    red_avgLength(reduct_list_1)
-    print("K=8:")
-    red_avgLength(reduct_list_2)
-    print("K=16:")
-    red_avgLength(reduct_list_3)
-
-    draw_four(x,time_list_1,time_list_2,time_list_3,time_list)
+    red_avgLength(Red(DM))
+    end = time.perf_counter()
+    print(end - start, "time")

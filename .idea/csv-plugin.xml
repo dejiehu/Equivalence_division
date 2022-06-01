@@ -360,7 +360,28 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\special_decision_set_value\garments_worker_productivity(5%).csv">
+        <entry key="\special_decision_set_value\set_value_dataSet(1%)\set_speed.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\special_decision_set_value\set_value_dataSet(1%)\set_speed1.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\special_decision_set_value\set_value_dataSet(1%)\set_speed2.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\special_decision_set_value\set_value_dataSet(1%)\test2.csv">
           <value>
             <Attribute>
               <option name="separator" value="&#9;" />

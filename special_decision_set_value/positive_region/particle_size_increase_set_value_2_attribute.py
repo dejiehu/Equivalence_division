@@ -146,10 +146,11 @@ def red_avgLength(red):
         for i in red:
             num += len(i)
         print(num/len(red),"平均长度")
+    print()
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("set_value_dataSet(1%)/Concrete Slump Test_2.csv")
+    list_data = readfileBylist("../set_value_dataSet(5%)在修改/garments_worker_productivity.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 3)], list_data))
     print(len(con_data[0]), "条件属性数")
@@ -179,68 +180,46 @@ if __name__ == '__main__':
             break
 
     ####    全类
+    x = []
     time_list = []
-    for i in range(10):
-        start = time.perf_counter()
-        temp_con_data = con_data[0:int(len(con_data) * (i + 1) / 10)]
+    time_list_1 = []
+    time_list_2 = []
+    time_list_3 = []
+    for i in range(len(con_data[0])):
+        x.append(i + 1)
+        temp_con_data = list(map(lambda x: x[:i+1], con_data))
         con_divlist = div_byCompare(temp_con_data)
-        # print(con_divlist,"con_divlist")
+        start = time.perf_counter()
         pos_list = pos(dec_divlist_1, con_divlist)
         DM = Matrix_construct(temp_con_data, pos_list, dec_data_1)
         reduct_list = Red(DM)
-        end = time.perf_counter()
-        time_list.append(end - start)
-    red_avgLength(reduct_list)
-
- ###    单类K=4
-    time_list_1 = []
-    x = []
-    ############################
-    print("第一列选了：",(dec_divlist_1[class_num_1]))
-    for i in range(10):
-        x.append(i+1)
-        start = time.perf_counter()
-        temp_con_data = con_data[0:int(len(con_data)*(i+1)/10)]
-        con_divlist = div_byCompare(temp_con_data)
-        pos_list = pos_specialDec(dec_divlist_1[class_num_1], con_divlist)
-        DM = Matrix_construct(temp_con_data,pos_list,dec_data_1)
-        reduct_list = Red(DM)
-        end = time.perf_counter()
-        time_list_1.append(end - start)
-    red_avgLength(reduct_list)
-    # print("k=4", reduct_list)
-
-    ######    单类K=8
-    print()
-    time_list_2 = []
-    print("第二列选了：",(dec_divlist_2[class_num_2]))
-    for i in range(10):
-        start = time.perf_counter()
-        temp_con_data = con_data[0:int(len(con_data)*(i+1)/10)]
-        con_divlist = div_byCompare(temp_con_data)
-        pos_list = pos_specialDec(dec_divlist_2[class_num_2], con_divlist)
+        time_list.append(time.perf_counter() - start)
+        ###    单类K=4
+        start_1 = time.perf_counter()
+        pos_list_1 = pos_specialDec(dec_divlist_1[class_num_1], con_divlist)
+        DM_1 = Matrix_construct(temp_con_data, pos_list_1, dec_data_1)
+        reduct_list_1 = Red(DM_1)
+        time_list_1.append(time.perf_counter() - start_1)
+        ######    单类K=8
+        start_2 = time.perf_counter()
+        pos_list_2 = pos_specialDec(dec_divlist_2[class_num_2], con_divlist)
         # print("pos_list",pos_list,len(pos_list))
-        DM = Matrix_construct(temp_con_data,pos_list,dec_data_2)
-        reduct_list = Red(DM)
-        end = time.perf_counter()
-        time_list_2.append(end - start)
+        DM_2 = Matrix_construct(temp_con_data, pos_list_2, dec_data_2)
+        reduct_list_2 = Red(DM_2)
+        time_list_2.append(time.perf_counter() - start_2)
+        ######    单类K=16
+        start_3 = time.perf_counter()
+        pos_list_3 = pos_specialDec(dec_divlist_3[class_num_3], con_divlist)
+        DM_3 = Matrix_construct(temp_con_data, pos_list_3, dec_data_3)
+        reduct_list_3 = Red(DM_3)
+        time_list_3.append(time.perf_counter() - start_3)
+    print("K=4:")
     red_avgLength(reduct_list)
-    # print("k=8", reduct_list)
-    print()
+    print("K=4:")
+    red_avgLength(reduct_list_1)
+    print("K=8:")
+    red_avgLength(reduct_list_2)
+    print("K=16:")
+    red_avgLength(reduct_list_3)
 
-    ######    单类K=16
-    print("第三列选了：",(dec_divlist_3[class_num_3]))
-    time_list_3 = []
-    for i in range(10):
-        start = time.perf_counter()
-        temp_con_data = con_data[0:int(len(con_data) * (i + 1) / 10)]
-        con_divlist = div_byCompare(temp_con_data)
-        pos_list = pos_specialDec(dec_divlist_3[class_num_3], con_divlist)
-        # print("pos_list",pos_list,len(pos_list))
-        DM = Matrix_construct(temp_con_data, pos_list, dec_data_3)
-        reduct_list = Red(DM)
-        end = time.perf_counter()
-        time_list_3.append(end - start)
-    red_avgLength(reduct_list)
-    # print("k=16", reduct_list)
     draw_four(x,time_list_1,time_list_2,time_list_3,time_list)
