@@ -65,7 +65,7 @@ def add_newDec(con_data,dec_divlist):     #新决策添加到数据集
 if __name__ == '__main__':
     # start = time.perf_counter()
     # list_data = readfileBylist("../complete_dataSet_classication/german.txt")
-    filename = "servo.csv"
+    filename = "test2.csv"
     list_data = readfileBylist("../Numerical_decision_dataSet/" + filename)
 
     print(len(list_data),"对象数")
@@ -74,17 +74,19 @@ if __name__ == '__main__':
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
     # print(dec_data)
     # print(con_data)
-    K=4
+    K=2
     y_pred = KMeans(n_clusters=K, max_iter=300000).fit_predict(dec_data)
     # print(y_pred, "划分结果",len(y_pred),(type(y_pred)))
     dec_divlist = [[]] * K
     for i in range(len(y_pred)):
         dec_divlist[y_pred[i]] = dec_divlist[y_pred[i]] + [i]
     add_newDec(con_data, dec_divlist)
+    print(dec_divlist)
     dec_divlist = dec_divTwice(dec_divlist, dec_data)
     add_newDec(con_data, dec_divlist)
-    # print(dec_divlist)
+    print(dec_divlist)
     dec_divlist = dec_divTwice(dec_divlist, dec_data)
+    print(dec_divlist)
     print("最后聚了：",len(dec_divlist))
     add_newDec(con_data, dec_divlist)
     array = numpy.array(con_data)

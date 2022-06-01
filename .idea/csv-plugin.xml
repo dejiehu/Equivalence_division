@@ -304,6 +304,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\special_decision\multi_dataSet_Numerical\test2.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\special_decision\multi_dataSet_artificial\Anuran Calls.csv">
           <value>
             <Attribute>
@@ -354,6 +361,20 @@
           </value>
         </entry>
         <entry key="\special_decision_set_value\garments_worker_productivity(5%).csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\special_decision_set_value\set_value_dataSet(1%)\set_speed.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\special_decision_set_value\set_value_dataSet(1%)\test2.csv">
           <value>
             <Attribute>
               <option name="separator" value="&#9;" />

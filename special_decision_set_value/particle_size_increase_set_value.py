@@ -157,7 +157,7 @@ if __name__ == '__main__':
     dec_divlist = div_dec(dec_data)
     print("con_divlist", con_divlist)
     print("dec_divlist", dec_divlist)
-    pos_list = pos_specialDec(dec_divlist[1],con_divlist)
+    pos_list = pos_specialDec(dec_divlist[0],con_divlist)
     # pos_list = pos(dec_divlist,con_divlist)
     print(pos_list)
     DM = Matrix_construct(con_data,pos_list,dec_data)
