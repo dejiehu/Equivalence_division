@@ -1,14 +1,10 @@
 import time
 from itertools import product, chain
-
-import numpy
-
 from draw.drawing import draw_four
-
 '''
 正域保持约简
 '''
-from part2.quote_file import div
+
 def readfileBylist(filename):
     file = open(filename,"r")
     list_row = file.readlines()
@@ -16,7 +12,6 @@ def readfileBylist(filename):
     for i in range(len(list_row)):
         list_line = list_row[i].strip().split('\t')
         list_data.append(list_line)
-    # print(list_data)
     return list_data
 
 def div_dec(my_data): #
@@ -71,6 +66,7 @@ def pos_specialDec(dec_divlist,con_divlist):  #子集  正域
     return pos_list
 
 def Matrix_construct(con_data,pos_list,dec_data):  #构造基于正域的矩阵
+    start= time.perf_counter()
     s = set()
     DM = [['None'] *len(con_data)  for _ in range(len(con_data))]
     for i in range(len(con_data)):
@@ -83,6 +79,7 @@ def Matrix_construct(con_data,pos_list,dec_data):  #构造基于正域的矩阵
                     s.add(k)
             DM[i][j] = s.copy()
     # print(DM)
+    print("构造矩阵时间",time.perf_counter()-start)
     return DM
 '''
 耗时间
@@ -118,8 +115,9 @@ def Red(DM):#逻辑运算
             if len(DM[i][j]) == 0:
                 continue
             DM_list.append(DM[i][j])
+    # print("未吸收",len(DM_list), DM_list)
     DM_list = logic_operation(DM_list)#集合析取逻辑操作（多余集合被吸收）
-    # print(DM_list,len(DM_list),"多余集合被吸收")
+    print("多余集合被吸收",len(DM_list),DM_list)
     loop_val = []#将合取式差分为析取式     loop_val = [{1,2},{1,3}]
     for i in DM_list:
         loop_val.append(i)
@@ -150,7 +148,7 @@ def red_avgLength(red):
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../set_value_dataSet(5%)在修改/garments_worker_productivity.csv")
+    list_data = readfileBylist("../set_value_dataSet(5%)在修改/meta_1.csv")
     # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 3)], list_data))
@@ -161,14 +159,25 @@ if __name__ == '__main__':
     dec_divlist_1 = div_dec(dec_data_1)
     dec_divlist_2 = div_dec(dec_data_2)
     dec_divlist_3 = div_dec(dec_data_3)
-
+    print("dec_divlist_3",dec_divlist_3)
     #####找最小
     class_len_3 = len(dec_divlist_3[0])
     class_num_3 = 0
     for i in range(len(dec_divlist_3)):
-        if class_len_3 > len(dec_divlist_3[i]):
+
+        if class_len_3 >= len(dec_divlist_3[i]):
             class_len_3 = len(dec_divlist_3[i])
             class_num_3 = i
+        if len(dec_divlist_3[i]) == 1:
+            print("个数为10",i)
+
+
+    # class_len_3 = len(dec_divlist_3[0])
+    # class_num_3 = 0
+    # for i in range(len(dec_divlist_3)):
+    #     if 2 == len(dec_divlist_3[i]):
+    #         # class_len_3 = len(dec_divlist_3[i])
+    #         class_num_3 = i
 
     for i in range(len(dec_divlist_2)):
         if set(dec_divlist_3[class_num_3]).issubset(dec_divlist_2[i]):
@@ -191,42 +200,65 @@ if __name__ == '__main__':
     time_list_1 = []
     time_list_2 = []
     time_list_3 = []
-    for i in range(10):
-        x.append(i + 1)
-        temp_con_data = con_data[0:int(len(con_data) * (i + 1) / 10)]
-        con_divlist = div_byCompare(temp_con_data)
-        start = time.perf_counter()
-        pos_list = pos(dec_divlist_1, con_divlist)
-        DM = Matrix_construct(temp_con_data, pos_list, dec_data_1)
-        reduct_list = Red(DM)
-        time_list.append(time.perf_counter() - start)
-        ###    单类K=4
-        start_1 = time.perf_counter()
-        pos_list_1 = pos_specialDec(dec_divlist_1[class_num_1], con_divlist)
-        DM_1 = Matrix_construct(temp_con_data, pos_list_1, dec_data_1)
-        reduct_list_1 = Red(DM_1)
-        time_list_1.append(time.perf_counter() - start_1)
-        ######    单类K=8
-        start_2 = time.perf_counter()
-        pos_list_2 = pos_specialDec(dec_divlist_2[class_num_2], con_divlist)
-        # print("pos_list",pos_list,len(pos_list))
-        DM_2 = Matrix_construct(temp_con_data, pos_list_2, dec_data_2)
-        reduct_list_2 = Red(DM_2)
-        time_list_2.append(time.perf_counter() - start_2)
-        ######    单类K=16
-        start_3 = time.perf_counter()
-        pos_list_3 = pos_specialDec(dec_divlist_3[class_num_3], con_divlist)
-        DM_3 = Matrix_construct(temp_con_data, pos_list_3, dec_data_3)
-        reduct_list_3 = Red(DM_3)
-        time_list_3.append(time.perf_counter() - start_3)
-        print("----",(i+1)*10,"%----")
-    print("K=4:")
+    # for i in range(10):
+    #     x.append(i + 1)
+    con_divlist = div_byCompare(con_data)
+
+
+    start = time.perf_counter()
+    pos_list = pos(dec_divlist_1, con_divlist)
+    # print("pos_list:",len(pos_list),pos_list)
+    DM = Matrix_construct(con_data, pos_list, dec_data_1)
+    reduct_list = Red(DM)
+    time_list.append(time.perf_counter() - start)
+
+    print("all,K=4:")
     red_avgLength(reduct_list)
+    print("time:",time.perf_counter() - start)
+    #pos_list: 183
+    #多余集合被吸收 36
+    #  time: 21.926646667
+    # 构造矩阵时间 5.503694222
+
+    ##    单类K=4
+    start_1 = time.perf_counter()
+    pos_list_1 = pos_specialDec(dec_divlist_1[class_num_1], con_divlist)
+    # print("pos_list:", len(pos_list_1), pos_list_1)
+    DM_1 = Matrix_construct(con_data, pos_list_1, dec_data_1)
+    reduct_list_1 = Red(DM_1)
+    time_list_1.append(time.perf_counter() - start_1)
     print("K=4:")
     red_avgLength(reduct_list_1)
+    print("time:", time.perf_counter() - start_1)
+    #pos_list: 16
+    #构造矩阵时间 1.2670675550000001
+
+    # ######    单类K=8
+    start_2 = time.perf_counter()
+    pos_list_2 = pos_specialDec(dec_divlist_2[class_num_2], con_divlist)
+    # print("pos_list",pos_list,len(pos_list))
+    DM_2 = Matrix_construct(con_data, pos_list_2, dec_data_2)
+    reduct_list_2 = Red(DM_2)
+    time_list_2.append(time.perf_counter() - start_2)
+    print("time:",time.perf_counter() - start_2)
     print("K=8:")
     red_avgLength(reduct_list_2)
+    time_list_1.append(time.perf_counter() - start_2)
+
+    #####    单类K=16
+    start_3 = time.perf_counter()
+    pos_list_3 = pos_specialDec(dec_divlist_3[class_num_3], con_divlist)
+    # print("pos_list_3:", len(pos_list_3), pos_list_3)
+    DM_3 = Matrix_construct(con_data, pos_list_3, dec_data_3)
+    reduct_list_3 = Red(DM_3)
+    time_list_3.append(time.perf_counter() - start_3)
+
     print("K=16:")
     red_avgLength(reduct_list_3)
+    print("time:", time.perf_counter() - start_3)
+    #  time: 57.118534221999994
+    # pos_list_3: 1
+    #构造矩阵时间 0.12997022199999986
 
-    draw_four(x,time_list_1,time_list_2,time_list_3,time_list)
+    # draw_four(x,time_list_1,time_list_2,time_list_3,time_list)
+

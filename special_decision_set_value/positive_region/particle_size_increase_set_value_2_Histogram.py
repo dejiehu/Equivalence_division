@@ -118,7 +118,7 @@ def Red(DM):#逻辑运算
             if len(DM[i][j]) == 0:
                 continue
             DM_list.append(DM[i][j])
-    # print((len(DM_list)/(len(DM)**2)*200))
+    print((len(DM_list)/(len(DM)**2)*200))
     return (len(DM_list)/(len(DM)**2)*200)
     # DM_list = logic_operation(DM_list)#集合析取逻辑操作（多余集合被吸收）
     # print(DM_list,len(DM_list),"多余集合被吸收")
@@ -135,7 +135,7 @@ def red_avgLength(red):
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../set_value_dataSet(5%)在修改/Forest Fires.csv")
+    list_data = readfileBylist("../set_value_dataSet(5%)在修改/Dow Jones Index_25.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 3)], list_data))
     print(len(con_data[0]), "条件属性数")
@@ -190,7 +190,7 @@ if __name__ == '__main__':
     pos_list_3 = pos_specialDec(dec_divlist_3[class_num_3], con_divlist)
     DM_3 = Matrix_construct(con_data, pos_list_3, dec_data_3)
     reduct_list_3 = Red(DM_3)
-    Histogram(reduct_list, reduct_list_1, reduct_list_2, reduct_list_3)
+    # Histogram(reduct_list, reduct_list_1, reduct_list_2, reduct_list_3)
 
     # x = []
     # time_list = []
@@ -225,4 +225,4 @@ if __name__ == '__main__':
     #     DM_3 = Matrix_construct(temp_con_data, pos_list_3, dec_data_3)
     #     reduct_list_3 = Red(DM_3)
     #     time_list_3.append(reduct_list_3)
-    Histogram(x, time_list, time_list_1, time_list_2, time_list_3)
+    # Histogram(x, time_list, time_list_1, time_list_2, time_list_3)

@@ -145,7 +145,7 @@ def red_avgLength(red):
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../set_value_dataSet(5%)在修改/garments_worker_productivity.csv")
+    list_data = readfileBylist("../set_value_dataSet(5%)在修改/Dow Jones Index_25.csv")
     # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 3)], list_data))
@@ -214,6 +214,7 @@ if __name__ == '__main__':
         DM_3 = Matrix_construct(temp_con_data, pos_list_3, dec_data_3)
         reduct_list_3 = Red(DM_3)
         time_list_3.append(time.perf_counter() - start_3)
+        print("----",(i+1)*10,"%----")
     print("K=4:")
     red_avgLength(reduct_list)
     print("K=4:")

@@ -388,20 +388,6 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\special_decision_set_value\set_value_dataSet(1%)\set_speed.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="&#9;" />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\special_decision_set_value\set_value_dataSet(1%)\test2.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="&#9;" />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\special_decision_set_value\set_value_dataSet(10%)在修改\Airfoil Self-Noise.csv">
           <value>
             <Attribute>
@@ -445,13 +431,6 @@
           </value>
         </entry>
         <entry key="\special_decision_set_value\set_value_dataSet(5%)在修改\Real estate valuation.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="&#9;" />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\special_decision_set_value\set_value_dataSet(5%)在修改\garments_worker_productivity.csv">
           <value>
             <Attribute>
               <option name="separator" value="&#9;" />
