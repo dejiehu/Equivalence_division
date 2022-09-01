@@ -47,9 +47,9 @@ def draw_four_universe(x,y,y1,y2,y3):
 
     plt.rcParams['font.sans-serif'] = 'times new roman'  # 设置全局字体，会被局部字体顶替
     plt.plot(x, y3, marker='^', color='c', ms=10, label='PRDM')
-    plt.plot(x, y, marker='o',color = 'r',label='CSPRDM d1')
-    plt.plot(x, y1, marker='*', color = 'b',ms=10,  label='CSPRDM d2')
-    plt.plot(x, y2, marker='v', color='g', ms=10, label='CSPRDM d3')
+    plt.plot(x, y, marker='o',color = 'r',label='CSPRDM $d_1$')
+    plt.plot(x, y1, marker='*', color = 'b',ms=10,  label='CSPRDM $d_2$')
+    plt.plot(x, y2, marker='v', color='g', ms=10, label='CSPRDM $d_3$')
 
     plt.legend()  # 让图例生效
     # plt.xticks(x, names)   #轴刻度间隔   显示标签   标签字体倾斜度和颜色等外观属性
@@ -64,9 +64,9 @@ def draw_four_attribute(x,y,y1,y2,y3):
 
     plt.rcParams['font.sans-serif'] = 'times new roman'  # 设置全局字体，会被局部字体顶替
     plt.plot(x, y3, marker='^', color='c', ms=10, label='PRDM')
-    plt.plot(x, y, marker='o',color = 'r',label='CSPRDM d1')
-    plt.plot(x, y1, marker='*', color = 'b',ms=10,  label='CSPRDM d2')
-    plt.plot(x, y2, marker='v', color='g', ms=10, label='CSPRDM d3')
+    plt.plot(x, y, marker='o', color='r', label='CSPRDM $d_1$')
+    plt.plot(x, y1, marker='*', color='b', ms=10, label='CSPRDM $d_2$')
+    plt.plot(x, y2, marker='v', color='g', ms=10, label='CSPRDM $d_3$')
 
     plt.legend()  # 让图例生效
     # plt.xticks(x, names)   #轴刻度间隔   显示标签   标签字体倾斜度和颜色等外观属性
