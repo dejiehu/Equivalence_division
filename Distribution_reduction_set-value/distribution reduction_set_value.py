@@ -1,10 +1,14 @@
 import time
 from itertools import product, chain
-from draw.drawing import draw_four_universe
+import operator
+import numpy
+
+from draw.drawing import draw_four
+
 '''
 正域保持约简
 '''
-
+from part2.quote_file import div
 def readfileBylist(filename):
     file = open(filename,"r")
     list_row = file.readlines()
@@ -12,6 +16,7 @@ def readfileBylist(filename):
     for i in range(len(list_row)):
         list_line = list_row[i].strip().split('\t')
         list_data.append(list_line)
+    # print(list_data)
     return list_data
 
 def div_dec(my_data): #
@@ -47,37 +52,37 @@ def insection_isEmpty(i,j,my_data):
             return None
     return True
 
-def pos(dec_divlist,con_divlist):  #子集  正域
-    pos_list=[]
-    for i in range(len(dec_divlist)):
-         for j in range(len(con_divlist)):
-            if set(con_divlist[j]).issubset(dec_divlist[i]):
-                pos_list += [j]
-                continue
-    return pos_list
+def distribution(dec_divlist,con_divlist):  #
+    distribution_list=[]
+    for i in range(len(con_divlist)):
+         S_tuple = ()
+         for j in range(len(dec_divlist)):
+             S_tuple = S_tuple + ((len(set(con_divlist[i]) & set(dec_divlist[j])))/len(con_divlist[i]),)
+         distribution_list += [S_tuple]
+    return distribution_list
 
-def pos_specialDec(dec_divlist,con_divlist):  #子集  正域
-    pos_list=[]
-    for j in range(len(con_divlist)):
-        if set(con_divlist[j]).issubset(dec_divlist):
-            pos_list += [j]
-            continue
-    # print(pos_list,"pos_list")
-    return pos_list
+def distribution_specialDec(dec_list,con_divlist):  #子集  正域
+    distribution_list=[]
+    for i in range(len(con_divlist)):
+        S_tuple = ()
+        S_tuple = S_tuple + ((len(set(con_divlist[i]) & set(dec_list))) / len(con_divlist[i]),)
+        distribution_list += [S_tuple]
+    return distribution_list
 
-def Matrix_construct(con_data,pos_list,dec_data):  #构造基于正域的矩阵
+def Matrix_construct(con_data,distribution_list):  #构造基于正域的矩阵
     s = set()
     DM = [['None'] *len(con_data)  for _ in range(len(con_data))]
     for i in range(len(con_data)):
         for j in range(i):
             s.clear()
-            if not (({i}.issubset(set(pos_list)) or {j}.issubset(set(pos_list))) and dec_data[i] != dec_data[j]):
+            if operator.eq(distribution_list[i],distribution_list[j]):
                 continue
             for k in range(len(con_data[0])):
                 if len(eval(con_data[i][k]) & eval(con_data[j][k])) == 0:
                     s.add(k)
             DM[i][j] = s.copy()
-    # print(DM)
+    for i in DM:
+        print(i)
     return DM
 '''
 耗时间
@@ -145,83 +150,59 @@ def red_avgLength(red):
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../set_value_dataSet(5%)在修改/Dow Jones Index_25.csv")
+    list_data = readfileBylist("set_value_datasets/set_speed.csv")
     # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
     print(len(list_data), "对象数")
-    con_data = list(map(lambda x: x[:(len(list_data[0]) - 3)], list_data))
+    con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
+    dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
     print(len(con_data[0]), "条件属性数")
-    dec_data_1 = list(map(lambda x: x[(len(list_data[0]) - 3):(len(list_data[0]) - 2)], list_data))
-    dec_data_2 = list(map(lambda x: x[(len(list_data[0]) - 2):(len(list_data[0]) - 1)], list_data))
-    dec_data_3 = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
-    dec_divlist_1 = div_dec(dec_data_1)
-    dec_divlist_2 = div_dec(dec_data_2)
-    dec_divlist_3 = div_dec(dec_data_3)
 
-    #####找最小
-    class_len_3 = len(dec_divlist_3[0])
-    class_num_3 = 0
-    for i in range(len(dec_divlist_3)):
-        if class_len_3 > len(dec_divlist_3[i]):
-            class_len_3 = len(dec_divlist_3[i])
-            class_num_3 = i
+    con_divlist = div_byCompare(con_data)
+    dec_divlist = div_dec(dec_data)
 
-    for i in range(len(dec_divlist_2)):
-        if set(dec_divlist_3[class_num_3]).issubset(dec_divlist_2[i]):
-            class_num_2 = i
-            break
-
-    for i in range(len(dec_divlist_1)):
-        if set(dec_divlist_2[class_num_2]).issubset(dec_divlist_1[i]):
-            class_num_1 = i
-            break
-
-    print("第一，",len(dec_divlist_1[class_num_1]),dec_divlist_1[class_num_1])
-    print("第二，",len(dec_divlist_2[class_num_2]),dec_divlist_2[class_num_2])
-    print("第三，",len(dec_divlist_3[class_num_3]),dec_divlist_3[class_num_3])
+    print(con_divlist)
+    print(dec_divlist)
+    # distribution_list = distribution(dec_divlist,con_divlist)
+    distribution_list = distribution_specialDec(dec_divlist[0], con_divlist)
+    print(distribution_list)
 
 
-    ####    全类
+
+
+    red = Red(Matrix_construct(con_data, distribution_list))
+    print(red)
+
     x = []
     time_list = []
     time_list_1 = []
     time_list_2 = []
-    time_list_3 = []
     for i in range(10):
         x.append(i + 1)
         temp_con_data = con_data[0:int(len(con_data) * (i + 1) / 10)]
         con_divlist = div_byCompare(temp_con_data)
         start = time.perf_counter()
-        pos_list = pos(dec_divlist_1, con_divlist)
-        DM = Matrix_construct(temp_con_data, pos_list, dec_data_1)
+        #全类
+        distribution_list = distribution(dec_divlist, con_divlist)
+        DM = Matrix_construct(temp_con_data,distribution_list)
         reduct_list = Red(DM)
         time_list.append(time.perf_counter() - start)
-        ###    单类K=4
+        #单特定类
         start_1 = time.perf_counter()
-        pos_list_1 = pos_specialDec(dec_divlist_1[class_num_1], con_divlist)
-        DM_1 = Matrix_construct(temp_con_data, pos_list_1, dec_data_1)
+        distribution_list_1 = distribution_specialDec(dec_divlist[0], con_divlist)
+        DM_1 = Matrix_construct(temp_con_data, distribution_list_1)
         reduct_list_1 = Red(DM_1)
         time_list_1.append(time.perf_counter() - start_1)
-        ######    单类K=8
+        #多特定类
         start_2 = time.perf_counter()
-        pos_list_2 = pos_specialDec(dec_divlist_2[class_num_2], con_divlist)
-        # print("pos_list",pos_list,len(pos_list))
-        DM_2 = Matrix_construct(temp_con_data, pos_list_2, dec_data_2)
+        distribution_list_2 = distribution(dec_divlist, con_divlist)
+        DM_2 = Matrix_construct(temp_con_data, distribution_list_2)
         reduct_list_2 = Red(DM_2)
         time_list_2.append(time.perf_counter() - start_2)
-        ######    单类K=16
-        start_3 = time.perf_counter()
-        pos_list_3 = pos_specialDec(dec_divlist_3[class_num_3], con_divlist)
-        DM_3 = Matrix_construct(temp_con_data, pos_list_3, dec_data_3)
-        reduct_list_3 = Red(DM_3)
-        time_list_3.append(time.perf_counter() - start_3)
         print("----",(i+1)*10,"%----")
-    print("K=4:")
+    print("全类：")
     red_avgLength(reduct_list)
-    print("K=4:")
+    print("单特定类:")
     red_avgLength(reduct_list_1)
-    print("K=8:")
+    print("多特定类:")
     red_avgLength(reduct_list_2)
-    print("K=16:")
-    red_avgLength(reduct_list_3)
-
-    draw_four_universe(x,time_list_1,time_list_2,time_list_3,time_list)
+    draw_four(x,time_list_1,time_list_2,time_list_3,time_list)

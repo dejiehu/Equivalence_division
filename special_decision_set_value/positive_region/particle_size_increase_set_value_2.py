@@ -3,7 +3,7 @@ from itertools import product, chain
 
 import numpy
 
-from draw.drawing import draw_four
+from draw.drawing import draw_four_universe
 
 '''
 正域保持约简
@@ -229,4 +229,4 @@ if __name__ == '__main__':
     print("K=16:")
     red_avgLength(reduct_list_3)
 
-    draw_four(x,time_list_1,time_list_2,time_list_3,time_list)
+    draw_four_universe(x,time_list_1,time_list_2,time_list_3,time_list)
