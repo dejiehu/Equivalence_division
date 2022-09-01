@@ -135,12 +135,12 @@ def Red(DM):#逻辑运算
     return DM_list
 
 def red_avgLength(red):
-    print("约简的集合为：",red)
+    # print("约简的集合为：",red)
     num = 0
     if len(red) != 0:
         for i in red:
             num += len(i)
-        print(len(red),"   ",num/len(red),"平均长度")
+        print("个数：" ,len(red) ,"平均长度: " ,  num/len(red))
     print()
 
 if __name__ == '__main__':
