@@ -3,6 +3,7 @@ from itertools import product, chain
 import operator
 import numpy
 
+from draw.drawing import draw_four_attribute
 
 '''
 正域保持约简
@@ -165,5 +166,43 @@ if __name__ == '__main__':
     distribution_list = distribution_specialDec(dec_divlist[0], con_divlist)
     print(distribution_list)
 
+
+
+
     red = Red(Matrix_construct(con_data, distribution_list))
     print(red)
+
+    x = []
+    time_list = []
+    time_list_1 = []
+    time_list_2 = []
+    for i in range(len(con_data[0])):
+        x.append(i + 1)
+        temp_con_data = list(map(lambda x: x[:i + 1], con_data))  #检查一下
+        con_divlist = div_byCompare(temp_con_data)
+        start = time.perf_counter()
+        #全类
+        distribution_list = distribution(dec_divlist, con_divlist)
+        DM = Matrix_construct(temp_con_data,distribution_list)
+        reduct_list = Red(DM)
+        time_list.append(time.perf_counter() - start)
+        #单特定类
+        start_1 = time.perf_counter()
+        distribution_list_1 = distribution_specialDec(dec_divlist[0], con_divlist)
+        DM_1 = Matrix_construct(temp_con_data, distribution_list_1)
+        reduct_list_1 = Red(DM_1)
+        time_list_1.append(time.perf_counter() - start_1)
+        #多特定类
+        start_2 = time.perf_counter()
+        distribution_list_2 = distribution(dec_divlist, con_divlist)
+        DM_2 = Matrix_construct(temp_con_data, distribution_list_2)
+        reduct_list_2 = Red(DM_2)
+        time_list_2.append(time.perf_counter() - start_2)
+        print("----",(i+1)*10,"%----")
+    print("全类：")
+    red_avgLength(reduct_list)
+    print("单特定类:")
+    red_avgLength(reduct_list_1)
+    print("多特定类:")
+    red_avgLength(reduct_list_2)
+    draw_four_attribute(x,time_list,time_list_1,time_list_2)

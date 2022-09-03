@@ -28,16 +28,30 @@ def draw_Compare(x,y,y1):
     # plt.title("A simple plot") #标题
     plt.show()
 
-def draw_three(x,y,y1,y2):
+def draw_three_universe(x,y,y1,y2):
     plt.rcParams['font.sans-serif'] = 'times new roman'  # 设置全局字体，会被局部字体顶替
     plt.plot(x, y, marker='^', color='c', ms=10, label='PRDM')
-    plt.plot(x, y1, marker='o', color='r', label='CSPRDM d1')
-    plt.plot(x, y2, marker='*', color='b', ms=10, label='CSPRDM d2')
+    plt.plot(x, y1, marker='o', color='r', label='CSPRDM')
+    plt.plot(x, y2, marker='*', color='b', ms=10, label='CSPRDM')
     plt.legend()  # 让图例生效
     # plt.xticks(x, names)   #轴刻度间隔   显示标签   标签字体倾斜度和颜色等外观属性
     plt.margins(0)  #据边缘的距离
     plt.subplots_adjust(bottom=0.2)
     plt.xlabel("Size of universe") #X轴标签
+    plt.ylabel("Time consumption(s)") #Y轴标签
+    # plt.title("A simple plot") #标题
+    plt.show()
+
+def draw_three_attribute(x,y,y1,y2):
+    plt.rcParams['font.sans-serif'] = 'times new roman'  # 设置全局字体，会被局部字体顶替
+    plt.plot(x, y, marker='^', color='c', ms=10, label='PRDM')
+    plt.plot(x, y1, marker='o', color='r', label='CSPRDM')
+    plt.plot(x, y2, marker='*', color='b', ms=10, label='CSPRDM')
+    plt.legend()  # 让图例生效
+    # plt.xticks(x, names)   #轴刻度间隔   显示标签   标签字体倾斜度和颜色等外观属性
+    plt.margins(0)  #据边缘的距离
+    plt.subplots_adjust(bottom=0.2)
+    plt.xlabel("Size of attribute") #X轴标签
     plt.ylabel("Time consumption(s)") #Y轴标签
     # plt.title("A simple plot") #标题
     plt.show()
