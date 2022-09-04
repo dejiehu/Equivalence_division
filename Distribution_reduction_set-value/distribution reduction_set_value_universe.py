@@ -81,8 +81,8 @@ def Matrix_construct(con_data,distribution_list):  #构造基于正域的矩阵
                 if len(eval(con_data[i][k]) & eval(con_data[j][k])) == 0:
                     s.add(k)
             DM[i][j] = s.copy()
-    for i in DM:
-        print(i)
+    # for i in DM:
+    #     print(i)
     return DM
 '''
 耗时间
@@ -150,7 +150,7 @@ def red_avgLength(red):
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("set_value_datasets/set_speed.csv")
+    list_data = readfileBylist("set_value_datasets/5%/breast-cancer.csv")
     # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
@@ -160,14 +160,11 @@ if __name__ == '__main__':
     con_divlist = div_byCompare(con_data)
     dec_divlist = div_dec(dec_data)
 
-    print(con_divlist)
-    print(dec_divlist)
+    # print(con_divlist)
+    # print(dec_divlist)
     # distribution_list = distribution(dec_divlist,con_divlist)
     distribution_list = distribution_specialDec(dec_divlist[0], con_divlist)
-    print(distribution_list)
-
-
-
+    # print(distribution_list)
 
     red = Red(Matrix_construct(con_data, distribution_list))
     print(red)
@@ -194,7 +191,7 @@ if __name__ == '__main__':
         time_list_1.append(time.perf_counter() - start_1)
         #多特定类
         start_2 = time.perf_counter()
-        distribution_list_2 = distribution(dec_divlist, con_divlist)
+        distribution_list_2 = distribution([dec_divlist[0] + dec_divlist[1]], con_divlist)
         DM_2 = Matrix_construct(temp_con_data, distribution_list_2)
         reduct_list_2 = Red(DM_2)
         time_list_2.append(time.perf_counter() - start_2)

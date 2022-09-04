@@ -17,9 +17,10 @@ def readFile(filename):
         i=0
         for row in file_data:
 
-            if(i==0):
-                i = i + 1
-                continue
+            ###删除第一行
+            # if(i==0):
+            #     i = i + 1
+            #     continue
 
             tmp_list = row.split(',')
             tmp_list[-1] = tmp_list[-1].replace('\n', '')  # 去掉换行符
@@ -37,18 +38,14 @@ def equivalence_class_division(data):
     return a_all
 #数据处理
 if __name__ == "__main__":
-    filename = "Contraceptive Method Choice.csv"
-    # start = time.perf_counter()
+    filename = "letter.csv"
     data = readFile("Original/" + filename)#data里面已经不包括第一行
-    # print(data[0])
-    # for line in range(len(data[0])-1,len(data[0])):
-    # for line in range(len(data[0]) ):
-    for line in range(len(data[0]) - 1):
+
+    # for line in range(len(data[0]) ):   #转决策
+    for line in range(len(data[0]) - 1):  #不转决策
         # print(line)
         data_line = [example[line] for example in data]  # 第i列
-        # print(data_line)
         equ_class = equivalence_class_division(data_line)
-        # print(equ_class)
         for j in equ_class:
             #空缺值不发生改变
             if data[j[0]][line] == '?':
@@ -57,7 +54,9 @@ if __name__ == "__main__":
             #   字符换数字
             # for i in j:
             #     data[i][line]=equ_class.index(j)
-    # print(type(data))
+
+
+
 
     # for i in range(len(data)-1,-1,-1):
     #     for j in range(len(data[0])):
