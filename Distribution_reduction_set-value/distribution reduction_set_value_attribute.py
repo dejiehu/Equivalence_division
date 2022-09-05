@@ -180,7 +180,6 @@ if __name__ == '__main__':
     for i in range(len(con_data[0])):
         x.append(i + 1)
         temp_con_data = list(map(lambda x: x[:i + 1], con_data))  #检查一下
-        print(temp_con_data)
         con_divlist = div_byCompare(temp_con_data)
         start = time.perf_counter()
         #全类

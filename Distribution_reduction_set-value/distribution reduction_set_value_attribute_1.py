@@ -150,7 +150,7 @@ def red_avgLength(red):
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("set_value_datasets/5%/breast-cancer.csv")
+    list_data = readfileBylist("set_value_datasets/10%/Car Evaluation.csv")
     # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
     # print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
@@ -180,7 +180,6 @@ if __name__ == '__main__':
     for i in range(len(con_data[0])):
         x.append(i + 1)
         temp_con_data = list(map(lambda x: x[:i + 1], con_data))  #检查一下
-        print(temp_con_data)
         con_divlist = div_byCompare(temp_con_data)
         start = time.perf_counter()
         #全类
