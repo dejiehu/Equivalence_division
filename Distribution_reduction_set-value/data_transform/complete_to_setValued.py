@@ -11,7 +11,7 @@ def readfileBylist(filename):
     return list_data
 
 if __name__ == '__main__':
-    filename = "breast-cancer.csv"
+    filename = "zoo.csv"
     list_data = readfileBylist("target/" + filename)
     print(len(list_data),"对象数")
     print(len(list_data[0])-3,"条件属性数")
@@ -22,12 +22,13 @@ if __name__ == '__main__':
         for j in range(len(con_data)):
             attr_set.add(int(con_data[j][i]))
         attr_all_set.append(attr_set)
-    ratio = int((len(con_data) * len(con_data[0])) * 0.05)
+    # ratio = int((len(con_data) * len(con_data[0])) * 0.05)
+    ratio = int((len(con_data) * len(con_data[0])) * 0.10)
     print(ratio,"ratio",len(con_data) * len(con_data[0]))
     for i in range(ratio):
         attr_num = random.randint(0,len(con_data[0])-1)
         list_data[random.randint(0,len(con_data) - 1)][attr_num] = attr_all_set[attr_num]
-    with open("../set_value_datasets/5%/" + filename, 'w') as f:
+    with open("../set_value_datasets/10%/" + filename, 'w') as f:
         for i in range(len(list_data)):
             for j in range(len(list_data[0])):
                 if j < len(con_data[0]):

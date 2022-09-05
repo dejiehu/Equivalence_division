@@ -38,7 +38,7 @@ def equivalence_class_division(data):
     return a_all
 #数据处理
 if __name__ == "__main__":
-    filename = "letter.csv"
+    filename = "glass Identification_1.csv"
     data = readFile("Original/" + filename)#data里面已经不包括第一行
 
     # for line in range(len(data[0]) ):   #转决策

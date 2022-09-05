@@ -3,9 +3,9 @@ from itertools import product, chain
 import operator
 import numpy
 
-from draw.drawing import draw_four_universe
+from draw.drawing import draw_three_universe
 
-'''
+''' 
 正域保持约简
 '''
 from part2.quote_file import div
@@ -119,7 +119,7 @@ def Red(DM):#逻辑运算
                 continue
             DM_list.append(DM[i][j])
     DM_list = logic_operation(DM_list)#集合析取逻辑操作（多余集合被吸收）
-    # print(DM_list,len(DM_list),"多余集合被吸收")
+    print(DM_list,len(DM_list),"多余集合被吸收")
     loop_val = []#将合取式差分为析取式     loop_val = [{1,2},{1,3}]
     for i in DM_list:
         loop_val.append(i)
@@ -150,7 +150,7 @@ def red_avgLength(red):
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("set_value_datasets/5%/breast-cancer.csv")
+    list_data = readfileBylist("set_value_datasets/5%/lymphography.csv")
     # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
@@ -159,7 +159,6 @@ if __name__ == '__main__':
 
     con_divlist = div_byCompare(con_data)
     dec_divlist = div_dec(dec_data)
-
     # print(con_divlist)
     # print(dec_divlist)
     # distribution_list = distribution(dec_divlist,con_divlist)
@@ -167,7 +166,9 @@ if __name__ == '__main__':
     # print(distribution_list)
 
     red = Red(Matrix_construct(con_data, distribution_list))
-    print(red)
+    print("全类：",len(dec_divlist))
+    print("单特定类：",len(dec_divlist[0]),len(dec_divlist[1]))
+    print("多特定类：")
 
     x = []
     time_list = []
@@ -180,18 +181,20 @@ if __name__ == '__main__':
         start = time.perf_counter()
         #全类
         distribution_list = distribution(dec_divlist, con_divlist)
+        print(distribution_list)
         DM = Matrix_construct(temp_con_data,distribution_list)
         reduct_list = Red(DM)
         time_list.append(time.perf_counter() - start)
         #单特定类
         start_1 = time.perf_counter()
-        distribution_list_1 = distribution_specialDec(dec_divlist[0], con_divlist)
+        distribution_list_1 = distribution_specialDec(dec_divlist[2], con_divlist)
+        print(distribution_list_1)
         DM_1 = Matrix_construct(temp_con_data, distribution_list_1)
         reduct_list_1 = Red(DM_1)
         time_list_1.append(time.perf_counter() - start_1)
         #多特定类
         start_2 = time.perf_counter()
-        distribution_list_2 = distribution([dec_divlist[0] + dec_divlist[1]], con_divlist)
+        distribution_list_2 = distribution([dec_divlist[2]] + [dec_divlist[0]], con_divlist)
         DM_2 = Matrix_construct(temp_con_data, distribution_list_2)
         reduct_list_2 = Red(DM_2)
         time_list_2.append(time.perf_counter() - start_2)
@@ -202,4 +205,4 @@ if __name__ == '__main__':
     red_avgLength(reduct_list_1)
     print("多特定类:")
     red_avgLength(reduct_list_2)
-    draw_four_universe(x,time_list,time_list_1,time_list_2)
+    draw_three_universe(x,time_list,time_list_1,time_list_2)
