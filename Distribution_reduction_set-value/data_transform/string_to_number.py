@@ -18,9 +18,9 @@ def readFile(filename):
         for row in file_data:
 
             ###删除第一行
-            # if(i==0):
-            #     i = i + 1
-            #     continue
+            if(i==0):
+                i = i + 1
+                continue
 
             tmp_list = row.split(',')
             tmp_list[-1] = tmp_list[-1].replace('\n', '')  # 去掉换行符
@@ -38,11 +38,11 @@ def equivalence_class_division(data):
     return a_all
 #数据处理
 if __name__ == "__main__":
-    filename = "glass Identification_1.csv"
+    filename = "servo.csv"
     data = readFile("Original/" + filename)#data里面已经不包括第一行
 
-    # for line in range(len(data[0]) ):   #转决策
-    for line in range(len(data[0]) - 1):  #不转决策
+    for line in range(len(data[0]) ):   #转决策
+    # for line in range(len(data[0]) - 1):  #不转决策
         # print(line)
         data_line = [example[line] for example in data]  # 第i列
         equ_class = equivalence_class_division(data_line)
@@ -52,23 +52,17 @@ if __name__ == "__main__":
                 continue
 
             #   字符换数字
-            # for i in j:
-            #     data[i][line]=equ_class.index(j)
-
-
-
-
+            for i in j:
+                data[i][line]=equ_class.index(j)
     # for i in range(len(data)-1,-1,-1):
     #     for j in range(len(data[0])):
     #         if data[i][j] == '?':
     #             del data[i]
     #             break
-
     # for i in range(len(data) - 1, -1, -1):
     #     if data[i][25] == '?':
     #         del data[i]
     #         continue
-
     array = np.array(data)
     save = pd.DataFrame(array)
     save.to_csv('target/' + filename, index=False, header=False, sep="\t")

@@ -44,10 +44,10 @@ def draw_three_universe(x,y,y1,y2):
 
 def draw_three_attribute(x,y,y1,y2,y3):
     plt.rcParams['font.sans-serif'] = 'times new roman'  # 设置全局字体，会被局部字体顶替
-    plt.plot(x, y, marker='^', color='c', ms=10, label='全类')
-    plt.plot(x, y1, marker='o', color='r', label='单1')
-    plt.plot(x, y2, marker='o', color='r', label='单2')
-    plt.plot(x, y3, marker='*', color='b', ms=10, label='多')
+    plt.plot(x, y, marker='^', color='c', ms=10, label='ALL')
+    plt.plot(x, y1, marker='o', color='r', label='S1')
+    plt.plot(x, y2, marker='o', color='r', label='S2')
+    plt.plot(x, y3, marker='*', color='b', ms=10, label='MUL')
     plt.legend()  # 让图例生效
     # plt.xticks(x, names)   #轴刻度间隔   显示标签   标签字体倾斜度和颜色等外观属性
     plt.margins(0)  #据边缘的距离
