@@ -163,7 +163,7 @@ if __name__ == '__main__':
 
 
 
-    list_data = readfileBylist("set_value_datasets/10%/Solar Flare_2.csv")
+    list_data = readfileBylist("set_value_datasets/10%/winequality-red.csv")
     # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))

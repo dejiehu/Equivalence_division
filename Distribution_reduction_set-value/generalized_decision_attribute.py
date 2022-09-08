@@ -65,7 +65,8 @@ def Matrix_construct(con_data,gd_list,dec_data):  #构造基于正域的矩阵
             s.clear()
             if  gd_list[i].__contains__(dec_data[j][0]):
                 continue
-
+            # if gd_list[i] == gd_list[j] :
+            #     continue
             for k in range(len(con_data[0])):
                 if len(eval(con_data[i][k]) & eval(con_data[j][k])) == 0:
                     s.add(k+1)
@@ -159,7 +160,8 @@ def red_avgLength(red):
     print()
 
 if __name__ == '__main__':
-    list_data = readfileBylist("set_value_datasets/10%/Wine.csv")
+
+    list_data = readfileBylist("set_value_datasets/10%/Forest type mapping.csv")
     # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
@@ -183,9 +185,9 @@ if __name__ == '__main__':
     time_list_1 = []
     time_list_2 = []
     time_list_3 = []
-    for i in range(10):
+    for i in range(len(con_data[0])):
         x.append(i + 1)
-        temp_con_data = con_data[0:int(len(con_data) * (i + 1) / 10)]
+        temp_con_data = list(map(lambda x: x[:i + 1], con_data))  #检查一下
         con_divlist = div_byCompare(temp_con_data)
         start = time.perf_counter()
         gd_list = generalized_decision(con_divlist, dec_data)

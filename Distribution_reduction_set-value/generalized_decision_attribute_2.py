@@ -84,7 +84,7 @@ def Matrix_construct_partical(con_data,gd_list,con_divlist,dec_divlist,dec_data)
             s.clear()
             if gd_list[i].__contains__(dec_data[j][0]):
                 continue
-            if set(dec_divlist).isdisjoint(con_divlist[i]):  #判断两集合是否包含相同元素
+            if set(dec_divlist).isdisjoint(con_divlist[i]):
                 continue
 
             for k in range(len(con_data[0])):
@@ -163,7 +163,7 @@ if __name__ == '__main__':
 
 
 
-    list_data = readfileBylist("set_value_datasets/10%/Wine.csv")
+    list_data = readfileBylist("set_value_datasets/10%/Car Evaluation.csv")
     # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
@@ -192,31 +192,32 @@ if __name__ == '__main__':
         temp_con_data = list(map(lambda x: x[:i + 1], con_data))  #检查一下
         con_divlist = div_byCompare(temp_con_data)
         start = time.perf_counter()
-        gd_list = generalized_decision(con_divlist, dec_data)
-        # print(gd_list)
         #全类
-
+        gd_list = generalized_decision(con_divlist, dec_data)
 
         DM = Matrix_construct(temp_con_data, gd_list, dec_data)
         reduct_list = Red(DM)
         time_list.append(time.perf_counter() - start)
         #单特定类
         start_1 = time.perf_counter()
+        gd_list_1 = generalized_decision(con_divlist, dec_data)
 
-        DM_1 = Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[class_num],dec_data)
+        DM_1 = Matrix_construct_partical(temp_con_data,gd_list_1,con_divlist,dec_divlist[class_num],dec_data)
         reduct_list_1 = Red(DM_1)
         time_list_1.append(time.perf_counter() - start_1)
 
         #    单2
         start_2 = time.perf_counter()
+        gd_list_2 = generalized_decision(con_divlist, dec_data)
 
-        DM_2 = Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[class_num_1],dec_data)
+        DM_2 = Matrix_construct_partical(temp_con_data,gd_list_2,con_divlist,dec_divlist[class_num_1],dec_data)
         reduct_list_2 = Red(DM_2)
         time_list_2.append(time.perf_counter() - start_2)
 
         #多特定类
         start_3 = time.perf_counter()
-        DM_3= Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[class_num] + dec_divlist[class_num_1],dec_data)
+        gd_list_3 = generalized_decision(con_divlist, dec_data)
+        DM_3= Matrix_construct_partical(temp_con_data,gd_list_3,con_divlist,dec_divlist[class_num] + dec_divlist[class_num_1],dec_data)
         reduct_list_3 = Red(DM_3)
         time_list_3.append(time.perf_counter() - start_3)
         print("----",(i+1)*10,"%----")
