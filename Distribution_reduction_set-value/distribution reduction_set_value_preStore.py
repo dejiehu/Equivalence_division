@@ -3,9 +3,8 @@ from itertools import product, chain
 import operator
 import numpy
 
-from draw.drawing import draw_three_universe
 
-''' 
+'''
 正域保持约简
 '''
 from part2.quote_file import div
@@ -69,7 +68,22 @@ def distribution_specialDec(dec_list,con_divlist):  #子集  正域
         distribution_list += [S_tuple]
     return distribution_list
 
-def Matrix_construct(con_data,distribution_list):  #构造基于正域的矩阵
+def Matrix_preStorage(con_data,con_divlist):
+    s = set()
+    DM_preStorage = [['None'] * len(con_data) for _ in range(len(con_data))]
+    for i in range(len(con_data)):
+        for j in range(i):
+            s.clear()
+            if con_divlist[i].__contains__(i) and con_divlist[i].__contains__(j):
+                continue
+            for k in range(len(con_data[0])):
+                if len(eval(con_data[i][k]) & eval(con_data[j][k])) == 0:
+                    s.add(k)
+            DM_preStorage[i][j] = s.copy()
+    return DM_preStorage
+
+def Matrix_construct(con_data,distribution_list,DM_preStorage):  #构造基于正域的矩阵
+    print("矩阵构造 ")
     s = set()
     DM = [['None'] *len(con_data)  for _ in range(len(con_data))]
     for i in range(len(con_data)):
@@ -77,16 +91,14 @@ def Matrix_construct(con_data,distribution_list):  #构造基于正域的矩阵
             s.clear()
             if operator.eq(distribution_list[i],distribution_list[j]):
                 continue
-            for k in range(len(con_data[0])):
-                if len(eval(con_data[i][k]) & eval(con_data[j][k])) == 0:
-                    s.add(k)
-            DM[i][j] = s.copy()
+            DM[i][j] = DM_preStorage[i][j]
     # for i in DM:
     #     print(i)
+    print("矩阵构造 ")
     return DM
 '''
 耗时间
-'''
+# '''
 def logic_operation(diffItem_list):#析取，吸收
     DM_list = sorted(diffItem_list, key=lambda i: len(i), reverse=False)
     m = len(DM_list) - 1# 吸收多余的集合
@@ -99,6 +111,19 @@ def logic_operation(diffItem_list):#析取，吸收
             n += 1
         m -= 1
     return DM_list
+
+# def logic_operation(diffItem_list):#析取，吸收
+#     DM_list = sorted(diffItem_list, key=lambda i: len(i), reverse=False)
+#     n = 0
+#     while n < len(DM_list) :
+#         m = n + 1
+#         while m < len(DM_list):
+#             if set(DM_list[n]).issubset(DM_list[m]):
+#                 del DM_list[m]
+#             else:
+#                 m += 1
+#         n += 1
+#     return DM_list
 
 def product1(fix,dis):
     result_list =[]
@@ -150,7 +175,7 @@ def red_avgLength(red):
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("set_value_datasets/10%/Solar Flare_3.csv")
+    list_data = readfileBylist("set_value_datasets/10%/primary tumor.csv")#"set_value_datasets/5%/lymphography.csv"
     # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
@@ -159,50 +184,14 @@ if __name__ == '__main__':
 
     con_divlist = div_byCompare(con_data)
     dec_divlist = div_dec(dec_data)
-    # print(con_divlist)
+
+    print(con_divlist)
     print(dec_divlist)
     # distribution_list = distribution(dec_divlist,con_divlist)
     distribution_list = distribution_specialDec(dec_divlist[0], con_divlist)
-    # print(distribution_list)
+    print(distribution_list)
+    DM_preStorage = Matrix_preStorage(con_data, con_divlist)
+    DM = Matrix_construct(con_data, distribution_list,DM_preStorage)
 
-    red = Red(Matrix_construct(con_data, distribution_list))
-    print("全类：",len(dec_divlist))
-    print("单特定类：",len(dec_divlist[0]),len(dec_divlist[1]))
-    print("多特定类：")
-
-    x = []
-    time_list = []
-    time_list_1 = []
-    time_list_2 = []
-    for i in range(10):
-        x.append(i + 1)
-        temp_con_data = con_data[0:int(len(con_data) * (i + 1) / 10)]
-        con_divlist = div_byCompare(temp_con_data)
-        start = time.perf_counter()
-        #全类
-        distribution_list = distribution(dec_divlist, con_divlist)
-        # print(distribution_list)
-        DM = Matrix_construct(temp_con_data,distribution_list)
-        reduct_list = Red(DM)
-        time_list.append(time.perf_counter() - start)
-        #单特定类
-        start_1 = time.perf_counter()
-        distribution_list_1 = distribution_specialDec(dec_divlist[2], con_divlist)
-        # print(distribution_list_1)
-        DM_1 = Matrix_construct(temp_con_data, distribution_list_1)
-        reduct_list_1 = Red(DM_1)
-        time_list_1.append(time.perf_counter() - start_1)
-        #多特定类
-        start_2 = time.perf_counter()
-        distribution_list_2 = distribution([dec_divlist[2]] + [dec_divlist[1]], con_divlist)
-        DM_2 = Matrix_construct(temp_con_data, distribution_list_2)
-        reduct_list_2 = Red(DM_2)
-        time_list_2.append(time.perf_counter() - start_2)
-        print("----",(i+1)*10,"%----")
-    print("全类：")
-    red_avgLength(reduct_list)
-    print("单特定类:")
-    red_avgLength(reduct_list_1)
-    print("多特定类:")
-    red_avgLength(reduct_list_2)
-    draw_three_universe(x,time_list,time_list_1,time_list_2)
+    red = Red(DM)
+    print(time.perf_counter() - start)

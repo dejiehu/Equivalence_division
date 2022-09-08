@@ -38,11 +38,11 @@ def equivalence_class_division(data):
     return a_all
 #数据处理
 if __name__ == "__main__":
-    filename = "servo.csv"
+    filename = "winequality-white.csv"
     data = readFile("Original/" + filename)#data里面已经不包括第一行
 
-    for line in range(len(data[0]) ):   #转决策
-    # for line in range(len(data[0]) - 1):  #不转决策
+    # for line in range(len(data[0]) ):   #转决策
+    for line in range(len(data[0]) - 1):  #不转决策
         # print(line)
         data_line = [example[line] for example in data]  # 第i列
         equ_class = equivalence_class_division(data_line)
