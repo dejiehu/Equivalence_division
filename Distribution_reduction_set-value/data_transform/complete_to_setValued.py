@@ -11,7 +11,7 @@ def readfileBylist(filename):
     return list_data
 
 if __name__ == '__main__':
-    filename = "Forest type mapping.csv"
+    filename = "lymphography.csv"
     list_data = readfileBylist("target/" + filename)
     print(len(list_data),"对象数")
     print(len(list_data[0])-3,"条件属性数")

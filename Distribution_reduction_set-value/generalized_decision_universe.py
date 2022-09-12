@@ -159,7 +159,7 @@ def red_avgLength(red):
     print()
 
 if __name__ == '__main__':
-    list_data = readfileBylist("set_value_datasets/10%/yacht_hydrodynamics.csv")
+    list_data = readfileBylist("set_value_datasets/10%/zoo.csv")
     # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
@@ -167,6 +167,7 @@ if __name__ == '__main__':
     print(len(con_data[0]), "条件属性数")
     dec_divlist = div_dec(dec_data)
 
+    print(dec_divlist)
     sort_array = []
     for i in (dec_divlist):
         sort_array += [len(i)]
@@ -199,20 +200,20 @@ if __name__ == '__main__':
         #单特定类
         start_1 = time.perf_counter()
 
-        DM_1 = Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[class_num],dec_data)
+        DM_1 = Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[2],dec_data)
         reduct_list_1 = Red(DM_1)
         time_list_1.append(time.perf_counter() - start_1)
 
         #    单2
         start_2 = time.perf_counter()
 
-        DM_2 = Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[class_num_1],dec_data)
+        DM_2 = Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[3],dec_data)
         reduct_list_2 = Red(DM_2)
         time_list_2.append(time.perf_counter() - start_2)
 
         #多特定类
         start_3 = time.perf_counter()
-        DM_3= Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[class_num] + dec_divlist[class_num_1],dec_data)
+        DM_3= Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[2] + dec_divlist[3],dec_data)
         reduct_list_3 = Red(DM_3)
         time_list_3.append(time.perf_counter() - start_3)
         print("----",(i+1)*10,"%----")
