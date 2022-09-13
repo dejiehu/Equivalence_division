@@ -3,6 +3,34 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
+        <entry key="\Distribution_reduction_set-value\set_value_datasets\10%\Breast Tissue.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Distribution_reduction_set-value\set_value_datasets\10%\abalone.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Distribution_reduction_set-value\set_value_datasets\10%\winequality-red.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Distribution_reduction_set-value\set_value_datasets\10%\zoo.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\Numerical_decision_dataSet\Airfoil Self-Noise.csv">
           <value>
             <Attribute>

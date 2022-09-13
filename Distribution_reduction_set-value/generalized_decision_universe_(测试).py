@@ -4,7 +4,6 @@ from draw.drawing import draw_three_attribute
 '''
 不完备正域保持约简
 '''
-
 def readfileBylist(filename):
     file = open(filename,"r")
     list_row = file.readlines()
