@@ -159,7 +159,7 @@ def red_avgLength(red):
     print()
 
 if __name__ == '__main__':
-    list_data = readfileBylist("set_value_datasets/10%/Vehicle Silhouettes.csv")
+    list_data = readfileBylist("set_value_datasets/10%/wifi_localization.csv")
     # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
@@ -176,9 +176,9 @@ if __name__ == '__main__':
 
     for i in range(len(dec_divlist)):
         if sort_array[0] == len(dec_divlist[i]):
-            class_num = i
+            class_num = 0
         if sort_array[1] == len(dec_divlist[i]):
-            class_num_1 = i
+            class_num_1 = 1
     print(class_num,class_num_1)
     x = []
     time_list = []
@@ -187,10 +187,11 @@ if __name__ == '__main__':
     time_list_3 = []
     for i in range(10):
         x.append(i + 1)
+
         temp_con_data = con_data[0:int(len(con_data) * (i + 1) / 10)]
         con_divlist = div_byCompare(temp_con_data)
-        start = time.perf_counter()
         gd_list = generalized_decision(con_divlist, dec_data)
+        start = time.perf_counter()
         # print(gd_list)
         #全类
 
@@ -200,20 +201,20 @@ if __name__ == '__main__':
         #单特定类
         start_1 = time.perf_counter()
 
-        DM_1 = Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[3],dec_data)
+        DM_1 = Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[class_num],dec_data)
         reduct_list_1 = Red(DM_1)
         time_list_1.append(time.perf_counter() - start_1)
 
         #    单2
         start_2 = time.perf_counter()
 
-        DM_2 = Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[4],dec_data)
+        DM_2 = Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[class_num_1],dec_data)
         reduct_list_2 = Red(DM_2)
         time_list_2.append(time.perf_counter() - start_2)
 
         #多特定类
         start_3 = time.perf_counter()
-        DM_3= Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[3] + dec_divlist[4] ,dec_data)
+        DM_3= Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[class_num] + dec_divlist[class_num_1] ,dec_data)
         reduct_list_3 = Red(DM_3)
         time_list_3.append(time.perf_counter() - start_3)
         print("----",(i+1)*10,"%----")

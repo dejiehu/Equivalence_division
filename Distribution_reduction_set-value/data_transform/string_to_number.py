@@ -17,7 +17,7 @@ def readFile(filename):
         i=0
         for row in file_data:
 
-            ###删除第一行
+            ##删除第一行
             if(i==0):
                 i = i + 1
                 continue
@@ -38,7 +38,7 @@ def equivalence_class_division(data):
     return a_all
 #数据处理
 if __name__ == "__main__":
-    filename = "Forest type mapping.csv"
+    filename = "Speaker Accent Recognition.csv"
     data = readFile("Original/" + filename)#data里面已经不包括第一行
 
     for line in range(len(data[0]) ):   #转决策
