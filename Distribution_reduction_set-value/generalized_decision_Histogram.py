@@ -129,46 +129,17 @@ def Red(DM):#逻辑运算d
             if len(DM[i][j]) == 0:
                 continue
             DM_list.append(DM[i][j])
-    DM_list = logic_operation(DM_list)#集合析取逻辑操作（多余集合被吸收）
-    # print(DM_list,len(DM_list),"多余集合被吸收")
-    loop_val = []#将合取式差分为析取式     loop_val = [{1,2},{1,3}]
-    for i in DM_list:
-        loop_val.append(i)
-    DM_list = []
-    if len(loop_val) > 1:  ###############################      修改过
-        for i in loop_val[0]:
-            DM_list.append({i})
-        for i in range(1, len(loop_val)):
-            DM_list = product1(DM_list, loop_val[i])
-            DM_list = logic_operation(DM_list)
-    elif len(loop_val) == 0:
-        DM_list = loop_val.copy()
-    elif len(loop_val[0]) == 1:
-        DM_list = loop_val.copy()
-    elif len(loop_val[0]) > 1:
-        for i in loop_val[0]:
-            DM_list.append({i})
-    return DM_list
+    print((len(DM_list) / (len(DM) ** 2) * 100))
 
-def red_avgLength(red):
-    print("约简的集合为：")
-    num = 0
-    if len(red) != 0:
-        for i in red:
-            num += len(i)
-        print(len(red),"   ",num/len(red),"平均长度")
-    print()
 
 if __name__ == '__main__':
-    list_data = readfileBylist("set_value_datasets/10%/Absenteeism at work.csv")
+    list_data = readfileBylist("set_value_datasets/10%/OBS-Network-DataSet.csv")
     # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
     print(len(con_data[0]), "条件属性数")
     dec_divlist = div_dec(dec_data)
-    for i in range(len(dec_divlist)):
-        print(len(dec_divlist[i]),i,dec_data[dec_divlist[i][0]][0])
     sort_array = []
     for i in (dec_divlist):
         sort_array += [len(i)]
@@ -176,62 +147,32 @@ if __name__ == '__main__':
 
     for i in range(len(dec_divlist)):
         if sort_array[0] == len(dec_divlist[i]):
-            class_num = 5
+            class_num = i
         if sort_array[1] == len(dec_divlist[i]):
-            class_num_1 = 3
-    print(class_num ,dec_data[dec_divlist[class_num][0]][0],class_num_1,dec_data[dec_divlist[class_num_1][0]][0])
-    x = []
-    time_list = []
-    time_list_1 = []
-    time_list_2 = []
-    time_list_3 = []
-    for i in range(10):
-        x.append(i + 1)
-        temp_con_data = con_data[0:int(len(con_data) * (i + 1) / 10)]
-
-        con_divlist = div_byCompare(temp_con_data)
-        gd_list = generalized_decision(con_divlist, dec_data)
-        start = time.perf_counter()
-        gd_list = generalized_decision(con_divlist, dec_data)
-        # print(gd_list)
-        #全类
-
-        DM = Matrix_construct(temp_con_data, gd_list, dec_data)
-        reduct_list = Red(DM)
-        time_list.append(time.perf_counter() - start)
-        # #单特定类
-        start_1 = time.perf_counter()
-        DM_1 = Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[class_num],dec_data)
-        reduct_list_1 = Red(DM_1)
-        time_list_1.append(time.perf_counter() - start_1)
-        # time_list_1.append(0)
-
-        #    单2
-        # start_2 = time.perf_counter()
-        # DM_2 = Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[class_num_1],dec_data)
-        # reduct_list_2 = Red(DM_2)
-        # time_list_2.append(time.perf_counter() - start_2)
-        # time_list_2.append(0)
-
-        #多特定类
-        start_3 = time.perf_counter()
-        DM_3= Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[class_num] + dec_divlist[class_num_1],dec_data)
-        reduct_list_3 = Red(DM_3)
-        time_list_3.append(time.perf_counter() - start_3)
-        # time_list_3.append(0)
-        print("----",(i+1)*10,"%----")
-
-    print(len(list_data), "对象数")
-    print(len(con_data[0]), "条件属性数")
-
-    print("决策类个数：", len(dec_divlist) ,sort_array)
-
+            class_num_1 = i
+    print(class_num ,class_num_1,)
     print("全类：")
-    red_avgLength(reduct_list)
+    con_divlist = div_byCompare(con_data)
+    gd_list = generalized_decision(con_divlist, dec_data)
+    start = time.perf_counter()
+    # print(gd_list)
+    #全类
+
+    DM = Matrix_construct(con_data, gd_list, dec_data)
+    reduct_list = Red(DM)
+    # #单特定类
     print("单特定类1:")
-    red_avgLength(reduct_list_1)
-    # print("单特定类2:")
-    # red_avgLength(reduct_list_2)
+    DM_1 = Matrix_construct_partical(con_data,gd_list,con_divlist,dec_divlist[class_num],dec_data)
+    reduct_list_1 = Red(DM_1)
+
     print("多特定类:")
-    red_avgLength(reduct_list_3)
-    draw_three_universe(x,time_list,time_list_1,time_list_3)
+    #多特定类
+    start_3 = time.perf_counter()
+    DM_3= Matrix_construct_partical(con_data,gd_list,con_divlist,dec_divlist[class_num] + dec_divlist[class_num_1],dec_data)
+    reduct_list_3 = Red(DM_3)
+    # time_list_3.append(0)
+
+
+
+
+

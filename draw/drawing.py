@@ -28,11 +28,12 @@ def draw_Compare(x,y,y1):
     # plt.title("A simple plot") #标题
     plt.show()
 
+#广义决策特定类
 def draw_three_universe(x,y,y1,y2):
     plt.rcParams['font.sans-serif'] = 'times new roman'  # 设置全局字体，会被局部字体顶替
-    plt.plot(x, y, marker='^', color='c', ms=10, label='all')
-    plt.plot(x, y1, marker='o', color='r', label='one')
-    plt.plot(x, y2, marker='*', color='b', ms=10, label='more')
+    plt.plot(x, y, marker='^', color='c', ms=10, label='GRDM')
+    plt.plot(x, y1, marker='o', color='r', label='SGRDM(class:1;value:5)')
+    plt.plot(x, y2, marker='*', color='b', ms=10, label='MGRDM(class:1,2;value:3,5)')
     plt.legend()  # 让图例生效
     # plt.xticks(x, names)   #轴刻度间隔   显示标签   标签字体倾斜度和颜色等外观属性
     plt.margins(0)  #据边缘的距离
@@ -42,12 +43,12 @@ def draw_three_universe(x,y,y1,y2):
     # plt.title("A simple plot") #标题
     plt.show()
 
-def draw_three_attribute(x,y,y1,y2,y3):
+#广义决策特定类
+def draw_three_attribute(x,y,y1,y2):
     plt.rcParams['font.sans-serif'] = 'times new roman'  # 设置全局字体，会被局部字体顶替
-    plt.plot(x, y, marker='^', color='c', ms=10, label='ALL')
-    plt.plot(x, y1, marker='o', color='r', label='S1')
-    plt.plot(x, y2, marker='o', color='y', label='S2')
-    plt.plot(x, y3, marker='*', color='b', ms=10, label='MUL')
+    plt.plot(x, y, marker='^', color='c', ms=10, label='GRDM')
+    plt.plot(x, y1, marker='o', color='r', label='SGRDM(class:1;value:5)')
+    plt.plot(x, y2, marker='*', color='b', ms=10, label='MGRDM(class:1,2;value:3,5)')
     plt.legend()  # 让图例生效
     # plt.xticks(x, names)   #轴刻度间隔   显示标签   标签字体倾斜度和颜色等外观属性
     plt.margins(0)  #据边缘的距离
@@ -108,7 +109,7 @@ def draw_four_attribute(x,y,y1,y2,y3):
 #     plt.legend()
 #     plt.show()
 
-def Histogram():  # 并列柱状图
+def Histogram_1():  # 并列柱状图
     plt.rcParams['font.sans-serif'] = 'times new roman'  # 设置全局字体，会被局部字体顶替
     y = [70.2, 18.3, 70.0, 42.4, 60.94, 68.54, 44.9, 50.8]
     y1 = [28.8, 0.7, 26.2, 3.7, 21.47, 14.71, 5.5, 10.7]
@@ -135,5 +136,32 @@ def Histogram():  # 并列柱状图
     plt.legend()
     plt.show()
 
+#广义决策特定类
+def Histogram_2():  # 并列柱状图
+    plt.rcParams['font.sans-serif'] = 'times new roman'  # 设置全局字体，会被局部字体顶替
+    y = [77.83,73.51,84.34,75.76,69.70,83.24,14.22,64.60]
+    y1 = [1.63,11.46,3.30,15.88,8.03,4.28,0.29,9.98]
+    y2 = [24.38,29.34,19.18,24.80,16.32,9.36,3.86,22.37]
+    tick_label = ["Daily Demand Forecasting Orders", "Breast Tissue", "Auto Mpg", "Zoo",
+                  "Speaker Accent Recognition", "Primary Tumor", "Absenteeism At Work",
+                  "OBS Network"]
+    x = np.arange(len(tick_label))  # 横坐标范围
+    total_width, n = 0.72, 3  # 柱状图总宽度，有几组数据
+    width = total_width / n  # 单个柱状图的宽度
+    x1 = x - width * 1  # 第一组数据柱状图横坐标起始位置
+
+    x3 = x1 + width
+    x2 = x3 + width  # 第二组数据柱状图横坐标起始位置
+
+    plt.bar(x1, y, width=width, color="c", label="GRDM", alpha=0.5)
+    plt.bar(x2, y1, width=width, color="r", align="center", label="SGRDM", alpha=0.5)
+    plt.bar(x3, y2, width=width, color="b", align="center", label="MGRDM", alpha=0.5)
+    plt.xlabel("Data sets")
+    plt.ylabel("Number of disjunctions(%)")
+    plt.xticks(x, tick_label, rotation=75)
+    plt.legend()
+    plt.show()
+
 if __name__ == '__main__':
-    Histogram()
+    # Histogram_1()
+    Histogram_2()

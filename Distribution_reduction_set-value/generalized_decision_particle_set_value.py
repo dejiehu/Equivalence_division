@@ -1,6 +1,5 @@
 import time
 from itertools import product, chain
-from draw.drawing import draw_three_universe
 '''
 不完备正域保持约简
 '''
@@ -72,8 +71,8 @@ def Matrix_construct(con_data,gd_list,dec_data):  #构造基于正域的矩阵
                     s.add(k+1)
             if not not s:  #空返回False   非空True
                 DM[i][j] = s.copy()
-    # for i in DM:
-    #     print(i)
+    for i in DM:
+        print(i)
     return DM
 
 def Matrix_construct_partical(con_data,gd_list,con_divlist,dec_divlist,dec_data):  #构造基于正域的矩阵
@@ -82,18 +81,17 @@ def Matrix_construct_partical(con_data,gd_list,con_divlist,dec_divlist,dec_data)
     for i in range(len(con_data)):
         for j in range(len(con_data)):
             s.clear()
+            if set(dec_divlist).isdisjoint(con_divlist[i]):
+                continue
             if gd_list[i].__contains__(dec_data[j][0]):
                 continue
-            if set(dec_divlist).isdisjoint(con_divlist[i]):  #判断两集合是否包含相同元素
-                continue
-
             for k in range(len(con_data[0])):
                 if len(eval(con_data[i][k]) & eval(con_data[j][k])) == 0:
                     s.add(k+1)
             if not not s:  # 空返回False   非空True
                 DM[i][j] = s.copy()
-    # for i in DM:
-    #     print(i)
+    for i in DM:
+        print(i)
     return DM
 '''
 耗时间
@@ -148,90 +146,39 @@ def Red(DM):#逻辑运算d
     elif len(loop_val[0]) > 1:
         for i in loop_val[0]:
             DM_list.append({i})
-    return DM_list
-
-def red_avgLength(red):
-    print("约简的集合为：")
+    print("约简的集合为：",len(DM_list), DM_list,"约简个数")
     num = 0
-    if len(red) != 0:
-        for i in red:
-            num += len(i)
-        print(len(red),"   ",num/len(red),"平均长度")
-    print()
+    for i in DM_list:
+        num += len(i)
+    print(num/len(DM_list),"平均长度")
 
 if __name__ == '__main__':
-    list_data = readfileBylist("set_value_datasets/10%/Absenteeism at work.csv")
-    # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
-    print(len(list_data), "对象数")
+    start = time.perf_counter()
+    list_data = readfileBylist("set_value_datasets/set_speed.csv")
+    # list_data = readfileBylist("../Qualitative_Bankruptcy.txt")
+    print(len(list_data),"对象数")
+    print(len(list_data[0])-1,"条件属性数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
-    print(len(con_data[0]), "条件属性数")
+    print(dec_data)
+    num_list = []
+    for i in dec_data:
+        if num_list.__contains__(i[0]):
+            continue
+        num_list.append(i[0])
+    print(num_list,len(num_list),"决策数")
+    con_divlist = div_byCompare(con_data)
     dec_divlist = div_dec(dec_data)
-    for i in range(len(dec_divlist)):
-        print(len(dec_divlist[i]),i,dec_data[dec_divlist[i][0]][0])
-    sort_array = []
-    for i in (dec_divlist):
-        sort_array += [len(i)]
-    sort_array.sort()
-
-    for i in range(len(dec_divlist)):
-        if sort_array[0] == len(dec_divlist[i]):
-            class_num = 5
-        if sort_array[1] == len(dec_divlist[i]):
-            class_num_1 = 3
-    print(class_num ,dec_data[dec_divlist[class_num][0]][0],class_num_1,dec_data[dec_divlist[class_num_1][0]][0])
-    x = []
-    time_list = []
-    time_list_1 = []
-    time_list_2 = []
-    time_list_3 = []
-    for i in range(10):
-        x.append(i + 1)
-        temp_con_data = con_data[0:int(len(con_data) * (i + 1) / 10)]
-
-        con_divlist = div_byCompare(temp_con_data)
-        gd_list = generalized_decision(con_divlist, dec_data)
-        start = time.perf_counter()
-        gd_list = generalized_decision(con_divlist, dec_data)
-        # print(gd_list)
-        #全类
-
-        DM = Matrix_construct(temp_con_data, gd_list, dec_data)
-        reduct_list = Red(DM)
-        time_list.append(time.perf_counter() - start)
-        # #单特定类
-        start_1 = time.perf_counter()
-        DM_1 = Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[class_num],dec_data)
-        reduct_list_1 = Red(DM_1)
-        time_list_1.append(time.perf_counter() - start_1)
-        # time_list_1.append(0)
-
-        #    单2
-        # start_2 = time.perf_counter()
-        # DM_2 = Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[class_num_1],dec_data)
-        # reduct_list_2 = Red(DM_2)
-        # time_list_2.append(time.perf_counter() - start_2)
-        # time_list_2.append(0)
-
-        #多特定类
-        start_3 = time.perf_counter()
-        DM_3= Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[class_num] + dec_divlist[class_num_1],dec_data)
-        reduct_list_3 = Red(DM_3)
-        time_list_3.append(time.perf_counter() - start_3)
-        # time_list_3.append(0)
-        print("----",(i+1)*10,"%----")
-
-    print(len(list_data), "对象数")
-    print(len(con_data[0]), "条件属性数")
-
-    print("决策类个数：", len(dec_divlist) ,sort_array)
-
-    print("全类：")
-    red_avgLength(reduct_list)
-    print("单特定类1:")
-    red_avgLength(reduct_list_1)
-    # print("单特定类2:")
-    # red_avgLength(reduct_list_2)
-    print("多特定类:")
-    red_avgLength(reduct_list_3)
-    draw_three_universe(x,time_list,time_list_1,time_list_3)
+    print("con_divlist", con_divlist)
+    print("dec_divlist", dec_divlist)
+    gd_list = generalized_decision(con_divlist,dec_data)
+    print(gd_list)
+    # DM = Matrix_construct(con_data, gd_list, dec_data)
+    # Red(Matrix_construct(con_data, gd_list, dec_data))
+    # Red(Matrix_construct_partical(con_data, gd_list, con_divlist, dec_divlist[0], dec_data))
+    # Red(Matrix_construct_partical(con_data, gd_list, con_divlist, dec_divlist[1], dec_data))
+    # Red(Matrix_construct_partical(con_data, gd_list, con_divlist, dec_divlist[2], dec_data))
+    Red(Matrix_construct_partical(con_data,gd_list,con_divlist,dec_divlist[0] + dec_divlist[1],dec_data))
+    end = time.perf_counter()
+    print(end - start, "time")
+    #024   dec_divlist [[0], [1], [2], [3], [4], [5], [6], [7]]
