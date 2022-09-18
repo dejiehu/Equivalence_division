@@ -161,7 +161,7 @@ def red_avgLength(red):
 
 if __name__ == '__main__':
 
-    list_data = readfileBylist("set_value_datasets/10%/Real estate valuation data set.csv")
+    list_data = readfileBylist("set_value_datasets/10%/Maternal Health Risk Data Set.csv")
     # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
@@ -179,7 +179,7 @@ if __name__ == '__main__':
         if sort_array[0] == len(dec_divlist[i]):#5,6
             class_num = i
         if sort_array[1] == len(dec_divlist[i]):
-            class_num_1 = 5
+            class_num_1 = i
     print(class_num,class_num_1)
     x = []
     time_list = []
