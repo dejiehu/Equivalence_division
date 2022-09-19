@@ -1,5 +1,7 @@
 from matplotlib import pyplot as plt
 from pylab import *                #支持中文
+
+
 mpl.rcParams['font.sans-serif'] = ['SimHei']
 
 
@@ -136,8 +138,24 @@ def Histogram_1():  # 并列柱状图
     plt.legend()
     plt.show()
 
+
+def auto_label(rects):
+    for rect in rects:
+        height = rect.get_height()
+        plt.annotate('{}'.format(height), # put the detail data
+                    xy=(rect.get_x() + rect.get_width() / 2, height), # get the center location.
+                    xytext=(0, 3),  # 3 points vertical offset
+                    textcoords="offset points",
+                    ha='center', va='bottom')
+
+
+def auto_text(rects):
+    for rect in rects:
+        plt.text(rect.get_x(), rect.get_height(), rect.get_height(), ha='left', va='bottom',fontsize = 6)
+
 #广义决策特定类
 def Histogram_2():  # 并列柱状图
+
     plt.rcParams['font.sans-serif'] = 'times new roman'  # 设置全局字体，会被局部字体顶替
     y = [77.83,73.51,84.34,75.76,69.70,83.24,14.22,64.60]
     y1 = [1.63,11.46,3.30,15.88,8.03,4.28,0.29,9.98]
@@ -153,9 +171,19 @@ def Histogram_2():  # 并列柱状图
     x3 = x1 + width
     x2 = x3 + width  # 第二组数据柱状图横坐标起始位置
 
-    plt.bar(x1, y, width=width, color="c", label="GRDM", alpha=0.5)
-    plt.bar(x2, y1, width=width, color="r", align="center", label="SGRDM", alpha=0.5)
-    plt.bar(x3, y2, width=width, color="b", align="center", label="MGRDM", alpha=0.5)
+    rects1 = plt.bar(x1, y, width=width, color="c", label="GRDM", alpha=0.5)
+    rects2 = plt.bar(x2, y1, width=width, color="r", align="center", label="SGRDM", alpha=0.5)
+    rects3 = plt.bar(x3, y2, width=width, color="b", align="center", label="MGRDM", alpha=0.5)
+
+    # for a,b in zip(x1,y):
+    #     plt.text(a,b,'%.2f'%b,ha='center',va='bottom',fontsize = 7)
+    # for a,b in zip(x2,y):
+    #     plt.text(a,b,'%.2f'%b,ha='center',va='bottom',fontsize = 7)
+    # for a,b in zip(x3,y):
+    #     plt.text(a,b,'%.2f'%b,ha='center',va='bottom',fontsize = 7)
+    auto_text(rects1)
+    auto_text(rects2)
+    auto_text(rects3)
     plt.xlabel("Data sets")
     plt.ylabel("Number of disjunctions(%)")
     plt.xticks(x, tick_label, rotation=75)
