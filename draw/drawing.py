@@ -33,9 +33,9 @@ def draw_Compare(x,y,y1):
 #广义决策特定类
 def draw_three_universe(x,y,y1,y2):
     plt.rcParams['font.sans-serif'] = 'times new roman'  # 设置全局字体，会被局部字体顶替
-    plt.plot(x, y, marker='^', color='c', ms=10, label='GRDM')
-    plt.plot(x, y1, marker='o', color='r', label='SGRDM(class:1;value:5)')
-    plt.plot(x, y2, marker='*', color='b', ms=10, label='MGRDM(class:1,2;value:3,5)')
+    plt.plot(x, y, marker='^', color='c', ms=10, label='MRGDM')
+    plt.plot(x, y1, marker='o', color='r', label='MRSGDM(class:1;value:5)')
+    plt.plot(x, y2, marker='*', color='b', ms=10, label='MRSGDM(class:1,2;value:3,5)')
     plt.legend()  # 让图例生效
     # plt.xticks(x, names)   #轴刻度间隔   显示标签   标签字体倾斜度和颜色等外观属性
     plt.margins(0)  #据边缘的距离
@@ -48,9 +48,9 @@ def draw_three_universe(x,y,y1,y2):
 #广义决策特定类
 def draw_three_attribute(x,y,y1,y2):
     plt.rcParams['font.sans-serif'] = 'times new roman'  # 设置全局字体，会被局部字体顶替
-    plt.plot(x, y, marker='^', color='c', ms=10, label='GRDM')
-    plt.plot(x, y1, marker='o', color='r', label='SGRDM(class:1;value:5)')
-    plt.plot(x, y2, marker='*', color='b', ms=10, label='MGRDM(class:1,2;value:3,5)')
+    plt.plot(x, y, marker='^', color='c', ms=10, label='MRGDM')
+    plt.plot(x, y1, marker='o', color='r', label='MRSGDM(class:1;value:5)')
+    plt.plot(x, y2, marker='*', color='b', ms=10, label='MRSGDM(class:1,2;value:3,5)')
     plt.legend()  # 让图例生效
     # plt.xticks(x, names)   #轴刻度间隔   显示标签   标签字体倾斜度和颜色等外观属性
     plt.margins(0)  #据边缘的距离
