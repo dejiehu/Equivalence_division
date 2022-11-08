@@ -195,7 +195,7 @@ def CAMARDF(DF,Reduct,MinReduct,con_data):
 
 
 if __name__ == '__main__':
-    list_data = readfileBylist("set_value_datasets/10%/Average Localization Error.csv")
+    list_data = readfileBylist("set_value_datasets/10%/Speaker Accent Recognition.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
@@ -268,7 +268,4 @@ if __name__ == '__main__':
     # red_avgLength(reduct_list_2)
     print("多特定类:")
     print(set(MinReduct_3), len(MinReduct_3),)
-    print(time_list)
-    print(time_list_1)
-    print(time_list_3)
     draw_three_attribute(x,time_list,time_list_1,time_list_3)  #MGRDM
