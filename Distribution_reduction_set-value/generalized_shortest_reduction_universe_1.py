@@ -195,7 +195,7 @@ def CAMARDF(DF,Reduct,MinReduct,con_data):
 
 
 if __name__ == '__main__':
-    list_data = readfileBylist("set_value_datasets/10%/primary tumor.csv")
+    list_data = readfileBylist("set_value_datasets/10%/Speaker Accent Recognition.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
@@ -211,9 +211,9 @@ if __name__ == '__main__':
     #
     for i in range(len(dec_divlist)):
         if sort_array[0] == len(dec_divlist[i]):
-            class_num = 2
+            class_num = i
         if sort_array[1] == len(dec_divlist[i]):
-            class_num_1 = 3
+            class_num_1 = i
     print(class_num ,dec_data[dec_divlist[class_num][0]][0],class_num_1,dec_data[dec_divlist[class_num_1][0]][0])
     x = []
     time_list = []
@@ -262,13 +262,13 @@ if __name__ == '__main__':
     print("决策类个数：", len(dec_divlist) ,sort_array)
 
     print("全类：")
-    print(set(MinReduct),len(MinReduct),"MinReduct")
+    print(set(MinReduct),len(MinReduct))
     print("单特定类1:")
-    print(set(MinReduct_1), len(MinReduct_1), "MinReduct_1")
+    print(set(MinReduct_1), len(MinReduct_1))
     # print("单特定类2:")
     # red_avgLength(reduct_list_2)
     print("多特定类:")
-    print(set(MinReduct_3), len(MinReduct_3), "MinReduct_1")
+    print(set(MinReduct_3), len(MinReduct_3))
     print(time_list.__len__())
     print(time_list_1.__len__())
     print(time_list_3.__len__())
