@@ -160,9 +160,9 @@ def Histogram_2():  # 并列柱状图
     y = [77.83,73.51,84.34,75.76,69.70,83.24,14.22,64.60]
     y1 = [1.63,11.46,3.30,15.88,8.03,4.28,0.29,9.98]
     y2 = [24.38,29.34,19.18,24.80,16.32,9.36,3.86,22.37]
-    tick_label = ["Daily Demand Forecasting Orders", "Breast Tissue", "Auto Mpg", "Zoo",
-                  "Speaker Accent Recognition", "Primary Tumor", "Absenteeism At Work",
-                  "OBS Network"]
+    tick_label = ["1", "2", "3", "4",
+                  "5", "6", "7",
+                  "8"]
     x = np.arange(len(tick_label))  # 横坐标范围
     total_width, n = 0.72, 3  # 柱状图总宽度，有几组数据
     width = total_width / n  # 单个柱状图的宽度
@@ -171,9 +171,9 @@ def Histogram_2():  # 并列柱状图
     x3 = x1 + width
     x2 = x3 + width  # 第二组数据柱状图横坐标起始位置
 
-    rects1 = plt.bar(x1, y, width=width, color="c", label="GRDM", alpha=0.5)
-    rects2 = plt.bar(x2, y1, width=width, color="r", align="center", label="SGRDM", alpha=0.5)
-    rects3 = plt.bar(x3, y2, width=width, color="b", align="center", label="MGRDM", alpha=0.5)
+    rects1 = plt.bar(x1, y, width=width, color="c", label="MRGDM", alpha=0.5)
+    rects2 = plt.bar(x2, y1, width=width, color="r", align="center", label="MRSGDM", alpha=0.5)
+    rects3 = plt.bar(x3, y2, width=width, color="b", align="center", label="MRMGDM", alpha=0.5)
 
     # for a,b in zip(x1,y):
     #     plt.text(a,b,'%.2f'%b,ha='center',va='bottom',fontsize = 7)
@@ -186,7 +186,7 @@ def Histogram_2():  # 并列柱状图
     auto_text(rects3)
     plt.xlabel("Data sets")
     plt.ylabel("Number of disjunctions(%)")
-    plt.xticks(x, tick_label, rotation=75)
+    plt.xticks(x, tick_label)
     plt.legend()
     plt.show()
 
