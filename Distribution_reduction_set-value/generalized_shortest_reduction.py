@@ -130,6 +130,7 @@ def shortest_Red(DM,con_data):#逻辑运算d
                 continue
             DM_list.append(DM[i][j])
     DM_list = logic_operation(DM_list)#集合析取逻辑操作（多余集合被吸收）
+    DM_list = [{1, 3}, {1, 2, 4}, {1, 2, 8}, {3, 7}, {3, 6}, {2, 5}]
     # print(DM_list,len(DM_list),"多余集合被吸收")
     # DM_list = [{1,3},{1,2,4},{1,4,8},{1,2,9},{3,7,12},{3,6,13},{2,5},{4,10},{11}]  #test.txt
     # DM_list = [{2,3,4,5}, {4,5,7,8,} ,{1,4,7,9}, {1,2,3,8}, {2,3,7,8}, {1,7,8}, {1,4,5}, {3,4,5,7}, {1,3,7}, {2,3,5,7}, {1,4,5,8}, {1,2,3,9}, {3,7,8,9}, {1,2,5,8,9}, {1,3,4,8,9},{6},{2,5,7,8,9},{1,2,4,7},{2,3,4,8},{1,3,5}]
@@ -187,7 +188,7 @@ def CAMARDF(DF,Reduct,MinReduct,con_data):
             CAMARDF(temp_DF,Reduct,MinReduct,con_data)
         Reduct.remove(sig_dict[i][0])
         i += 1
-        if(sig_dict[i][1] <= 1 or i >= len(con_data[0])):
+        if(sig_dict[i][1] <= 1 or i >= 17):#len(con_data[0])):
             break
 
 
@@ -203,8 +204,14 @@ def red_avgLength(red):
 
 
 if __name__ == '__main__':
+    # DF = [{1,3},{1,2,4},{1,2,8},{3,7},{3,6},{2,5}]
+    # Reduct = []
+    # MinReduct = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+    #
+    # print(CAMARDF(DF, Reduct, MinReduct, 17))
+    #
     start = time.perf_counter()
-    list_data = readfileBylist("set_value_datasets/10%/Chronic_Kidney_Disease.csv")
+    list_data = readfileBylist("set_value_datasets/10%/Average Localization Error.csv")
     # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))

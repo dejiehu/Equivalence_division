@@ -3,6 +3,20 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
+        <entry key="\Distribution_reduction_set-value\set_value_datasets\10%\Absenteeism at work.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Distribution_reduction_set-value\set_value_datasets\10%\Average Localization Error.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\Distribution_reduction_set-value\set_value_datasets\10%\Breast Tissue.csv">
           <value>
             <Attribute>
@@ -11,6 +25,20 @@
           </value>
         </entry>
         <entry key="\Distribution_reduction_set-value\set_value_datasets\10%\abalone.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Distribution_reduction_set-value\set_value_datasets\10%\airfoil_self_noise.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Distribution_reduction_set-value\set_value_datasets\10%\auto-mpg.csv">
           <value>
             <Attribute>
               <option name="separator" value="&#9;" />
