@@ -188,6 +188,8 @@ def Histogram_2():  # 并列柱状图
     plt.ylabel("Number of disjunctions(%)")
     plt.xticks(x, tick_label)
     plt.legend()
+    # plt.subplots_adjust(bottom=0.01)
+    plt.savefig("测试1.png",dpi = 600)
     plt.show()
 
 if __name__ == '__main__':
