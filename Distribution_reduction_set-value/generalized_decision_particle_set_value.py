@@ -90,8 +90,8 @@ def Matrix_construct_partical(con_data,gd_list,con_divlist,dec_divlist,dec_data)
                     s.add(k+1)
             if not not s:  # 空返回False   非空True
                 DM[i][j] = s.copy()
-    # for i in DM:
-    #     print(i)
+    for i in DM:
+        print(i)
     return DM
 '''
 耗时间
@@ -155,7 +155,7 @@ def Red(DM):#逻辑运算d
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("set_value_datasets/10%/Chronic_Kidney_Disease.csv")
+    list_data = readfileBylist("set_value_datasets/set_speed.csv")
     # list_data = readfileBylist("../Qualitative_Bankruptcy.txt")
     print(len(list_data),"对象数")
     print(len(list_data[0])-1,"条件属性数")
@@ -170,10 +170,10 @@ if __name__ == '__main__':
     # print(num_list,len(num_list),"决策数")
     con_divlist = div_byCompare(con_data)
     dec_divlist = div_dec(dec_data)
-    # print("con_divlist", con_divlist)
-    # print("dec_divlist", dec_divlist)
+    print("con_divlist", con_divlist)
+    print("dec_divlist", dec_divlist)
     gd_list = generalized_decision(con_divlist,dec_data)
-    # print(gd_list)
+    print(gd_list)
     # DM = Matrix_construct(con_data, gd_list, dec_data)
     # Red(Matrix_construct(con_data, gd_list, dec_data))
     # Red(Matrix_construct_partical(con_data, gd_list, con_divlist, dec_divlist[0], dec_data))
