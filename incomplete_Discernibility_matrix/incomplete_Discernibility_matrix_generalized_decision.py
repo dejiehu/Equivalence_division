@@ -37,6 +37,7 @@ def get_matrix(my_data): #多个对象的相容类等于单个对象的交集
                 if my_data[i][j] ==my_data[k][j] or my_data[i][j] == '?' or my_data[k][j] == '?':
                     sp_set.add(k)
             Sp_matrix[i].append(sp_set.copy())
+    print(Sp_matrix,"Sp_matrix")
     return Sp_matrix
 
 def div_base_matric(Sp_matrix):  #相容类下用交集求划分

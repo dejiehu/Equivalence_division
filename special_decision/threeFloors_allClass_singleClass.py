@@ -43,6 +43,7 @@ def pos_specialDec(dec_divlist,con_divlist):  #子集  正域
     return pos_list
 
 def Matrix_construct(con_data,pos_list,dec_data):  #构造基于正域的矩阵
+    T1 = time.perf_counter()
     s = set()
     DM = [['None'] *len(con_data)  for _ in range(len(con_data))]
     for i in range(len(con_data)):
@@ -57,6 +58,7 @@ def Matrix_construct(con_data,pos_list,dec_data):  #构造基于正域的矩阵
                 DM[i][j] = s.copy()
     # for i in DM:
     #     print(i)
+
     return DM
 '''
 耗时间

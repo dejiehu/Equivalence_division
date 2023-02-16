@@ -1,6 +1,6 @@
 import time
 from itertools import product, chain
-from draw.drawing import draw_three_universe
+from draw.drawing import draw_four_attribute_g
 '''
 不完备正域保持约简
 '''
@@ -63,15 +63,16 @@ def Matrix_construct(con_data,gd_list,dec_data):  #构造基于广义决策的�
     for i in range(len(con_data)):
         for j in range(len(con_data)):
             s.clear()
-            if  gd_list[i].__contains__(dec_data[j][0]):
+            # if  gd_list[i].__contains__(dec_data[j][0]):
+            if (dec_data[j][0]) in gd_list[i]:
                 continue
             # if gd_list[i] == gd_list[j] :
             #     continue
             for k in range(len(con_data[0])):
                 if len(eval(con_data[i][k]) & eval(con_data[j][k])) == 0:
                     s.add(k+1)
-            if not not s:  #空返回False   非空True
-                DM[i][j] = s.copy()
+            # if not not s:  #空返回False   非空True
+            DM[i][j] = s.copy()
     # for i in DM:
     #     print(i)
     return DM
@@ -83,6 +84,7 @@ def Matrix_construct_partical(con_data,gd_list,con_divlist,dec_divlist,dec_data)
         for j in range(len(con_data)):
             s.clear()
             if gd_list[i].__contains__(dec_data[j][0]):
+            # if (dec_data[j][0]) in gd_list[i]:
                 continue
             if set(dec_divlist).isdisjoint(con_divlist[i]):  #判断两集合是否包含相同元素
                 continue
@@ -95,14 +97,47 @@ def Matrix_construct_partical(con_data,gd_list,con_divlist,dec_divlist,dec_data)
     # for i in DM:
     #     print(i)
     return DM
+
+def pos(dec_divlist,con_divlist):  #子集  正域
+
+    pos_list=[]
+    for i in range(len(dec_divlist)):
+         for j in range(len(con_divlist)):
+            if set(con_divlist[j]).issubset(dec_divlist[i]):
+                pos_list += [j]
+                continue
+    return pos_list
+
+def Matrix_construct_pos(con_data,pos_list,dec_data):  #构造基于正域的矩阵
+    start= time.perf_counter()
+    s = set()
+    DM = [['None'] *len(con_data)  for _ in range(len(con_data))]
+    for i in range(len(con_data)):
+        for j in range(i):
+            s.clear()
+            # print(j,pos_list)
+            # print(({i}.issubset(set(pos_list)), {j}.issubset(set(pos_list))))
+            if not (({i}.issubset(set(pos_list)) or {j}.issubset(set(pos_list))) and dec_data[i] != dec_data[j]):
+                continue
+            for k in range(len(con_data[0])):
+                if len(eval(con_data[i][k]) & eval(con_data[j][k])) == 0:
+                    s.add(k)
+            DM[i][j] = s.copy()
+    # for s in DM:
+    #     print(s)
+    # print(DM)
+    # print("构造矩阵时间:",time.perf_counter()-start)
+    return DM
+
+
 '''
 耗时间
 '''
 def logic_operation(diffItem_list):#析取，吸收
     DM_list = sorted(diffItem_list, key=lambda i: len(i), reverse=False)
-    m = len(DM_list) - 1# 吸收多余的集合
-    while m > 0: #m从后往前
-        n = 0  #从前往后
+    m = len(DM_list) - 1  # 吸收多余的集合
+    while m > 0:   #m从后往前
+        n = 0       #从前往后
         while n < m:
             if set(DM_list[n]).issubset(DM_list[m]):
                 del DM_list[m]
@@ -195,7 +230,7 @@ def CAMARDF(DF,Reduct,MinReduct,con_data):
 
 
 if __name__ == '__main__':
-    list_data = readfileBylist("set_value_datasets/10%/Speaker Accent Recognition.csv")
+    list_data = readfileBylist("set_value_datasets/10%/Daily_Demand_Forecasting_Orders.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
@@ -218,28 +253,36 @@ if __name__ == '__main__':
     x = []
     time_list = []
     time_list_1 = []
-    # time_list_2 = []
+    time_list_pos = []
     time_list_3 = []
-    for i in range(10):
+    for i in range(len(con_data[0])):
         x.append(i + 1)
-        temp_con_data = con_data[0:int(len(con_data) * (i + 1) / 10)]
+        temp_con_data = list(map(lambda x: x[:i + 1], con_data))
 
         con_divlist = div_byCompare(temp_con_data)
+
+        '''正域'''
+        start_pos = time.perf_counter()
+        pos_list = pos(dec_divlist, con_divlist)
+        pos_DM = Matrix_construct_pos(temp_con_data, pos_list, dec_data)
+        MinReduct = shortest_Red(pos_DM, temp_con_data)
+        time_list_pos.append(time.perf_counter() - start_pos)
+
         gd_list = generalized_decision(con_divlist, dec_data)
         start = time.perf_counter()
-        gd_list = generalized_decision(con_divlist, dec_data)
+
         # print(gd_list)
         #全类
 
+        '''广义决策'''
         DM = Matrix_construct(temp_con_data, gd_list, dec_data)
         MinReduct = shortest_Red(DM,temp_con_data)
         time_list.append(time.perf_counter() - start)
-    #     # #单特定类
+        # # #单特定类
         start_1 = time.perf_counter()
         DM_1 = Matrix_construct_partical(temp_con_data,gd_list,con_divlist,dec_divlist[class_num],dec_data)
         MinReduct_1 = shortest_Red(DM_1,temp_con_data)
         time_list_1.append(time.perf_counter() - start_1)
-
 
         #    单2
         # start_2 = time.perf_counter()
@@ -268,8 +311,9 @@ if __name__ == '__main__':
     # print("单特定类2:")
     # red_avgLength(reduct_list_2)
     print("多特定类:")
-    print(set(MinReduct_3), len(MinReduct_3))
+    print(set(MinReduct_3), len(MinReduct_3),)
     print(time_list)
     print(time_list_1)
     print(time_list_3)
-    draw_three_universe(x,time_list,time_list_1,time_list_3)
+    print(time_list_pos)
+    draw_four_attribute_g(x,time_list,time_list_1,time_list_3,time_list_pos)  #MGRDM

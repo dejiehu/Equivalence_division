@@ -1,6 +1,7 @@
 import time
 from itertools import product, chain
-from draw.drawing import draw_three_attribute
+from draw.drawing import draw_three_attribute, draw_four_attribute
+
 '''
 不完备正域保持约简
 '''
@@ -158,7 +159,7 @@ def red_avgLength(red):
     print()
 
 if __name__ == '__main__':
-    list_data = readfileBylist("set_value_datasets/10%/leaf.csv")
+    list_data = readfileBylist("set_value_datasets/10%/Daily_Demand_Forecasting_Orders.csv")
     # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
