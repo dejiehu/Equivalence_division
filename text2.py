@@ -10,5 +10,4 @@ if __name__ == '__main__':
         # if  77 in dec_data:
             print(2)
         i += 1
-    print(time.perf_counter() - s)
-
+    print(time.perf_counter54() - s)

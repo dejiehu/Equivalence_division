@@ -1,14 +1,10 @@
 import time
 from itertools import product, chain
-
-import numpy
-
 from draw.drawing import draw_four_universe
-
 '''
 正域保持约简
 '''
-from part2.quote_file import div
+
 def readfileBylist(filename):
     file = open(filename,"r")
     list_row = file.readlines()
@@ -16,7 +12,6 @@ def readfileBylist(filename):
     for i in range(len(list_row)):
         list_line = list_row[i].strip().split('\t')
         list_data.append(list_line)
-    # print(list_data)
     return list_data
 
 def div_dec(my_data): #
@@ -150,7 +145,8 @@ def red_avgLength(red):
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../set_value_dataSet(5%)在修改/Image_Segmentation(2100).csv")
+    filename = "Dow Jones Index_25.csv"
+    list_data = readfileBylist("../set_value_dataSet(5%)在修改/" + filename)
     # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 3)], list_data))
@@ -229,4 +225,10 @@ if __name__ == '__main__':
     print("K=16:")
     red_avgLength(reduct_list_3)
 
-    draw_four_universe(x,time_list_1,time_list_2,time_list_3,time_list)
+
+    print(x)
+    print(time_list)
+    print(time_list_1)
+    print(time_list_2)
+    print(time_list_3)
+    draw_four_universe(x,time_list_1,time_list_2,time_list_3,time_list,filename)

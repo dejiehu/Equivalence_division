@@ -145,7 +145,8 @@ def red_avgLength(red):
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    list_data = readfileBylist("../set_value_dataSet(5%)在修改/Image_Segmentation(2100).csv")
+    filename = "Image_Segmentation(210).csv"
+    list_data = readfileBylist("../set_value_dataSet(5%)在修改/" + filename)
     # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 3)], list_data))
@@ -190,7 +191,6 @@ if __name__ == '__main__':
         x.append(i + 1)
         temp_con_data = con_data[0:int(len(con_data) * (i + 1) / 10)]
         con_divlist = div_byCompare(temp_con_data)
-        print(len(temp_con_data),"temp_con_data")
         start = time.perf_counter()
         pos_list = pos(dec_divlist_1, con_divlist)
         DM = Matrix_construct(temp_con_data, pos_list, dec_data_1)
@@ -225,4 +225,9 @@ if __name__ == '__main__':
     print("K=16:")
     red_avgLength(reduct_list_3)
 
-    draw_four_universe(x,time_list_1,time_list_2,time_list_3,time_list)
+    print(x)
+    print(time_list)
+    print(time_list_1)
+    print(time_list_2)
+    print(time_list_3)
+    draw_four_universe(x,time_list_1,time_list_2,time_list_3,time_list,filename)

@@ -1,6 +1,6 @@
 import time
 from itertools import product, chain
-from draw.drawing import draw_three_universe
+from draw.drawing import draw_four_universe_g
 '''
 不完备正域保持约简
 '''
@@ -95,6 +95,40 @@ def Matrix_construct_partical(con_data,gd_list,con_divlist,dec_divlist,dec_data)
     # for i in DM:
     #     print(i)
     return DM
+
+def pos(dec_divlist,con_divlist):  #子集  正域
+
+    pos_list=[]
+    for i in range(len(dec_divlist)):
+         for j in range(len(con_divlist)):
+            if set(con_divlist[j]).issubset(dec_divlist[i]):
+                pos_list += [j]
+                continue
+    return pos_list
+
+def Matrix_construct_pos(con_data,pos_list,dec_data):  #构造基于正域的矩阵
+    start= time.perf_counter()
+    s = set()
+    DM = [['None'] *len(con_data)  for _ in range(len(con_data))]
+    for i in range(len(con_data)):
+        for j in range(i):
+            s.clear()
+            # print(j,pos_list)
+            # print(({i}.issubset(set(pos_list)), {j}.issubset(set(pos_list))))
+            if not (({i}.issubset(set(pos_list)) or {j}.issubset(set(pos_list))) and dec_data[i] != dec_data[j]):
+                continue
+            for k in range(len(con_data[0])):
+                if len(eval(con_data[i][k]) & eval(con_data[j][k])) == 0:
+                    s.add(k)
+            DM[i][j] = s.copy()
+    # for s in DM:
+    #     print(s)
+    # print(DM)
+    # print("构造矩阵时间:",time.perf_counter()-start)
+    return DM
+
+
+
 '''
 耗时间
 '''
@@ -195,7 +229,8 @@ def CAMARDF(DF,Reduct,MinReduct,con_data):
 
 
 if __name__ == '__main__':
-    list_data = readfileBylist("set_value_datasets/10%/Speaker Accent Recognition.csv")
+    filename = "Breast Tissue.csv"
+    list_data = readfileBylist("set_value_datasets/10%/" + filename)
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
@@ -214,17 +249,27 @@ if __name__ == '__main__':
             class_num = i
         if sort_array[1] == len(dec_divlist[i]):
             class_num_1 = i
-    print(dec_data[dec_divlist[class_num][0]][0],dec_data[dec_divlist[class_num_1][0]][0])
+    print(class_num,class_num_1,dec_data[dec_divlist[class_num][0]][0],dec_data[dec_divlist[class_num_1][0]][0])
     x = []
     time_list = []
     time_list_1 = []
     # time_list_2 = []
+    time_list_pos = []
     time_list_3 = []
     for i in range(10):
         x.append(i + 1)
         temp_con_data = con_data[0:int(len(con_data) * (i + 1) / 10)]
 
         con_divlist = div_byCompare(temp_con_data)
+
+        '''正域'''
+        start_pos = time.perf_counter()
+        pos_list = pos(dec_divlist, con_divlist)
+        pos_DM = Matrix_construct_pos(temp_con_data, pos_list, dec_data)
+        MinReduct_pos = shortest_Red(pos_DM, temp_con_data)
+        time_list_pos.append(time.perf_counter() - start_pos)
+
+        '''广义决策'''
         gd_list = generalized_decision(con_divlist, dec_data)
         start = time.perf_counter()
         gd_list = generalized_decision(con_divlist, dec_data)
@@ -262,6 +307,8 @@ if __name__ == '__main__':
     print("决策类个数：", len(dec_divlist) ,sort_array)
 
     print("全类：")
+    print("正域：")
+    print(set(MinReduct_pos),len(MinReduct_pos))
     print(set(MinReduct),len(MinReduct))
     print("单特定类1:")
     print(set(MinReduct_1), len(MinReduct_1))
@@ -269,7 +316,11 @@ if __name__ == '__main__':
     # red_avgLength(reduct_list_2)
     print("多特定类:")
     print(set(MinReduct_3), len(MinReduct_3))
+
+    print(x)
     print(time_list)
     print(time_list_1)
     print(time_list_3)
-    draw_three_universe(x,time_list,time_list_1,time_list_3)
+    print(time_list_pos)
+    print(filename)
+    draw_four_universe_g(x,time_list,time_list_1,time_list_3,time_list_pos,filename)

@@ -230,7 +230,8 @@ def CAMARDF(DF,Reduct,MinReduct,con_data):
 
 
 if __name__ == '__main__':
-    list_data = readfileBylist("set_value_datasets/10%/Daily_Demand_Forecasting_Orders.csv")
+    filename = "OBS-Network-DataSet.csv"
+    list_data = readfileBylist("set_value_datasets/10%/" + filename)
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
     dec_data = list(map(lambda x: x[(len(list_data[0]) - 1):], list_data))
@@ -246,9 +247,9 @@ if __name__ == '__main__':
     #
     for i in range(len(dec_divlist)):
         if sort_array[0] == len(dec_divlist[i]):
-            class_num = i
+            class_num = 1
         if sort_array[1] == len(dec_divlist[i]):
-            class_num_1 = i
+            class_num_1 = 2
     print(dec_data[dec_divlist[class_num][0]][0],dec_data[dec_divlist[class_num_1][0]][0])
     x = []
     time_list = []
@@ -312,8 +313,9 @@ if __name__ == '__main__':
     # red_avgLength(reduct_list_2)
     print("多特定类:")
     print(set(MinReduct_3), len(MinReduct_3),)
+    print(x)
     print(time_list)
     print(time_list_1)
     print(time_list_3)
     print(time_list_pos)
-    draw_four_attribute_g(x,time_list,time_list_1,time_list_3,time_list_pos)  #MGRDM
+    draw_four_attribute_g(x,time_list,time_list_1,time_list_3,time_list_pos,filename)  #MGRDM

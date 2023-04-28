@@ -95,6 +95,38 @@ def Matrix_construct_partical(con_data,gd_list,con_divlist,dec_divlist,dec_data)
     # for i in DM:
     #     print(i)
     return DM
+
+def pos(dec_divlist,con_divlist):  #子集  正域
+
+    pos_list=[]
+    for i in range(len(dec_divlist)):
+         for j in range(len(con_divlist)):
+            if set(con_divlist[j]).issubset(dec_divlist[i]):
+                pos_list += [j]
+                continue
+    return pos_list
+
+def Matrix_construct_pos(con_data,pos_list,dec_data):  #构造基于正域的矩阵
+    start= time.perf_counter()
+    s = set()
+    DM = [['None'] *len(con_data)  for _ in range(len(con_data))]
+    for i in range(len(con_data)):
+        for j in range(i):
+            s.clear()
+            # print(j,pos_list)
+            # print(({i}.issubset(set(pos_list)), {j}.issubset(set(pos_list))))
+            if not (({i}.issubset(set(pos_list)) or {j}.issubset(set(pos_list))) and dec_data[i] != dec_data[j]):
+                continue
+            for k in range(len(con_data[0])):
+                if len(eval(con_data[i][k]) & eval(con_data[j][k])) == 0:
+                    s.add(k)
+            DM[i][j] = s.copy()
+    # for s in DM:
+    #     print(s)
+    # print(DM)
+    # print("构造矩阵时间:",time.perf_counter()-start)
+    return DM
+
 '''
 耗时间
 '''
@@ -131,9 +163,19 @@ def Red(DM):#逻辑运算d
             DM_list.append(DM[i][j])
     print((len(DM_list) / (len(DM) ** 2) * 100))
 
+def Red_1(DM):  # 逻辑运算d
+    DM_list = []
+    for i in range(len(DM)):  # 矩阵差别项放到集合DM_list中
+        for j in range(len(DM)):
+            if DM[i][j] == 'None':  # 把集合为空的丢掉
+                continue
+            if len(DM[i][j]) == 0:
+                continue
+            DM_list.append(DM[i][j])
+    print((len(DM_list)/(len(DM)**2)*200))
 
 if __name__ == '__main__':
-    list_data = readfileBylist("set_value_datasets/10%/OBS-Network-DataSet.csv")
+    list_data = readfileBylist("set_value_datasets/10%/Speaker Accent Recognition.csv")
     # list_data = readfileBylist("Parameters comparison/10%/Real estate valuation.csv")
     print(len(list_data), "对象数")
     con_data = list(map(lambda x: x[:(len(list_data[0]) - 1)], list_data))
@@ -147,12 +189,18 @@ if __name__ == '__main__':
 
     for i in range(len(dec_divlist)):
         if sort_array[0] == len(dec_divlist[i]):
-            class_num = i
+            class_num = 0
         if sort_array[1] == len(dec_divlist[i]):
-            class_num_1 = i
+            class_num_1 = 3
     print(class_num ,class_num_1,)
     print("全类：")
+    print("正域：")
     con_divlist = div_byCompare(con_data)
+    pos_list = pos(dec_divlist, con_divlist)
+    pos_DM = Matrix_construct_pos(con_data, pos_list, dec_data)
+    Red_1(pos_DM)
+
+    print("广义决策：")
     gd_list = generalized_decision(con_divlist, dec_data)
     start = time.perf_counter()
     # print(gd_list)
